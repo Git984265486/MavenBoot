@@ -1,0 +1,50 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>员工信息</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<table class="layui-hide" id="table_user_info" lay-filter="user"></table>
+			</div>
+		</div>
+
+		<script>
+			layui.use('table', function() {
+				var $ = layui.jquery,
+					table = layui.table;
+				table.render({
+					elem: '#table_user_info',
+					url: 'http://127.0.0.1:8080/user',
+					title:"用户信息表",
+					cols: [
+						[	
+							{field: 'autoID',title: 'ID',sort: true},
+							{field: 'optPY',title: '员工编号',sort: true},
+							{field: 'optName',title: '员工姓名',sort: true},
+							{field: 'optPY',title: '助记码',sort: true},
+							{field: 'optPWD',title: '所属部门',sort: true},
+							//{field: 'sfzh',title: '身份证号',sort: true},
+							//{field: 'xb',title: '性别',sort: true},
+							//{field: 'sr',title: '生日',sort: true},
+							//{field: 'zj',title: '座机',sort: true},
+							//{field: 'sj',title: '手机',sort: true},
+							//{field: 'zz',title: '住址',sort: true},
+							{field: 'optName',title: '是否停用'},
+							{field: 'badmin',title: '备注',sort: true}
+						]
+					],
+					//limits: [10, 15, 20, 25, 50, 100],
+					//limit: 10,
+					page: true,
+					//skin: 'line'
+				});
+			});
+		</script>
+	</body>
+</html>

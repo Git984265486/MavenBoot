@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费系统首页</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../static/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<body>
+		<div class="layui-tab layui-tab-brief">
+		  <ul class="layui-tab-title" id="charge">
+			<li class="layui-this">
+				<button type="button" class="layui-btn layui-btn-primary"  data-method="chargeInfo">收费信息</button>
+			</li>
+			<li>
+				<button type="button" class="layui-btn layui-btn-primary"  data-method="userInfo">员工信息</button>
+			</li>
+			<li>
+				<button type="button" class="layui-btn layui-btn-primary"  data-method="carInfo">车辆实时状态</button>
+			</li>
+		  </ul>
+		  <div class="layui-tab-content" style="height: 800px;">
+			<div class="layui-tab-item layui-show" id="chargeInfo" style="height: 100%;"></div>
+			<div class="layui-tab-item" id="userInfo" style="height: 100%;"></div>
+			<div class="layui-tab-item" id="carInfo" style="height: 100%;">车辆实时状态</div>
+		  </div>
+		</div>
+		<script>
+		layui.use('element', function(){
+		  var $ = layui.jquery
+		  ,element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+		  
+		  $('#charge').load($(function fun() {
+		     document.getElementById("chargeInfo").innerHTML= '<object type="text/html" data="127.0.0.1:8089/testPage" width="100%" height="100%"></object>'
+		  }));
+		  
+		  //触发事件
+		  var active = {
+		      chargeInfo : function(){
+				 document.getElementById("chargeInfo").innerHTML= '<object type="text/html" data="127.0.0.1:8089/testPage" width="100%" height="100%"></object>'
+			  },
+			  userInfo : function(){
+				 document.getElementById("userInfo").innerHTML= '<object type="text/html" data="pages/userInfo.html" width="100%" height="100%"></object>'
+			  },
+			  carInfo : function(){
+				  
+			  }
+			  
+		  };
+		  
+		  $('#charge .layui-btn').on('click', function(){
+		        var othis = $(this), method = othis.data('method');
+		        active[method] ? active[method].call(this, othis) : '';
+		  });
+		 
+		  
+		});
+		</script>
+
+	</body>
+</html>
