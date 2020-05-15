@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.chargeMapper">
+
+    <resultMap type="com.boot.damain.chargeInfo" id="chargeResult">
+        <result property="autoid" column="autoid"/>
+        <result property="billno" column="billno"/>
+        <result property="carno" column="carno"/>
+        <result property="dtdate" column="dtdate"/>
+        <result property="cartype" column="cartype"/>
+        <result property="pcode" column="pcode"/>
+        <result property="memo" column="memo"/>
+        <result property="jcxm" column="jcxm"/>
+        <result property="zsl" column="zsl"/>
+        <result property="zje" column="zje"/>
+        <result property="optname" column="optname"/>
+        <result property="flag" column="flag"/>
+        <result property="cz" column="cz"/>
+        <result property="czphone" column="czphone"/>
+        <result property="dsdate" column="dsdate"/>
+        <result property="dldate" column="dldate"/>
+    </resultMap>
+
+    <!--查询所有的收费表信息-->
+    <select id="selectChargeList" resultMap="chargeResult">
+        SELECT * from tSFB ORDER BY autoid
+    </select>
+
+
+    <!--条件查询收费表信息-->
+    <select id="filterChargeList" resultMap="chargeResult">
+        SELECT * FROM tSFB
+        <where>
+            <if test="startTime != null and endTime != null">
+                AND tSFB.dtdate BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="billno != null">
+                AND tSFB.billno = #{billno}
+            </if>
+            <if test="carno != null">
+                AND tSFB.carno = #{carno}
+            </if>
+            <if test="cartype != null">
+                AND tSFB.cartype = #{cartype}
+            </if>
+            <if test="cz != null">
+                AND tSFB.cz = #{cz}
+            </if>
+            <if test="jcxm != null">
+                AND tSFB.jcxm = #{jcxm}
+            </if>
+            <if test="memo != null">
+                AND tSFB.memo = #{memo}
+            </if>
+        </where>
+        ORDER BY autoid
+    </select>
+
+</mapper>

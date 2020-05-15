@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
     url: jdbc:sqlserver://localhost:1433;DatabaseName=CarCheck
     username: sa
-    #台式密码：81236238，笔记本密码：123456
+    #台式数据库密码：81236238，笔记本数据库密码：123456
     password: 81236238
   #HTML页面配置
   thymeleaf:

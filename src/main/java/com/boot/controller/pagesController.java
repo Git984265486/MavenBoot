@@ -19,14 +19,21 @@ public class pagesController {
     private tUserService userService;
 
     @RequestMapping("/index")
-    public String test(){
+    public String index(){
         return "index";
     }
 
-    @RequestMapping("/testPage")
-    public String test1(){
+    @RequestMapping("/userPage")
+    public String userPage(){
         return "pages/userInfo";
     }
+
+    @RequestMapping("/chargePage")
+    public String chargePage(){
+        return "pages/chargeInfo";
+    }
+
+
 
     @RequestMapping("/user")
     @ResponseBody
