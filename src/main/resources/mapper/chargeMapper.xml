@@ -23,9 +23,9 @@
         <result property="dldate" column="dldate"/>
     </resultMap>
 
-    <!--查询所有的收费表信息-->
+    <!--查询最近30天数据-->
     <select id="selectChargeList" resultMap="chargeResult">
-        SELECT * from tSFB ORDER BY autoid
+        select * from tSFB where datediff(DAY,dtdate,getdate())&lt;=30 ORDER BY autoid
     </select>
 
 
@@ -35,6 +35,9 @@
         <where>
             <if test="startTime != null and endTime != null">
                 AND tSFB.dtdate BETWEEN #{startTime} AND #{endTime}
+            </if>
+            <if test="startTime == null or endTime == null">
+                AND datediff(DAY,dtdate,getdate())&lt;=30
             </if>
             <if test="billno != null">
                 AND tSFB.billno = #{billno}

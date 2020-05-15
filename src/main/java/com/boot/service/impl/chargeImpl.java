@@ -27,4 +27,5 @@ public class chargeImpl implements chargeService {
         return chargeMapper.filterChargeList(startTime,endTime,billno ,carno
                 ,cartype ,cz,jcxm,memo);
     }
+
 }

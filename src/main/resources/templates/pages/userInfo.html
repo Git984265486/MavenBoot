@@ -13,6 +13,13 @@
 				<table class="layui-hide" id="table_user_info" lay-filter="user"></table>
 			</div>
 		</div>
+		<script type="text/html" id="userToolbar">
+			<div class="layui-btn-container">
+				<button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+				<button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
+				<button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+			</div>
+		</script>
 
 		<script>
 			layui.use('table', function() {
@@ -22,28 +29,49 @@
 					elem: '#table_user_info',
 					url: 'http://127.0.0.1:8080/user',
 					title:"用户信息表",
+					toolbar: '#userToolbar', //开启头部工具栏，并为其绑定左侧模板
 					cols: [
-						[	
+						[
+							{type: 'radio'},
 							{field: 'autoID',title: 'ID',sort: true},
 							{field: 'optPY',title: '员工编号',sort: true},
 							{field: 'optName',title: '员工姓名',sort: true},
 							{field: 'optPY',title: '助记码',sort: true},
 							{field: 'optPWD',title: '所属部门',sort: true},
-							//{field: 'sfzh',title: '身份证号',sort: true},
-							//{field: 'xb',title: '性别',sort: true},
-							//{field: 'sr',title: '生日',sort: true},
-							//{field: 'zj',title: '座机',sort: true},
-							//{field: 'sj',title: '手机',sort: true},
-							//{field: 'zz',title: '住址',sort: true},
 							{field: 'optName',title: '是否停用'},
 							{field: 'badmin',title: '备注',sort: true}
 						]
 					],
-					//limits: [10, 15, 20, 25, 50, 100],
-					//limit: 10,
+					limits: [10, 15, 20, 25, 50, 100],
 					page: true,
-					//skin: 'line'
 				});
+				//头工具栏事件
+				table.on('toolbar(user)', function(obj){
+					var checkStatus = table.checkStatus(obj.config.id);
+					switch(obj.event){
+						case 'getCheckData':
+							var data = checkStatus.data;
+							if (data.length != 0){
+								layer.alert(JSON.stringify(data));
+							}else {
+								layer.msg("请先选择要操作的项");
+							}
+							break;
+						case 'getCheckLength':
+							var data = checkStatus.data;
+							layer.msg("按钮点击");
+							break;
+						case 'isAll':
+							var data = checkStatus.data;
+							layer.msg("按钮点击");
+							break;
+					};
+				});
+
+
+
+
+
 			});
 		</script>
 	</body>
