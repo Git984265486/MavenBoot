@@ -63,14 +63,14 @@ public class chargeTools {
             if (memo.length() == 0){
                 memo = null;
             }
-            System.out.println("startTimeDate:" + startTimeDate);
-            System.out.println("endTimeDate:" + endTimeDate);
-            System.out.println("billno:" + billno);
-            System.out.println("carno:" + carno);
+            System.out.print("startTimeDate:" + startTimeDate);
+            System.out.print("\tendTimeDate:" + endTimeDate);
+            System.out.print("\tbillno:" + billno);
+            System.out.print("\tcarno:" + carno);
             System.out.println("cartype:" + cartype);
-            System.out.println("flag:" + cz);
-            System.out.println("jcxm:" + jcxm);
-            System.out.println("memo:" + memo);
+            System.out.print("\tflag:" + cz);
+            System.out.print("\tjcxm:" + jcxm);
+            System.out.print("\tmemo:" + memo);
         }
 
     }

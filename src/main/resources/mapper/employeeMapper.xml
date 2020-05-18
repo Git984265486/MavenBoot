@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.employeeMapper">
+
+    <resultMap type="com.boot.damain.employee" id="employeeResult">
+        <result property="autoid" column="autoid"/>
+        <result property="name" column="name"/>
+        <result property="py" column="py"/>
+        <result property="sex" column="sex"/>
+        <result property="birthday" column="birthday"/>
+        <result property="code" column="code"/>
+        <result property="phone" column="phone"/>
+        <result property="mobile" column="mobile"/>
+        <result property="wxdj" column="wxdj"/>
+        <result property="memo" column="memo"/>
+        <result property="SMS" column="SMS"/>
+        <result property="department" column="department"/>
+    </resultMap>
+
+    <!--查询所有的员工信息-->
+    <select id="selectListEmployee" resultMap="employeeResult">
+        select e.* , td.name AS department from tEmployee e, tDepartment td where e.deptid = td.id
+    </select>
+
+
+    <!--添加员工信息，同时添加登录用户-->
+    <insert id="addEmployee">
+        DECLARE @autoid int ,@code varchar(30),@name varchar(100),@py varchar(100),@stop int
+        insert into tEmployee(code,name,py,stop,deptid,SMS) values(#{code},#{name},#{py},0,#{deptid},0) set @autoid = @@IDENTITY
+        select @code = tEmployee.code from tEmployee where autoid = @autoid
+        select @name = tEmployee.name from tEmployee where autoid = @autoid
+        select @py = tEmployee.py from tEmployee where autoid = @autoid
+        select @stop = tEmployee.stop from tEmployee where autoid = @autoid
+        insert into tUser(OptCode,OptName,Stop,bAdmin,OptPY,OptPWD) values(@code,@name,@stop,'0',@py,'888888')
+
+        DECLARE @autoid int
+        insert into tEmployee(code,name,py,stop,deptid,SMS) values(#{code},#{name},#{py},0,#{deptid},0) set @autoid = @@IDENTITY
+        insert into tUser(OptCode,OptName,Stop,bAdmin,OptPY,OptPWD) values(#{code},#{name},@stop,'0',#{py},'888888')
+
+    </insert>
+    <!--创建触发器，在表格tEmployee插入数据之后，表格tUser也插入数据，OptPWD字段：初始值8个8
+        create trigger tgr_user
+        on tEmployee
+        after insert
+        as
+        BEGIN
+            insert into
+                tUser(OptCode,OptName,OptPY,Stop,OptPWD)
+                select i.code,i.name,i.py,i.stop,'88888888'
+                from INSERTED i
+        END
+
+        drop trigger tgr_user  删除触发器
+    -->
+
+
+    <!--取最后一条数据-->
+    <select id="selectLastData" resultMap="employeeResult">
+        SELECT TOP 1 * FROM tEmployee order by autoid desc
+    </select>
+
+</mapper>

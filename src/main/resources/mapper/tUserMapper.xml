@@ -14,7 +14,7 @@
         <result property="Stop" column="Stop"/>
     </resultMap>
 
-    <!--查询所有的用户-->
+    <!--查询所有的登录用户信息-->
     <select id="selectListUser" resultMap="tUserResult">
         select * from tUser
     </select>

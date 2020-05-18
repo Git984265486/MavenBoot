@@ -27,19 +27,24 @@
 					table = layui.table;
 				table.render({
 					elem: '#table_user_info',
-					url: 'http://127.0.0.1:8080/user',
+					url: '/employeeList',			//获取数据源url
 					title:"用户信息表",
 					toolbar: '#userToolbar', //开启头部工具栏，并为其绑定左侧模板
 					cols: [
 						[
-							{type: 'radio'},
-							{field: 'autoID',title: 'ID',sort: true},
-							{field: 'optPY',title: '员工编号',sort: true},
-							{field: 'optName',title: '员工姓名',sort: true},
-							{field: 'optPY',title: '助记码',sort: true},
-							{field: 'optPWD',title: '所属部门',sort: true},
-							{field: 'optName',title: '是否停用'},
-							{field: 'badmin',title: '备注',sort: true}
+							{type: 'checkbox', fixed: 'left'},
+							{field: 'code',title: '员工编号',sort: true},
+							{field: 'name',title: '员工姓名',sort: true},
+							{field: 'py',title: '助记码',sort: true},
+							{field: 'department',title: '所属部门',sort: true},
+							{field: 'cardno',title: '身份证号',sort: true},
+							{field: 'sex',title: '性别',sort: true},
+							{field: 'birthday',title: '生日',sort: true},
+							{field: 'phone',title: '座机',sort: true},
+							{field: 'mobile',title: '手机',sort: true},
+							{field: 'address',title: '住址',sort: true},
+							{field: 'stop',title: '是否停用'},
+							{field: 'memo',title: '备注',sort: true}
 						]
 					],
 					limits: [10, 15, 20, 25, 50, 100],
@@ -59,17 +64,38 @@
 							break;
 						case 'getCheckLength':
 							var data = checkStatus.data;
-							layer.msg("按钮点击");
+							layer.msg('选中了：'+ data.length + ' 个');
+
+							layer.open({
+								type: 2
+								,title: '添加用户' //不显示标题栏
+								,area: ['80%', '80%']
+								,shade: 0.8
+								,id: 'userAdd' //设定一个id，防止重复弹出
+								,moveType: 0 //拖拽模式，0或者1
+								,content: '/userPage'
+								,success: function(layero){
+									layer.msg('弹框成功');
+								}
+							});
+
 							break;
 						case 'isAll':
-							var data = checkStatus.data;
-							layer.msg("按钮点击");
+							layer.msg(checkStatus.isAll ? '全选': '未全选');
 							break;
 					};
 				});
 
 
-
+/*
+* DECLARE @autoid int ,@code varchar(30),@name varchar(100),@py varchar(100),@stop int
+insert into tEmployee(code,name,py,stop,deptid,SMS) values('jhsm','tes','tes',0,2,0) set @autoid = @@IDENTITY
+select @code = tEmployee.code from tEmployee where autoid = @autoid
+select @name = tEmployee.name from tEmployee where autoid = @autoid
+select @py = tEmployee.py from tEmployee where autoid = @autoid
+select @stop = tEmployee.stop from tEmployee where autoid = @autoid
+insert into tUser(OptCode,OptName,Stop,bAdmin,OptPY,OptPWD) values(@code,@name,@stop,'0',@py,'888888')
+* */
 
 
 			});
