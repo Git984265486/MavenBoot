@@ -6,6 +6,11 @@
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">/**此处样式为解决表格单选显示不完全问题**/
+			.laytable-cell-radio {
+				padding: 10px 10px 0 10px;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="layuimini-container">
@@ -15,9 +20,10 @@
 		</div>
 		<script type="text/html" id="userToolbar">
 			<div class="layui-btn-container">
-				<button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-				<button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>
-				<button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>
+				<button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="deleteEmployee">删除员工信息</button>
+				<button class="layui-btn layui-btn-sm" lay-event="addEmployee">员工信息录入</button>
+				<button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="stopEmployee">停用员工账号</button>
+				<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="startEmployee">启动员工账号</button>
 			</div>
 		</script>
 
@@ -32,7 +38,7 @@
 					toolbar: '#userToolbar', //开启头部工具栏，并为其绑定左侧模板
 					cols: [
 						[
-							{type: 'checkbox', fixed: 'left'},
+							{type: 'radio'},
 							{field: 'code',title: '员工编号',sort: true},
 							{field: 'name',title: '员工姓名',sort: true},
 							{field: 'py',title: '助记码',sort: true},
@@ -43,7 +49,7 @@
 							{field: 'phone',title: '座机',sort: true},
 							{field: 'mobile',title: '手机',sort: true},
 							{field: 'address',title: '住址',sort: true},
-							{field: 'stop',title: '是否停用'},
+							{field: 'isStop',title: '是否停用'},
 							{field: 'memo',title: '备注',sort: true}
 						]
 					],
@@ -53,50 +59,113 @@
 				//头工具栏事件
 				table.on('toolbar(user)', function(obj){
 					var checkStatus = table.checkStatus(obj.config.id);
-					switch(obj.event){
-						case 'getCheckData':
-							var data = checkStatus.data;
+					switch(obj.event){			//删除员工信息
+						case 'deleteEmployee':
+							var data = checkStatus.data;	//获取到行数据
+							var code = data[0]['code'];		//拿到code值
 							if (data.length != 0){
-								layer.alert(JSON.stringify(data));
+								//layer.alert(JSON.stringify(data) +"Code值:" + code);
+								$.ajax({
+									type:"POST",
+									url:"/delEmployee",
+									data:{
+										code : code
+									},
+									success:function (data) {
+										if (data.result == "success"){
+											layer.alert("用户删除成功!",function(){
+												window.location.reload();//刷新父页面
+											});
+										}else{
+											layer.alert("用户删除失败!",function(){
+												window.location.reload();//刷新父页面
+											});
+										}
+									},
+									error:function () {
+										layer.msg("用户删除错误");
+									}
+								});
 							}else {
-								layer.msg("请先选择要操作的项");
+								layer.msg("请先选择要删除的员工");
 							}
 							break;
-						case 'getCheckLength':
-							var data = checkStatus.data;
-							layer.msg('选中了：'+ data.length + ' 个');
-
+						case 'addEmployee':
 							layer.open({
 								type: 2
 								,title: '添加用户' //不显示标题栏
-								,area: ['80%', '80%']
+								,area: ['70%', '70%']
 								,shade: 0.8
 								,id: 'userAdd' //设定一个id，防止重复弹出
 								,moveType: 0 //拖拽模式，0或者1
-								,content: '/userPage'
-								,success: function(layero){
-									layer.msg('弹框成功');
-								}
+								,content: '/addEmployeePage'
 							});
-
 							break;
-						case 'isAll':
-							layer.msg(checkStatus.isAll ? '全选': '未全选');
+
+						case 'stopEmployee':
+							var data = checkStatus.data;	//获取到行数据
+							var code = data[0]['code'];		//拿到code值
+							if (data.length != 0){
+								//layer.alert(JSON.stringify(data) +"Code值:" + code);
+								$.ajax({
+									type:"POST",
+									url:"/stopEmployee",
+									data:{
+										code : code,
+										stop : "1",
+									},
+									success:function (data) {
+										if (data.result == "success"){
+											layer.alert("账户禁用成功!",function(){
+												window.location.reload();//刷新页面
+											});
+										}else{
+											layer.alert("账户禁用失败!",function(){
+												window.location.reload();//刷新页面
+											});
+										}
+									},
+									error:function () {
+										layer.msg("账户禁用错误");
+									}
+								});
+							}else {
+								layer.msg("请选择要禁用的员工账号");
+							}
+							break;
+						case 'startEmployee' :
+							var data = checkStatus.data;	//获取到行数据
+							var code = data[0]['code'];		//拿到code值
+							if (data.length != 0){
+								//layer.alert(JSON.stringify(data) +"Code值:" + code);
+								$.ajax({
+									type:"POST",
+									url:"/stopEmployee",
+									data:{
+										code : code,
+										stop : "0",
+									},
+									success:function (data) {
+										if (data.result == "success"){
+											layer.alert("账户启用成功!",function(){
+												window.location.reload();//刷新页面
+											});
+										}else{
+											layer.alert("账户启用失败!",function(){
+												window.location.reload();//刷新页面
+											});
+										}
+									},
+									error:function () {
+										layer.msg("账户启用错误");
+									}
+								});
+							}else {
+								layer.msg("请选择要启用的员工账号");
+							}
 							break;
 					};
 				});
-
-
-/*
-* DECLARE @autoid int ,@code varchar(30),@name varchar(100),@py varchar(100),@stop int
-insert into tEmployee(code,name,py,stop,deptid,SMS) values('jhsm','tes','tes',0,2,0) set @autoid = @@IDENTITY
-select @code = tEmployee.code from tEmployee where autoid = @autoid
-select @name = tEmployee.name from tEmployee where autoid = @autoid
-select @py = tEmployee.py from tEmployee where autoid = @autoid
-select @stop = tEmployee.stop from tEmployee where autoid = @autoid
-insert into tUser(OptCode,OptName,Stop,bAdmin,OptPY,OptPWD) values(@code,@name,@stop,'0',@py,'888888')
-* */
-
 
 			});
 		</script>

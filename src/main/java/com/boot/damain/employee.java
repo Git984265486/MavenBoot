@@ -25,5 +25,6 @@ public class employee {
     private String wxdj;            //
     private int SMS;                //
     private String department;      //职务
+    private String isStop;          //是否停用
 
 }

@@ -21,26 +21,16 @@
 
     <!--查询所有的员工信息-->
     <select id="selectListEmployee" resultMap="employeeResult">
-        select e.* , td.name AS department from tEmployee e, tDepartment td where e.deptid = td.id
+        select e.* , td.name AS department from tEmployee e, tDepartment td where e.deptid = td.id ORDER BY e.autoid
     </select>
 
 
     <!--添加员工信息，同时添加登录用户-->
     <insert id="addEmployee">
-        DECLARE @autoid int ,@code varchar(30),@name varchar(100),@py varchar(100),@stop int
-        insert into tEmployee(code,name,py,stop,deptid,SMS) values(#{code},#{name},#{py},0,#{deptid},0) set @autoid = @@IDENTITY
-        select @code = tEmployee.code from tEmployee where autoid = @autoid
-        select @name = tEmployee.name from tEmployee where autoid = @autoid
-        select @py = tEmployee.py from tEmployee where autoid = @autoid
-        select @stop = tEmployee.stop from tEmployee where autoid = @autoid
-        insert into tUser(OptCode,OptName,Stop,bAdmin,OptPY,OptPWD) values(@code,@name,@stop,'0',@py,'888888')
-
-        DECLARE @autoid int
-        insert into tEmployee(code,name,py,stop,deptid,SMS) values(#{code},#{name},#{py},0,#{deptid},0) set @autoid = @@IDENTITY
-        insert into tUser(OptCode,OptName,Stop,bAdmin,OptPY,OptPWD) values(#{code},#{name},@stop,'0',#{py},'888888')
-
+        insert into tEmployee(code,name,py,stop,deptid,SMS,sex,birthday,cardno,address,phone,mobile,memo)
+         values(#{code},#{name},#{py},0,#{deptid},0,#{sex},#{birthday},#{cardno},#{address},#{phone},#{mobile},#{memo})
     </insert>
-    <!--创建触发器，在表格tEmployee插入数据之后，表格tUser也插入数据，OptPWD字段：初始值8个8
+    <!--创建插入触发器，在表格tEmployee插入数据之后，表格tUser也插入数据，OptPWD字段：初始值8个8
         create trigger tgr_user
         on tEmployee
         after insert
@@ -60,5 +50,27 @@
     <select id="selectLastData" resultMap="employeeResult">
         SELECT TOP 1 * FROM tEmployee order by autoid desc
     </select>
+
+    <!--删除员工信息-->
+    <delete id="delEmployee">
+        DELETE FROM tEmployee where tEmployee.code = #{code}
+    </delete>
+    <!--创建了一个删除触发器，在删除员工信息同时一并删除用户登录信息
+    create trigger del_empl
+       ON tEmployee
+       FOR Delete
+       AS
+       BEGIN
+        DECLARE @code varchar(30)
+        select @code = code from deleted
+        delete from tUser where tUser.OptCode = @code
+       END
+    -->
+
+    <!--更新员工信息，停用账户-->
+    <update id="stopEmployee">
+        UPDATE tEmployee set tEmployee.stop = #{stop} where tEmployee.code = #{code}
+        UPDATE tUser set Stop = #{stop} where tUser.OptCode = #{code}
+    </update>
 
 </mapper>

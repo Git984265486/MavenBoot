@@ -23,6 +23,9 @@ public class pagesController {
         return "pages/chargeInfo";
     }
 
-
+    @RequestMapping("/addEmployeePage")
+    public String addEmployee(){
+        return "pages/addEmployee";
+    }
 
 }
