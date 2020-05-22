@@ -14,9 +14,16 @@ public class tUserImpl implements tUserService {
     @Autowired
     private tUserMapper userMapper;
 
+    /**【列出所有用户信息】**/
     @Override
     public List<tUser> selectListUser(){
         return userMapper.selectListUser();
+    }
+
+    /**【用户登录验证】**/
+    @Override
+    public tUser validateUser(String username , String password) {
+        return userMapper.validateUser(username , password);
     }
 
 }

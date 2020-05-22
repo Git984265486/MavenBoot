@@ -1,6 +1,7 @@
 package com.boot.controller;
 
 import com.boot.damain.chargeInfo;
+import com.boot.damain.tUser;
 import com.boot.tools.chargeTools;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -10,6 +11,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.*;
 
@@ -22,12 +29,15 @@ public class chargeController {
 
     @RequestMapping("/listChargeInfo")
     @ResponseBody
-    public Map<String , Object> ListChargeInfo(@RequestParam(value = "page",defaultValue = "1") int page,
+    public Map<String , Object> ListChargeInfo(HttpServletRequest request, HttpServletResponse response,
+                                               @RequestParam(value = "page",defaultValue = "1") int page,
                                                @RequestParam(value = "limit",defaultValue = "20")int size,
-                                               @RequestParam(value = "searchParams",defaultValue = "") String searchParams) throws ParseException {
+                                               @RequestParam(value = "searchParams",defaultValue = "") String searchParams)
+            throws ParseException, IOException, ServletException {
         HashMap<String , Object> map = new HashMap<>();
         PageHelper.startPage(page,size);
         List<chargeInfo> listCharge = new ArrayList<>();
+
         if (searchParams == null || searchParams.equals("")){
             listCharge = chargeService.selectChargeList();
         }else{

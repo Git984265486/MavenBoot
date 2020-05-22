@@ -61,7 +61,7 @@ public class employeeTools {
         return listData;
     }
 
-    /**将传过来的json数据赋值到employee中**/
+    /**【将传过来的json数据赋值到employee中】**/
     public employee initData(String requestData) throws ParseException {
         employee user = null;
         if (requestData != null){
@@ -82,7 +82,7 @@ public class employeeTools {
         return user;
     }
 
-    /**String转Date**/
+    /**【String转Date】**/
     public Date StrToDate(String strTime) throws ParseException {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date time = null;

@@ -6,6 +6,8 @@
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../static/layui/layui.js" charset="utf-8"></script>
+		<!--<script th:src="@{/layui/index.js}" src="../static/layui/index.js"></script>-->
+
 	</head>
 	<body>
 		<div class="layui-tab layui-tab-brief">
@@ -28,11 +30,26 @@
 		</div>
 		<script>
 		layui.use('element', function(){
-		  var $ = layui.jquery,
+		  	var $ = layui.jquery,
 				  element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
 
-		  var chargePage = '<object type="text/html" data="http://localhost:8080/chargePage" width="100%" height="100%"></object>';
-		  var userPage = '<object type="text/html" data="http://localhost:8080/userPage" width="100%" height="100%"></object>';
+		  	var chargePage = '<object type="text/html" data="/chargePage" width="100%" height="100%"></object>';
+		  	var userPage = '<object type="text/html" data="/userPage" width="100%" height="100%"></object>';
+
+			var user = JSON.stringify(layui.sessionData('user'));
+			console.log("打印信息user:" + user);
+			if (user != null && user != ""){
+				var users = JSON.parse(user);
+				console.log("打印信息users:" + JSON.stringify(users.userData));
+
+				if (users.userData != null && users.userData != ""){
+					var data = JSON.parse(JSON.stringify(users.userData));
+					console.log("打印信息data:" + data.optCode);
+				}else{
+					window.location.href = "/login";
+				}
+
+			}
 
 		  $('#charge').load($(function fun() {
 		     document.getElementById("chargeInfo").innerHTML= chargePage;

@@ -11,12 +11,10 @@ public class pagesController {
         return "index";
     }
 
-
     @RequestMapping("/userPage")
     public String userPage(){
         return "pages/userInfo";
     }
-
 
     @RequestMapping("/chargePage")
     public String chargePage(){
@@ -27,5 +25,11 @@ public class pagesController {
     public String addEmployee(){
         return "pages/addEmployee";
     }
+
+    @RequestMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
+
 
 }
