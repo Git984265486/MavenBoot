@@ -5,6 +5,7 @@ import com.boot.damain.tUser;
 import com.boot.tools.chargeTools;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,13 +28,12 @@ public class chargeController {
     @Autowired
     private com.boot.service.chargeService chargeService;
 
+    /**【列出收费信息，含按条件查找】**/
     @RequestMapping("/listChargeInfo")
     @ResponseBody
-    public Map<String , Object> ListChargeInfo(HttpServletRequest request, HttpServletResponse response,
-                                               @RequestParam(value = "page",defaultValue = "1") int page,
-                                               @RequestParam(value = "limit",defaultValue = "20")int size,
-                                               @RequestParam(value = "searchParams",defaultValue = "") String searchParams)
-            throws ParseException, IOException, ServletException {
+    public Map<String , Object> ListChargeInfo(@RequestParam(value = "page",defaultValue = "1") int page,
+                             @RequestParam(value = "limit",defaultValue = "10")int size,
+                             @RequestParam(value = "searchParams",defaultValue = "") String searchParams) throws ParseException{
         HashMap<String , Object> map = new HashMap<>();
         PageHelper.startPage(page,size);
         List<chargeInfo> listCharge = new ArrayList<>();
@@ -49,6 +49,36 @@ public class chargeController {
         map.put("code",0);
         map.put("count",pageInfo.getTotal());
         map.put("data",pageInfo.getList());
+        return map;
+    }
+
+    /**【返回当天自增编号】**/
+    @RequestMapping("/seleLastCharge")
+    @ResponseBody
+    public Map<String , Object> seleLastCharge() throws ParseException {
+        HashMap<String , Object> map = new HashMap<>();
+        chargeInfo lastData = chargeService.seleLastCharge();   //最近插入的数据，billno != tmpLR
+        chargeTools tools = new chargeTools("");
+        String billNum = tools.getBillNo(lastData.getBillno());
+        System.out.println("获得当天自增编号为:\t" + billNum);
+        map.put("data",billNum);
+        return map;
+    }
+
+    /**【收费登记】**/
+    @RequestMapping("/addChargeInfo")
+    @ResponseBody
+    public Map<String , Object> addChargeInfo(@RequestParam String addData) throws ParseException {
+        HashMap<String , Object> map = new HashMap<>();
+
+        chargeTools tools = new chargeTools("");
+        chargeInfo chargeData = tools.setDataToObj(addData);
+        if (chargeData != null){
+            chargeService.addChargeInfo(chargeData);
+            map.put("result","success");
+        }else {
+            map.put("result","fail");
+        }
         return map;
     }
 

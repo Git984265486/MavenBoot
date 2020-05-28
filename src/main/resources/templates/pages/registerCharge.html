@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费登记</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+
+				
+				<form class="layui-form" lay-filter="example">
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+						
+							<label class="layui-form-label">车牌号</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="carNum" lay-verify="required" placeholder="车牌号" autocomplete="off" class="layui-input">
+							</div>
+
+							<label class="layui-form-label">车辆识别号</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="carVin" placeholder="车辆识别号" autocomplete="off" class="layui-input" lay-verify="required">
+							</div>
+
+							<label class="layui-form-label">车辆类型</label>
+							<div class="layui-input-inline">
+								<select name="carType" lay-filter="aihao" id="carType">
+									<option value="">选择类型</option>
+									<option value="大型汽车">大型汽车</option>
+									<option value="中型汽车">中型汽车</option>
+									<option value="小型汽车">小型汽车</option>
+									<option value="挂车">挂车</option>
+								</select>
+							</div>
+							
+							<label class="layui-form-label">日期</label>
+							<div class="layui-input-inline">
+								<input type="text" name="time" id="date" autocomplete="off" class="layui-input">
+							</div>
+
+
+
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+
+							<label class="layui-form-label">支付方式</label>
+							<div class="layui-input-inline">
+								<select name="payType" lay-filter="aihao" id="payType">
+									<option value="">选择支付方式</option>
+									<option value="微信">微信</option>
+									<option value="转账">转账</option>
+									<option value="月结">月结</option>
+								</select>
+							</div>
+
+							<label class="layui-form-label">备注</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="remark" placeholder="备注" autocomplete="off" class="layui-input">
+							</div>
+
+							<label class="layui-form-label">检测项目</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="checkProject" placeholder="检测项目" autocomplete="off" class="layui-input" id="checkProject">
+							</div>
+
+							<label class="layui-form-label">数量</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="count" placeholder="数量" autocomplete="off" class="layui-input" id="count">
+							</div>
+
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+
+							<label class="layui-form-label">编码</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="billNum" placeholder="编码" autocomplete="off" class="layui-input" id="billStr">
+							</div>
+
+							<label class="layui-form-label">单价</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="dj" placeholder="单价" autocomplete="off" class="layui-input" id="price">
+							</div>
+
+							<label class="layui-form-label" style="color: red">金额</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="je" placeholder="金额" autocomplete="off"
+									   class="layui-input" readonly="readonly"  style="color: red" id="amount">
+							</div>
+
+							<label class="layui-form-label" style="color: red">开单员</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="opterater" placeholder="开单员" autocomplete="off"
+									   class="layui-input" readonly="readonly"  style="color: red" id="operate">
+							</div>
+
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline" style="width: 70%">
+							<table class="layui-hide" id="table_base" lay-filter="base"></table>
+						</div>
+					</div>
+					
+				    <div class="layui-input-block" style="text-align: center;">
+				      <button type="submit" class="layui-btn" lay-submit="" lay-filter="addChargeInfo">录入收费信息</button>
+				    </div>
+				
+				</form>
+			</div>
+		</div>
+
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+				<button type="button" class="layui-btn layui-btn-sm" lay-event="addCheckData">添加收费类型</button>
+				<button type="button" class="layui-btn layui-btn-sm" lay-event="delCheckData">删除选中行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm" lay-event="editCheckData">编辑选中行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm" lay-event="stopCheckData">停用选中行数据</button>
+			</div>
+		</script>
+
+		<script type="text/html" id="baseBar">
+			<a class="layui-btn layui-btn-xs" lay-event="selectData">选择检测类型</a>
+		</script>
+		<script>
+
+			/**【获得当前系统日期】**/
+			function getTime(){
+				var date = new Date();
+				var year = date.getFullYear();
+				var month = date.getMonth() + 1;
+				var day = date.getDate();
+				if (month < 10) {
+					month = "0" + month;
+				}
+				if (day < 10) {
+					day = "0" + day;
+				}
+				var nowDate = year + "-" + month + "-" + day;
+				return nowDate;
+			}
+
+			layui.use(['form', 'laydate',"jquery","table"], function(){
+				var form = layui.form,
+				laydate = layui.laydate,
+				table = layui.table,
+				$ = layui.$;
+
+				var isAdmin = "";
+
+				/**【获得自增编号		billno	】**/
+				$(function getBillNo(){
+					var user = JSON.stringify(layui.sessionData('user'));
+					console.log("【收费登记页面打印信息user】" + user);
+					if (user != null && user != ""){
+						var users = JSON.parse(user);
+						console.log("【收费登记页面打印信息users.userData】" + JSON.stringify(users.userData));
+						if (users.userData != null && users.userData != ""){
+							var data = JSON.parse(JSON.stringify(users.userData));
+							console.log("【收费登记页面打印信息data.optName】" + data.optName);
+							$('#operate').val(data.optName);
+							isAdmin = data.badmin;
+						}else{
+							window.location.href = "/login";
+						}
+					}else{
+						window.location.href = "/login";
+					}
+					$.ajax({
+						type:"POST",
+						url:"/seleLastCharge",
+						data:"",
+						dataType:'json',
+						success:function (data) {
+							layer.msg("拿到返回的数据:\t" + JSON.stringify(data.data));
+							$('#billStr').val(data.data);
+						},
+						error:function () {
+							layer.msg("返回数据billNo错误");
+						}
+					});
+				});
+
+				/**【表格数据赋值】**/
+				table.render({
+					elem: '#table_base',
+					url: '/listBaseData',			//获取数据源url
+					toolbar: '#toolbarDemo',//false, //开启头部工具栏
+					cols: [
+						[
+							{type: 'radio'},
+							{field: 'code',title: '编码',sort: true},
+							{field: 'name',title: '名称',sort: true , width : "20%"},
+							{field: 'py',title: '助记码',sort: true},
+							{field: 'sfbz',title: '收费标准',sort: true},
+							{field: 'spdl',title: '车辆类型',sort: true , width : "20%"},
+							{field: 'memo',title: '备注',sort: true},
+							{field: 'stop',title: '是否停用',sort: true},
+							{fixed: 'right', title:'操作', toolbar: '#baseBar'}
+						]
+					],
+					limits: [10, 15, 20, 25, 50, 100],
+					limit: 10,
+					page: true,
+				});
+
+				/**【头工具栏事件】**/
+				table.on('toolbar(base)', function(obj){
+					var checkStatus = table.checkStatus(obj.config.id); //获取选中行状态
+					var checkData = checkStatus.data;
+							//选中行数据不为	typeof(checkData.length)
+					if (isAdmin === 1){
+						if (checkData.length !== 0){
+							if (obj.event === 'delCheckData'){
+								layer.alert(JSON.stringify(checkData));
+							}
+							if (obj.event === 'editCheckData'){
+								layer.alert(JSON.stringify(checkData));
+							}
+							if (obj.event === 'stopCheckData'){
+								layer.alert(JSON.stringify(checkData));
+							}
+						}else {
+							layer.alert("请先选择要编辑的数据行！");
+						}
+
+						if (obj.event === 'addCheckData') {
+							layer.alert("添加数据");
+						}
+
+					}else {
+						layer.alert("你不是管理员，无权操作此功能！");
+					}
+
+				});
+
+				/**【监听行工具事件】**/
+				table.on('tool(base)', function(obj){
+					var data = obj.data;
+
+					if(obj.event === 'selectData'){
+						// console.log("【数据①】--->" + obj);
+						// console.log("【数据②】--->" + obj.data);
+						console.log("【数据③】--->" + JSON.stringify(obj.data));
+						console.log("【数据④】--->" + obj.data.code);
+						$('#price').val(data.sfbz);
+						$('#checkProject').val(data.name);
+						$('#count').val(1);
+						$('#amount').val($('#count').val() * data.sfbz);
+
+					}
+				});
+
+				/**【监听提交】**/
+				form.on('submit(addChargeInfo)', function(data){
+					var addData = JSON.stringify(data.field);	//json字符串
+
+					if ($('#carType').val() === ""){
+						layer.alert("请先选择车型！");
+					}else if ($('#payType').val() === ""){
+						layer.alert("请先选择支付方式！");
+					}else if($('#checkProject').val() === ""){
+						layer.alert("请先选择收费项目！");
+					}else {
+						$.ajax({
+							type:"POST",
+							url:"/addChargeInfo",
+							data:{
+								addData : addData
+							},
+							dataType:'json',
+							success:function (data) {
+								if (data.result === "success"){
+									layer.msg("数据添加成功");
+								}else{
+									layer.msg("数据添加失败");
+								}
+							},
+							error:function () {
+								layer.msg("数据添加错误");
+							}
+						});
+					}
+					return false;
+				});
+
+			    /**【日期选择器】**/
+			    laydate.render({
+				  elem: '#date',
+				  value : getTime()
+				});
+
+			});
+
+
+		</script>
+	</body>
+</html>

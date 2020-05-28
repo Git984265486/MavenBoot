@@ -21,11 +21,26 @@ public class chargeImpl implements chargeService {
     }
 
 
+    /**【按条件查找收费信息】**/
     @Override
     public List<chargeInfo> filterChargeList(Date startTime, Date endTime, String billno , String carno
             , String cartype , String cz, String jcxm, String memo) {
         return chargeMapper.filterChargeList(startTime,endTime,billno ,carno
                 ,cartype ,cz,jcxm,memo);
+    }
+
+    /**【取最后一条数据】**/
+    @Override
+    public chargeInfo seleLastCharge() {
+        return chargeMapper.seleLastCharge();
+    }
+
+    /**【录入收费信息】**/
+    @Override
+    public void addChargeInfo(chargeInfo charge) {
+        chargeMapper.addChargeInfo(charge.getBillno(),charge.getCarno(),charge.getDtdate(),charge.getCartype(),
+                charge.getCz(),charge.getCzphone(),charge.getPcode(),charge.getMemo(),charge.getJcxm(),charge.getZsl(),
+                charge.getZje(),charge.getOptname(),charge.getFlag(),charge.getDsdate(),charge.getDldate());
     }
 
 }

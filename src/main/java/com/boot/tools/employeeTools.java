@@ -61,16 +61,17 @@ public class employeeTools {
         return listData;
     }
 
-    /**【将传过来的json数据赋值到employee中】**/
+    /**【将传过来的json数据赋值到employee中，添加员工信息】**/
     public employee initData(String requestData) throws ParseException {
         employee user = null;
-        if (requestData != null){
+        if (requestData != null && !requestData.equals("")){
             user = new employee();
             JSONObject jsonobject = JSONObject.fromObject(requestData);
             System.out.println("传过来的requestData：" + jsonobject.toString());
+
             user.setName(jsonobject.getString("name"));
             user.setPy(jsonobject.getString("py"));
-            user.setBirthday(StrToDate(jsonobject.getString("birthday")));
+            user.setBirthday(jsonobject.getString("birthday"));
             user.setCardno(jsonobject.getString("cardno"));
             user.setAddress(jsonobject.getString("address"));
             user.setSex(jsonobject.getString("sex"));
@@ -78,6 +79,60 @@ public class employeeTools {
             user.setPhone(jsonobject.getString("phone"));
             user.setMobile(jsonobject.getString("mobile"));
             user.setMemo(jsonobject.getString("memo"));
+        }
+        return user;
+    }
+
+    /**【将传过来的json数据赋值到employee中，更新员工信息】**/
+    public employee initDataUpdate(String requestData) throws ParseException {
+        employee user = null;
+        if (requestData != null){
+            user = new employee();
+            JSONObject jsonobject = JSONObject.fromObject(requestData);
+            System.out.println("传过来的requestData：" + jsonobject.toString());
+            if (jsonobject.getString("code")!=null){
+                user.setCode(jsonobject.getString("code"));
+            }
+
+            if (jsonobject.getString("name")!=null){
+                user.setName(jsonobject.getString("name"));
+            }
+
+            if (jsonobject.getString("py")!=null){
+                user.setPy(jsonobject.getString("py"));
+            }
+
+            if (jsonobject.getString("birthday")!=null){
+                user.setBirthday(jsonobject.getString("birthday"));
+            }
+
+            if (jsonobject.getString("cardno")!=null){
+                user.setCardno(jsonobject.getString("cardno"));
+            }
+
+            if (jsonobject.getString("address")!=null){
+                user.setAddress(jsonobject.getString("address"));
+            }
+
+            if (jsonobject.getString("sex")!=null){
+                user.setSex(jsonobject.getString("sex"));
+            }
+
+            if (jsonobject.getString("deptid")!=null){
+                user.setDeptid(Integer.parseInt(jsonobject.getString("deptid")));
+            }
+
+            if (jsonobject.getString("phone")!=null){
+                user.setPhone(jsonobject.getString("phone"));
+            }
+
+            if (jsonobject.getString("mobile")!=null){
+                user.setMobile(jsonobject.getString("mobile"));
+            }
+
+            if (jsonobject.getString("memo")!=null){
+                user.setMemo(jsonobject.getString("memo"));
+            }
         }
         return user;
     }
@@ -90,6 +145,17 @@ public class employeeTools {
             time = format.parse(strTime);
         }
         return time;
+    }
+
+    /**【指定时间格式转换】**/
+    public String timeFormat(String time){
+        String timeData = null;
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        if (time != null && !time.equals("")){
+            timeData = dateFormat.format(time);
+        }
+        System.out.println("【时间格式转换】" + timeData);
+        return timeData;
     }
 
 }

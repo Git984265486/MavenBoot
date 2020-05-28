@@ -47,4 +47,18 @@ public class employeeImpl implements employeeService {
         empMapper.stopEmployee(code , stop);
     }
 
+    /**【通过code拿到员工信息】**/
+    @Override
+    public employee selectEmployeeByCode(String code) {
+        return empMapper.selectEmployeeByCode(code);
+    }
+
+
+    /**【通过code更新员工信息】**/
+    @Override
+    public void editEmployee(employee employee) {
+        empMapper.editEmployee(employee.getBirthday(),employee.getCardno(),employee.getAddress(),employee.getPhone(),
+                employee.getMobile(),employee.getMemo(),employee.getSex(),employee.getCode());
+    }
+
 }

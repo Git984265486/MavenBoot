@@ -51,6 +51,11 @@
         SELECT TOP 1 * FROM tEmployee order by autoid desc
     </select>
 
+    <!--通过code拿到员工信息-->
+    <select id="selectEmployeeByCode" resultMap="employeeResult">
+        select e.* , td.name AS department from tEmployee e, tDepartment td WHERE e.code = #{code}  AND e.deptid = td.id
+    </select>
+
     <!--删除员工信息-->
     <delete id="delEmployee">
         DELETE FROM tEmployee where tEmployee.code = #{code}
@@ -71,6 +76,12 @@
     <update id="stopEmployee">
         UPDATE tEmployee set tEmployee.stop = #{stop} where tEmployee.code = #{code}
         UPDATE tUser set Stop = #{stop} where tUser.OptCode = #{code}
+    </update>
+
+    <!--更新员工信息-->
+    <update id="editEmployee">
+        UPDATE tEmployee set birthday = #{birthday} , cardno = #{cardno} , address = #{address} ,
+            phone = #{phone} , mobile = #{mobile} , memo = #{memo} , sex = #{sex} where tEmployee.code = #{code}
     </update>
 
 </mapper>

@@ -24,8 +24,8 @@ public class chargeInfo {
     private int zsl;        //总数量
     private int zje;        //总金额
     private String optname; //操作人
-    private int flag;       //
-    private Date dsdate;    //
-    private Date dldate;    //
+    private String flag;       //
+    private String dsdate;    //
+    private String dldate;    //
 
 }

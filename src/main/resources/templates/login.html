@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
-		<title>收费系统首页</title>
+		<title>收费登录页</title>
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../static/layui/layui.js" charset="utf-8"></script>
@@ -117,9 +117,10 @@
 								if ( obj['stop'] != "1" ){
 									layui.sessionData('user',{
 										key:"userData" , value:{
-											optCode : obj['optCode'],
-											optName : obj['optName'],
-											badmin : obj['badmin']
+											optCode : obj.optCode,
+											optName : obj.optName,
+											badmin : obj.badmin,
+											optPWD : obj.optPWD
 										}
 									});
 									layer.msg("用户登录成功");
@@ -149,7 +150,6 @@
 				}
 
 			}
-
 
 			/**监听提交**/
 			form.on('submit(login)', function(data) {

@@ -26,4 +26,16 @@ public class tUserImpl implements tUserService {
         return userMapper.validateUser(username , password);
     }
 
+    /**【用户与管理员身份变更】**/
+    @Override
+    public void updateAdmin(int isAdmin, String code) {
+        userMapper.updateAdmin(isAdmin, code);
+    }
+
+    /**【重置账号密码】**/
+    @Override
+    public void updatePWD(String optPWD, String code) {
+        userMapper.updatePWD(optPWD,code);
+    }
+
 }

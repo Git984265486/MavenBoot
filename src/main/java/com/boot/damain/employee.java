@@ -13,7 +13,7 @@ public class employee {
     private String name;            //姓名
     private String py;              //姓名首字母拼音
     private String sex;             //性别
-    private Date birthday;          //生日
+    private String birthday;          //生日
     private int deptid;             //部门ID
     private String duty;            //
     private String cardno;          //身份证号码

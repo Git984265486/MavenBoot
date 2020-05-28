@@ -22,4 +22,9 @@ public interface employeeService {
     /**【更新员工信息，更新字段:stop】**/
     public void stopEmployee(String code , int stop);
 
+    /**【通过code拿到员工信息】**/
+    public employee selectEmployeeByCode(String code);
+
+    /**【通过code更新员工信息】**/
+    public void editEmployee(employee employee);
 }

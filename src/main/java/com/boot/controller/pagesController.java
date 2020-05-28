@@ -31,5 +31,14 @@ public class pagesController {
         return "login";
     }
 
+    @RequestMapping("/editEmployeePage")
+    public String editEmployeePage(){
+        return "pages/editEmployee";
+    }
+
+    @RequestMapping("/registerCharge")
+    public String registerCharge(){
+        return "pages/registerCharge";
+    }
 
 }

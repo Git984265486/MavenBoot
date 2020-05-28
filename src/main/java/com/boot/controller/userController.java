@@ -8,10 +8,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +31,10 @@ public class userController {
         return map;
     }
 
+    /**【用户登录验证】**/
     @RequestMapping("/validateUser")
     @ResponseBody
-    public  Map<String ,Object> validateUser(HttpServletRequest request, HttpServletResponse response,
-                                             @RequestParam String username , @RequestParam String password){
+    public  Map<String ,Object> validateUser(@RequestParam String username , @RequestParam String password){
         HashMap<String , Object> map = new HashMap<>();
         System.out.println("传过来的数据：" + username + "\t|" + password);
 
@@ -51,6 +47,40 @@ public class userController {
             }else{
                 map.put("result","fail");
             }
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    /**【登录用户提升管理与降为普通用户，密码重置】**/
+    @RequestMapping("/updateAdmin")
+    @ResponseBody
+    public  Map<String ,Object> updateAdmin(@RequestParam String isAdmin ,@RequestParam String optPWD ,  @RequestParam String code){
+        HashMap<String , Object> map = new HashMap<>();
+        System.out.println("用户身份变更传过来的数据：" + isAdmin + "\t|识别：" + code + "\t|密码：" + optPWD);
+        if (code != null && !code.equals("")){
+            if (!code.equals("5") && optPWD.equals("")){
+                userService.updateAdmin(Integer.parseInt(isAdmin) , code);
+            }else if (optPWD.equals("RS")){
+                userService.updatePWD("88888888" , code);
+            }
+            map.put("result","success");
+        }else{
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    /**【用户修改密码】**/
+    @RequestMapping("/resetPassword")
+    @ResponseBody
+    public Map<String ,Object> resetPassword(@RequestParam String optPWD ,  @RequestParam String code){
+        HashMap<String , Object> map = new HashMap<>();
+        System.out.println("用户身份变更传过来的数据：" + "\t|识别code：" + code + "\t|密码：" + optPWD);
+        if (optPWD != null && !optPWD.equals("") && code != null && !code.equals("")){
+            userService.updatePWD(optPWD,code);
+            map.put("result","success");
         }else{
             map.put("result","fail");
         }

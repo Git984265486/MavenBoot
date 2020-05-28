@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.Format;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +29,7 @@ public class employeeController {
     @RequestMapping("/employeeList")
     @ResponseBody
     public Map<String ,Object> employeeList(@RequestParam(value = "page",defaultValue = "1") int page,
-                                            @RequestParam(value = "limit",defaultValue = "10")int size){
+                                            @RequestParam(value = "limit",defaultValue = "15")int size){
         HashMap<String , Object> map = new HashMap<>();
         employeeTools tools = new employeeTools();
         PageHelper.startPage(page,size);
@@ -83,7 +86,7 @@ public class employeeController {
         String result = "";
         System.out.println("传过来的Code值：" + code);
         if (code != null && !code.equals("")){
-            //service.delEmployee(code);      //删除员工信息
+            service.delEmployee(code);      //删除员工信息
             result = "success";
         }
         map.put("result",result);
@@ -102,6 +105,41 @@ public class employeeController {
             result = "success";
         }
         map.put("result",result);
+        return map;
+    }
+
+    /**【通过code拿到员工信息】**/
+    @RequestMapping("/selectEmplByCode")
+    @ResponseBody
+    public Map<String , Object> selectEmplByCode(@RequestParam String code) throws ParseException {
+        HashMap<String,Object> map = new HashMap<>();
+        System.out.println("前端传过来获取员工信息数据code:\t" + code);
+        if (code != null && !code.equals("")){
+            employee employee = service.selectEmployeeByCode(code);
+            employeeTools tools = new employeeTools();
+            employee.setBirthday(tools.timeFormat(employee.getBirthday()));
+            map.put("employee",employee);
+            map.put("result","success");
+        }else {
+            map.put("result","fail");
+        }
+        return map;
+    }
+
+    /**【通过code修改员工信息】**/
+    @RequestMapping("/editEmployeeByCode")
+    @ResponseBody
+    public Map<String , Object> editEmployeeByCode(@RequestParam String edtiData) throws ParseException {
+        HashMap<String,Object> map = new HashMap<>();
+        System.out.println("前端传过来员工信息数据edtiData:\t" + edtiData);
+        if (edtiData != null && !edtiData.equals("")){
+            employeeTools tool = new employeeTools();
+            employee em = tool.initDataUpdate(edtiData);
+            service.editEmployee(em);
+            map.put("result","success");
+        }else {
+            map.put("result","fail");
+        }
         return map;
     }
 }

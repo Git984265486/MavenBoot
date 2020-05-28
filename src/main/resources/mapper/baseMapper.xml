@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.baseMapper">
+
+    <resultMap type="com.boot.damain.base" id="baseResult">
+        <result property="autoid" column="autoid"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="py" column="py"/>
+        <result property="stop" column="stop"/>
+        <result property="memo" column="memo"/>
+        <result property="ccode" column="ccode"/>
+        <result property="spdl" column="spdl"/>
+        <result property="sfbz" column="sfbz"/>
+    </resultMap>
+
+    <!--查询全部数据-->
+    <select id="selectBaseList" resultMap="baseResult">
+        select * from tBase where ccode = '2' ORDER BY autoid
+    </select>
+
+
+
+
+</mapper>

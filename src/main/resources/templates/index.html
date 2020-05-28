@@ -6,38 +6,50 @@
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../static/layui/layui.js" charset="utf-8"></script>
-		<!--<script th:src="@{/layui/index.js}" src="../static/layui/index.js"></script>-->
 
 	</head>
 	<body>
 		<div class="layui-tab layui-tab-brief">
-		  <ul class="layui-tab-title" id="charge">
-			<li class="layui-this">
-				<button type="button" class="layui-btn layui-btn-primary"  data-method="chargeInfo">收费信息</button>
-			</li>
-			<li>
-				<button type="button" class="layui-btn layui-btn-primary"  data-method="userInfo">员工信息</button>
-			</li>
-			<li>
-				<button type="button" class="layui-btn layui-btn-primary"  data-method="carInfo">车辆实时状态</button>
-			</li>
+		    <ul class="layui-tab-title" id="charge">
+			    <li class="layui-this">
+				    <button type="button" class="layui-btn layui-btn-primary"  data-method="chargeInfo">收费信息</button>
+			    </li>
+				<li>
+					<button type="button" class="layui-btn layui-btn-primary"  data-method="userInfo">员工信息</button>
+				</li>
+				<li>
+					<button type="button" class="layui-btn layui-btn-primary"  data-method="carInfo">车辆实时状态</button>
+				</li>
+			    <li>
+				    <button type="button" class="layui-btn layui-btn-primary"  data-method="employeeInfo">修改个人信息</button>
+			    </li>
+				<li>
+					<button type="button" class="layui-btn layui-btn-primary"  data-method="registerCharge">收费登记</button>
+				</li>
 		  </ul>
 		  <div class="layui-tab-content" style="height: 800px;">
-			<div class="layui-tab-item layui-show" id="chargeInfo" style="height: 100%;"></div>
-			<div class="layui-tab-item" id="userInfo" style="height: 100%;"></div>
-			<div class="layui-tab-item" id="carInfo" style="height: 100%;">车辆实时状态</div>
+			  <div class="layui-tab-item layui-show" id="chargeInfo" style="height: 100%;"></div>
+			  <div class="layui-tab-item" id="userInfo" style="height: 100%;"></div>
+			  <div class="layui-tab-item" id="carInfo" style="height: 100%;">车辆实时状态</div>
+			  <div class="layui-tab-item" id="employeeInfo" style="height: 100%;"></div>
+			  <div class="layui-tab-item" id="registerCharge" style="height: 100%;"></div>
 		  </div>
 		</div>
 		<script>
-		layui.use('element', function(){
+		layui.use(['element','jquery','layer'], function(){
 		  	var $ = layui.jquery,
-				  element = layui.element; //Tab的切换功能，切换事件监听等，需要依赖element模块
+					layer = layui.layer;
 
 		  	var chargePage = '<object type="text/html" data="/chargePage" width="100%" height="100%"></object>';
 		  	var userPage = '<object type="text/html" data="/userPage" width="100%" height="100%"></object>';
+		  	var employeePage = '<object type="text/html" data="/editEmployeePage" width="100%" height="100%"></object>';
+		  	var registerPage = '<object type="text/html" data="/registerCharge" width="100%" height="100%"></object>';
 
 			var user = JSON.stringify(layui.sessionData('user'));
 			console.log("打印信息user:" + user);
+
+			var isAdmin = "";
+
 			if (user != null && user != ""){
 				var users = JSON.parse(user);
 				console.log("打印信息users:" + JSON.stringify(users.userData));
@@ -45,10 +57,13 @@
 				if (users.userData != null && users.userData != ""){
 					var data = JSON.parse(JSON.stringify(users.userData));
 					console.log("打印信息data:" + data.optCode);
+					isAdmin = data.badmin;
 				}else{
 					window.location.href = "/login";
 				}
 
+			}else{
+				window.location.href = "/login";
 			}
 
 		  $('#charge').load($(function fun() {
@@ -61,10 +76,23 @@
 				 document.getElementById("chargeInfo").innerHTML= chargePage;
 			  },
 			  userInfo : function(){
-				 document.getElementById("userInfo").innerHTML= userPage;
+		      	if (isAdmin == "1"){
+					document.getElementById("userInfo").innerHTML= userPage;
+				}else {
+					layer.alert("你不是管理员，你无权限操作该功能！",function () {
+						window.location.reload();//刷新父页面
+					});
+				}
+
 			  },
 			  carInfo : function(){
 
+			  },
+			  employeeInfo : function () {
+				  document.getElementById("employeeInfo").innerHTML= employeePage;
+			  },
+			  registerCharge : function () {
+					document.getElementById("registerCharge").innerHTML = registerPage;
 			  }
 
 		  };

@@ -1,5 +1,6 @@
 package com.boot.tools;
 
+import com.boot.damain.chargeInfo;
 import net.sf.json.JSONObject;
 
 import java.text.DateFormat;
@@ -75,5 +76,93 @@ public class chargeTools {
 
     }
 
+    /**【当天自增编号  billno  】**/
+    public String getBillNo(String billno){
+        String billNum = "";
+        if (!billno.equals("") && billno != null){
+            String bills [] = billno.split("-");
+            if (bills.length != 0){
+                for (int i = 0 ; i < bills.length ; i ++ ) {
+                    System.out.println("切割的字符串:\t" + bills[i]);
+                }
+                if (bills[0].equals(timeNumber())){     //判断最后处理的数据的日期是否是当天
+                    billNum = timeNumber() + "-" +getNumber(bills[1]);
+                }else{                                  //不是当天则编号从0001重新开始
+                    billNum = timeNumber() + "-0001";
+                }
+            }
+        }
+        return billNum;
+    }
+
+    /**【获得四位数的数字字符串】**/
+    public String getNumber(String number){
+        String numStr = "";
+        int num = 0;
+        if (number != null && !number.equals("")){
+            num = 1 + Integer.parseInt(number);
+            if (num <= 9){
+                numStr = "000" + num;
+            }else if (num <= 99){
+                numStr = "00" + num;
+            }else{
+                numStr = "0" + num;
+            }
+        }
+        System.out.println("【获得四位数的数字字符串】" + numStr);
+        return numStr;
+    }
+
+    /**【指定时间格式】**/
+    public String timeNumber(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        String timeData = dateFormat.format(new Date());
+        System.out.println("获取指定的时间格式【yyyyMMdd】数据:\t" + timeData);
+        return timeData;
+    }
+
+    /**【将json串数据赋值到对象中】**/
+    public chargeInfo setDataToObj(String addData){
+        chargeInfo info = null;
+        if (addData != null && !addData.equals("")){
+            JSONObject jsonobject = JSONObject.fromObject(addData);
+            System.out.println("传过来的requestData：" + jsonobject.toString());
+            System.out.println("传过来的billNum：" + jsonobject.getString("billNum"));
+            String dj = jsonobject.getString("dj"); //单价
+            String count = jsonobject.getString("count");//总数
+            String billNum = jsonobject.getString("billNum");
+
+            info.setBillno(billNum);
+            info.setCarno(jsonobject.getString("carNum"));
+            info.setDldate(jsonobject.getString("time"));
+            info.setCartype(jsonobject.getString("carType"));
+            info.setCz(jsonobject.getString("payType"));
+            info.setPcode(jsonobject.getString("carVin"));
+            info.setJcxm(jsonobject.getString("checkProject"));
+            info.setZsl(StrToNnmber(count));
+            info.setZje(TotalNumber(count,dj));
+            info.setOptname(jsonobject.getString("opterater"));
+            info.setMemo(jsonobject.getString("remark"));
+        }
+        return info;
+    }
+
+    /**【字符串转数字】**/
+    public int StrToNnmber(String str){
+        int number = 0;
+        if (str != null && !str.equals("")){
+            number = Integer.parseInt(str);
+        }
+        return number;
+    }
+
+    /**【计算总价格】**/
+    public int TotalNumber(String count , String dj){   //总数量 × 单价
+        int total = 0;
+        if (count != null && !count.equals("") && dj != null && !dj.equals("")){
+            total = StrToNnmber(count) * StrToNnmber(dj);
+        }
+        return total;
+    }
 
 }

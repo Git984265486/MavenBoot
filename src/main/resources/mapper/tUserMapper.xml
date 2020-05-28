@@ -24,4 +24,16 @@
         select * from tUser where tUser.OptPY = #{username} and tUser.OptPWD = #{password}
     </select>
 
+    <!--  通过OptCode查询用户信息  -->
+
+    <!--登录用户提升管理与降为普通用户-->
+    <update id="updateAdmin">
+        UPDATE tUser SET bAdmin = #{isAdmin} where tUser.OptCode = #{code}
+    </update>
+
+    <!--重置账号密码-->
+    <update id="updatePWD">
+        UPDATE tUser SET optPWD = #{optPWD} where tUser.OptCode = #{code}
+    </update>
+
 </mapper>
