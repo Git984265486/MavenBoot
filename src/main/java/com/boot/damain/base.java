@@ -9,10 +9,10 @@ public class base {
     private String code;    //编码
     private String name;    //
     private String py;      //助记码
-    private int stop;       //是否停用
+    private String stop;       //是否停用
     private String memo;    //备注
     private int ccode;
     private String spdl;
-    private int sfbz;       //收费标准
+    private String sfbz;       //收费标准
 
 }

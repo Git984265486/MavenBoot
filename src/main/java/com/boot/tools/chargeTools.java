@@ -122,19 +122,19 @@ public class chargeTools {
     }
 
     /**【将json串数据赋值到对象中】**/
-    public chargeInfo setDataToObj(String addData){
-        chargeInfo info = null;
+    public chargeInfo setDataToObj(String addData) throws ParseException {
+        chargeInfo info = new chargeInfo();
         if (addData != null && !addData.equals("")){
             JSONObject jsonobject = JSONObject.fromObject(addData);
             System.out.println("传过来的requestData：" + jsonobject.toString());
-            System.out.println("传过来的billNum：" + jsonobject.getString("billNum"));
+            //System.out.println("传过来的billNum：" + jsonobject.getString("billNum"));
             String dj = jsonobject.getString("dj"); //单价
             String count = jsonobject.getString("count");//总数
             String billNum = jsonobject.getString("billNum");
 
-            info.setBillno(billNum);
+            info.setBillno(billNum);                /////报错
             info.setCarno(jsonobject.getString("carNum"));
-            info.setDldate(jsonobject.getString("time"));
+            info.setDtdate(StrToDate(jsonobject.getString("time")));
             info.setCartype(jsonobject.getString("carType"));
             info.setCz(jsonobject.getString("payType"));
             info.setPcode(jsonobject.getString("carVin"));
@@ -163,6 +163,25 @@ public class chargeTools {
             total = StrToNnmber(count) * StrToNnmber(dj);
         }
         return total;
+    }
+
+    /**【String转Date】**/
+    public Date StrToDate(String strTime) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date time = null;
+        if (strTime != null && !strTime.equals("")){
+            time = format.parse(strTime);
+        }
+        return time;
+    }
+
+    /**【拿到当前系统时间】**/
+    public Date getSystemTime() throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date time = new Date();
+        String times = format.format(time);
+        System.out.println("【拿到当前系统时间】" + times);
+        return time;
     }
 
 }

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费项目编辑</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
+				  <legend>修改收费项目信息</legend>
+				</fieldset>
+				
+				<form class="layui-form" lay-filter="example">
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+						
+							<label class="layui-form-label">检验项目</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="name" lay-verify="required" placeholder="姓名" autocomplete="off"
+									   class="layui-input" id="proName">
+							</div>
+								
+							<label class="layui-form-label">检验项目首字母</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="py" placeholder="检验项目首字母" lay-verify="required" autocomplete="off"
+									   class="layui-input" id="proPYval">
+							</div>
+							
+							<label class="layui-form-label">是否停用</label>
+							<div class="layui-input-inline">
+								<select name="stop" lay-filter="aihao">
+									<option value="0" selected="">否</option>
+									<option value="1">是</option>
+								</select>
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+							<div class="layui-inline">
+
+								<label class="layui-form-label">备注信息</label>
+								<div  class="layui-input-inline">
+									<input type="text" name="remark" placeholder="备注信息" autocomplete="off"
+										   class="layui-input" id="remarkVal">
+								</div>
+
+								<label class="layui-form-label">车辆类型</label>
+								<div  class="layui-input-inline">
+									<input type="text" name="carType" placeholder="车辆类型" autocomplete="off"
+										   class="layui-input" id="carTypeVal" lay-verify="required">
+								</div>
+
+								<label class="layui-form-label">收费标准</label>
+								<div class="layui-input-inline">
+									<input type="text" name="charge" placeholder="收费标准" autocomplete="off"
+										   class="layui-input" id="chargeVal" lay-verify="required">
+								</div>
+
+							</div>
+						</div>
+
+				    <div class="layui-input-block" style="text-align: center;">
+				      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">添加收费项</button>
+				    </div>
+				
+				</form>
+			</div>
+		</div>
+		
+		<script>
+		layui.use(['form', "jquery"], function(){
+			var form = layui.form,
+			$ = layui.$;
+
+
+		  
+		  /**监听提交**/
+		  form.on('submit(demo1)', function(data){
+		  	var insertData = JSON.stringify(data.field);	//json字符串
+		    //layer.alert(requestData);
+			  $.ajax({
+				  type:"POST",
+				  url:"/insertBaseData",
+				  data:{
+					  insertData : insertData,
+				  },
+				  dataType:'json',
+				  success:function (data) {
+					  if (data.result === "insertSuccess"){
+						  layer.alert("添加数据成功",function () {
+							  window.parent.location.reload();//刷新父页面
+							  parent.layer.close(index);//关闭弹出层
+						  });
+					  }else{
+						  layer.msg("添加数据失败");
+					  }
+				  },
+				  error:function () {
+					  layer.msg("添加数据错误");
+				  }
+			  });
+		    return false;
+		  });
+
+		});
+		</script>
+	</body>
+</html>

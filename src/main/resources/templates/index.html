@@ -26,6 +26,9 @@
 				<li>
 					<button type="button" class="layui-btn layui-btn-primary"  data-method="registerCharge">收费登记</button>
 				</li>
+				<li>
+					<button type="button" class="layui-btn layui-btn-primary"  data-method="checkOver">检测发证</button>
+				</li>
 		  </ul>
 		  <div class="layui-tab-content" style="height: 800px;">
 			  <div class="layui-tab-item layui-show" id="chargeInfo" style="height: 100%;"></div>
@@ -33,6 +36,7 @@
 			  <div class="layui-tab-item" id="carInfo" style="height: 100%;">车辆实时状态</div>
 			  <div class="layui-tab-item" id="employeeInfo" style="height: 100%;"></div>
 			  <div class="layui-tab-item" id="registerCharge" style="height: 100%;"></div>
+			  <div class="layui-tab-item" id="checkOver" style="height: 100%;">检验发证</div>
 		  </div>
 		</div>
 		<script>
@@ -93,6 +97,9 @@
 			  },
 			  registerCharge : function () {
 					document.getElementById("registerCharge").innerHTML = registerPage;
+			  },
+			  checkOver : function () {
+
 			  }
 
 		  };

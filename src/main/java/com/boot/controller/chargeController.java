@@ -72,6 +72,7 @@ public class chargeController {
         HashMap<String , Object> map = new HashMap<>();
 
         chargeTools tools = new chargeTools("");
+        tools.getSystemTime();
         chargeInfo chargeData = tools.setDataToObj(addData);
         if (chargeData != null){
             chargeService.addChargeInfo(chargeData);

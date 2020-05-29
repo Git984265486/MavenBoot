@@ -133,6 +133,7 @@
 				<button type="button" class="layui-btn layui-btn-sm" lay-event="delCheckData">删除选中行数据</button>
 				<button type="button" class="layui-btn layui-btn-sm" lay-event="editCheckData">编辑选中行数据</button>
 				<button type="button" class="layui-btn layui-btn-sm" lay-event="stopCheckData">停用选中行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm" lay-event="startCheckData">启用选中行数据</button>
 			</div>
 		</script>
 
@@ -189,7 +190,8 @@
 						data:"",
 						dataType:'json',
 						success:function (data) {
-							layer.msg("拿到返回的数据:\t" + JSON.stringify(data.data));
+							//layer.msg("拿到返回的数据:\t" + JSON.stringify(data.data));
+							console.log("【拿到返回的编号数据】" + data.data);
 							$('#billStr').val(data.data);
 						},
 						error:function () {
@@ -228,27 +230,108 @@
 							//选中行数据不为	typeof(checkData.length)
 					if (isAdmin === 1){
 						if (checkData.length !== 0){
-							if (obj.event === 'delCheckData'){
-								layer.alert(JSON.stringify(checkData));
+							if (obj.event === 'delCheckData'){		//删除选中行数据
+								//layer.msg(JSON.stringify(checkData[0].code));
+								$.ajax({
+									type:"POST",
+									url:"/delBaseByCode",
+									data:{
+										code : checkData[0].code
+									},
+									dataType:'json',
+									success:function (data) {
+										if (data.result === "success"){
+											layer.alert("删除数据成功",function () {
+												window.parent.location.reload();//刷新父页面
+												parent.layer.close(index);//关闭弹出层
+											});
+										}else{
+											layer.msg("删除数据失败");
+										}
+									},
+									error:function () {
+										layer.msg("删除添加错误");
+									}
+								});
 							}
-							if (obj.event === 'editCheckData'){
-								layer.alert(JSON.stringify(checkData));
+							if (obj.event === 'editCheckData'){		//编辑选中行数据
+								//layer.msg(JSON.stringify(checkData));
+								layer.open({
+									title: '收费项目信息',
+									type: 2,
+									shade: 0.2,
+									maxmin: true,
+									shadeClose: true,
+									area: ['60%', '60%'],
+									content: '/editBasePage' + '?code=' + checkData[0].code
+								});
 							}
-							if (obj.event === 'stopCheckData'){
-								layer.alert(JSON.stringify(checkData));
+							if (obj.event === 'stopCheckData'){		//停用选中行数据
+								//layer.msg(JSON.stringify(checkData));
+								$.ajax({
+									type:"POST",
+									url:"/updateBaseByCode",
+									data:{
+										updateData : checkData[0].code,
+										operateStr : "stopData"
+									},
+									dataType:'json',
+									success:function (data) {
+										if (data.result === "stopSuccess"){
+											layer.alert("停用数据成功",function () {
+												window.location.reload();//刷新页面
+											});
+
+										}else{
+											layer.msg("停用数据失败");
+										}
+									},
+									error:function () {
+										layer.msg("停用数据错误");
+									}
+								});
+							}
+							if (obj.event === 'startCheckData'){	//启用选中行数据
+								$.ajax({
+									type:"POST",
+									url:"/updateBaseByCode",
+									data:{
+										updateData : checkData[0].code,
+										operateStr : "startData"
+									},
+									dataType:'json',
+									success:function (data) {
+										if (data.result === "startSuccess"){
+											layer.alert("启用数据成功",function () {
+												window.location.reload();//刷新页面
+											});
+										}else{
+											layer.msg("启用数据失败");
+										}
+									},
+									error:function () {
+										layer.msg("启用数据错误");
+									}
+								});
 							}
 						}else {
-							layer.alert("请先选择要编辑的数据行！");
+							layer.msg("请先选择要编辑的数据行！");
 						}
-
-						if (obj.event === 'addCheckData') {
-							layer.alert("添加数据");
+						if (obj.event === 'addCheckData') {		//添加数据
+							//layer.msg("添加数据");
+							layer.open({
+								title: '添加收费项目信息',
+								type: 2,
+								shade: 0.2,
+								maxmin: true,
+								shadeClose: true,
+								area: ['60%', '60%'],
+								content: '/addBasePage'
+							});
 						}
-
 					}else {
-						layer.alert("你不是管理员，无权操作此功能！");
+						layer.msg("你不是管理员，无权操作此功能！");
 					}
-
 				});
 
 				/**【监听行工具事件】**/
@@ -256,15 +339,18 @@
 					var data = obj.data;
 
 					if(obj.event === 'selectData'){
-						// console.log("【数据①】--->" + obj);
-						// console.log("【数据②】--->" + obj.data);
-						console.log("【数据③】--->" + JSON.stringify(obj.data));
-						console.log("【数据④】--->" + obj.data.code);
-						$('#price').val(data.sfbz);
-						$('#checkProject').val(data.name);
-						$('#count').val(1);
-						$('#amount').val($('#count').val() * data.sfbz);
-
+						if (data.stop === "是"){
+							layer.msg("此收费项已停用，请联系管理员启用！");
+						}else {
+							console.log("【数据①】--->" + obj);
+							console.log("【数据②】--->" + obj.data);
+							console.log("【数据③】--->" + JSON.stringify(obj.data));
+							console.log("【数据④】--->" + obj.data.code);
+							$('#price').val(data.sfbz);
+							$('#checkProject').val(data.name);
+							$('#count').val(1);
+							$('#amount').val($('#count').val() * data.sfbz);
+						}
 					}
 				});
 
@@ -273,11 +359,11 @@
 					var addData = JSON.stringify(data.field);	//json字符串
 
 					if ($('#carType').val() === ""){
-						layer.alert("请先选择车型！");
+						layer.msg("请先选择车型！");
 					}else if ($('#payType').val() === ""){
-						layer.alert("请先选择支付方式！");
+						layer.msg("请先选择支付方式！");
 					}else if($('#checkProject').val() === ""){
-						layer.alert("请先选择收费项目！");
+						layer.msg("请先选择收费项目！");
 					}else {
 						$.ajax({
 							type:"POST",

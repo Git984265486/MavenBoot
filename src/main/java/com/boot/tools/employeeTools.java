@@ -148,11 +148,13 @@ public class employeeTools {
     }
 
     /**【指定时间格式转换】**/
-    public String timeFormat(String time){
+    public String timeFormat(String time) throws ParseException {
         String timeData = null;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (time != null && !time.equals("")){
-            timeData = dateFormat.format(time);
+            Date date = new Date();
+            date = dateFormat.parse(time);
+            timeData = dateFormat.format(date);
         }
         System.out.println("【时间格式转换】" + timeData);
         return timeData;

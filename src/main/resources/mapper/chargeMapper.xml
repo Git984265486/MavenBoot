@@ -69,7 +69,7 @@
     <!--添加收费登记信息-->
     <insert id="addChargeInfo">
         Insert into tSFB(Billno,carno,dtdate,cartype,cz,czphone,pcode,memo,jcxm,zsl,zje,optname,flag,dsdate,dldate)
-        values (#{Billno},#{carno},#{dtdate},#{cartype},#{cz},#{czphone},#{pcode},#{memo},#{jcxm},#{zsl},#{zje},#{optname},#{flag},#{dsdate},#{dldate},)
+        values (#{Billno},#{carno},#{dtdate},#{cartype},#{cz},#{czphone},#{pcode},#{memo},#{jcxm},#{zsl},#{zje},#{optname},#{flag},#{dsdate},#{dldate})
     </insert>
     <!--    创建触发器，一并插入数据到表：tSFMXB
         create trigger sfb_tgr

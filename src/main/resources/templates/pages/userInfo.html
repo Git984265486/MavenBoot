@@ -63,121 +63,97 @@
 				//头工具栏事件
 				table.on('toolbar(user)', function(obj){
 					var checkStatus = table.checkStatus(obj.config.id);
+					console.log("【员工信息datas】" + JSON.stringify(checkStatus));
+					console.log("【员工信息data】" + JSON.stringify(checkStatus.data));
+					console.log("【员工信息长度】" + checkStatus.data.length);
 
-					switch(obj.event){			//删除员工信息
-						case 'deleteEmployee':
-							var data = checkStatus.data;	//获取到行数据
-							var code = data[0]['code'];		//拿到code值
-							if (data.length != 0){
-								//layer.alert(JSON.stringify(data) +"Code值:" + code);
-								$.ajax({
-									type:"POST",
-									url:"/delEmployee",
-									data:{
-										code : code
-									},
-									success:function (data) {
-										if (data.result == "success"){
-											layer.alert("用户删除成功!",function(){
-												window.location.reload();//刷新父页面
-											});
-										}else{
-											layer.alert("用户删除失败!",function(){
-												window.location.reload();//刷新父页面
-											});
-										}
-									},
-									error:function () {
-										layer.msg("用户删除错误");
+					if (checkStatus.data.length !== 1){
+						layer.msg("请先选择要变动的员工");
+					}else{
+						var data = checkStatus.data;	//获取到行数据
+						var code = data[0]['code'];		//拿到code值
+						if (obj.event === 'stopEmployee'){		//停用账号登录
+							$.ajax({
+								type:"POST",
+								url:"/stopEmployee",
+								data:{
+									code : code,
+									stop : "1",
+								},
+								success:function (data) {
+									if (data.result == "success"){
+										layer.alert("账户禁用成功!",function(){
+											window.location.reload();//刷新页面
+										});
+									}else{
+										layer.alert("账户禁用失败!",function(){
+											window.location.reload();//刷新页面
+										});
 									}
-								});
-							}else {
-								layer.msg("请先选择要删除的员工");
-							}
-							break;
-						case 'addEmployee':
-							layer.open({
-								type: 2
-								,title: '添加用户' //不显示标题栏
-								,area: ['70%', '70%']
-								,shade: 0.8
-								,id: 'userAdd' //设定一个id，防止重复弹出
-								,moveType: 0 //拖拽模式，0或者1
-								,content: '/addEmployeePage'
+								},
+								error:function () {
+									layer.msg("账户禁用错误");
+								}
 							});
-							break;
-						case 'stopEmployee':
-							var data = checkStatus.data;	//获取到行数据
-							var code = data[0]['code'];		//拿到code值
-							if (data.length != 0){
-								//layer.alert(JSON.stringify(data) +"Code值:" + code);
-								$.ajax({
-									type:"POST",
-									url:"/stopEmployee",
-									data:{
-										code : code,
-										stop : "1",
-									},
-									success:function (data) {
-										if (data.result == "success"){
-											layer.alert("账户禁用成功!",function(){
-												window.location.reload();//刷新页面
-											});
-										}else{
-											layer.alert("账户禁用失败!",function(){
-												window.location.reload();//刷新页面
-											});
-										}
-									},
-									error:function () {
-										layer.msg("账户禁用错误");
+						}
+
+						if(obj.event === 'deleteEmployee'){		//删除员工信息
+							$.ajax({
+								type:"POST",
+								url:"/delEmployee",
+								data:{
+									code : data[0]['code']
+								},
+								success:function (data) {
+									if (data.result == "success"){
+										layer.alert("用户删除成功!",function(){
+											window.location.reload();//刷新父页面
+										});
+									}else{
+										layer.alert("用户删除失败!",function(){
+											window.location.reload();//刷新父页面
+										});
 									}
-								});
-							}else {
-								layer.msg("请选择要禁用的员工账号");
-							}
-							break;
-						case 'startEmployee' :
-							var data = checkStatus.data;	//获取到行数据
-							var code = data[0]['code'];		//拿到code值
-							if (data.length != 0){
-								//layer.alert(JSON.stringify(data) +"Code值:" + code);
-								$.ajax({
-									type:"POST",
-									url:"/stopEmployee",
-									data:{
-										code : code,
-										stop : "0",
-									},
-									success:function (data) {
-										if (data.result == "success"){
-											layer.alert("账户启用成功!",function(){
-												window.location.reload();//刷新页面
-											});
-										}else{
-											layer.alert("账户启用失败!",function(){
-												window.location.reload();//刷新页面
-											});
-										}
-									},
-									error:function () {
-										layer.msg("账户启用错误");
+								},
+								error:function () {
+									layer.msg("用户删除错误");
+								}
+							});
+						}
+
+						if (obj.event === 'startEmployee'){
+							$.ajax({
+								type:"POST",
+								url:"/stopEmployee",
+								data:{
+									code : code,
+									stop : "0",
+								},
+								success:function (data) {
+									if (data.result == "success"){
+										layer.alert("账户启用成功!",function(){
+											window.location.reload();//刷新页面
+										});
+									}else{
+										layer.alert("账户启用失败!",function(){
+											window.location.reload();//刷新页面
+										});
 									}
-								});
-							}else {
-								layer.msg("请选择要启用的员工账号");
-							}
-							break;
-						case 'upUser' :
-							var datas = checkStatus.data;	//获取到行数据
-							var codes = datas[0]['code'];		//拿到code值
+								},
+								error:function () {
+									layer.msg("账户启用错误");
+								}
+							});
+						}
+
+						if (obj.event === 'upUser'){
 							$.ajax({
 								type:"POST",
 								url:"/updateAdmin",
 								data:{
 									isAdmin : 1,
 									optPWD : "",
-									code : codes,
+									code : code,
 								},
 								success:function (data) {
 									if (data.result == "success"){
@@ -194,17 +170,16 @@
 									layer.msg("账户更新管理权限错误");
 								}
 							});
-							break;
-						case 'downUser' :
-							var datas = checkStatus.data;	//获取到行数据
-							var codes = datas[0]['code'];		//拿到code值
+						}
+
+						if (obj.event === 'downUser'){
 							$.ajax({
 								type:"POST",
 								url:"/updateAdmin",
 								data:{
 									isAdmin : 0,
 									optPWD : "",
-									code : codes,
+									code : code,
 								},
 								success:function (data) {
 									if (data.result == "success"){
@@ -221,17 +196,16 @@
 									layer.msg("账户更新管理权限错误");
 								}
 							});
-							break;
-						case 'resetPWD' :
-							var datas = checkStatus.data;	//获取到行数据
-							var codes = datas[0]['code'];		//拿到code值
+						}
+
+						if (obj.event === 'resetPWD'){
 							$.ajax({
 								type:"POST",
 								url:"/updateAdmin",
 								data:{
 									isAdmin : 5,
 									optPWD : "RS",
-									code : codes,
+									code : code,
 								},
 								success:function (data) {
 									if (data.result == "success"){
@@ -248,10 +222,21 @@
 									layer.msg("账户重置密码错误");
 								}
 							});
-							break;
-					};
-				});
+						}
+					}
 
+					if(obj.event === 'addEmployee'){
+						layer.open({
+							type: 2
+							,title: '添加用户' //不显示标题栏
+							,area: ['70%', '70%']
+							,shade: 0.8
+							,id: 'userAdd' //设定一个id，防止重复弹出
+							,moveType: 0 //拖拽模式，0或者1
+							,content: '/addEmployeePage'
+						});
+					}
+				});
 			});
 		</script>
 	</body>
