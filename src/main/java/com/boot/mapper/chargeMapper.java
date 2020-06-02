@@ -19,5 +19,5 @@ public interface chargeMapper {
 
     /**【录入收费信息】**/
     public void addChargeInfo(String Billno,String carno,Date dtdate,String cartype,String cz,String czphone,String pcode,
-                              String memo,String jcxm,int zsl,int zje,String optname,String flag,String dsdate,String dldate);
+                              String memo,String jcxm,int zsl,Double zje,String optname,String flag,String dsdate,String dldate);
 }

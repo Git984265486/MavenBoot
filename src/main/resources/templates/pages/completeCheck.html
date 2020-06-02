@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>检测发证</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+
+	</head>
+	<body>
+	<div class="layuimini-container">
+		<div class="layuimini-main" style="text-align: center;">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
+				<legend>检测车辆信息表</legend>
+			</fieldset>
+
+			<div class="layui-form-item">
+
+				<div class="layui-inline" style="width: 28% ; float: center;">
+					<label style="color: red;">待检车辆</label>
+					<div class="layui-inline">
+						<form class="layui-form layui-form-pane">
+							<div class="layui-input-inline">
+								<input type="tel" name="checkCar" class="layui-input" placeholder="输入车牌">
+							</div>
+							<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="check-btn">
+								<i class="layui-icon"></i>搜 索
+							</button>
+						</form>
+						<table class="layui-hide" id="table_check" lay-filter="check"></table>
+					</div>
+				</div>
+
+				<div class="layui-inline" style="width: 28% ; float: center;">
+					<label style="color: red;">待审车辆</label>
+
+					<div class="layui-inline">
+						<form class="layui-form layui-form-pane">
+							<div class="layui-input-inline">
+								<input type="tel" name="examinationCar" class="layui-input" placeholder="输入车牌">
+							</div>
+							<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="examination-btn">
+								<i class="layui-icon"></i>搜 索
+							</button>
+						</form>
+						<table class="layui-hide" id="table_examination" lay-filter="examination"></table>
+					</div>
+				</div>
+
+				<div class="layui-inline" style="width: 28% ; float: center;">
+					<label style="color: red;">领取证件</label>
+					<div class="layui-inline">
+						<form class="layui-form layui-form-pane">
+							<div class="layui-input-inline">
+								<input type="tel" name="completeCar" class="layui-input" placeholder="输入车牌">
+							</div>
+							<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="complete-btn">
+								<i class="layui-icon"></i>搜 索
+							</button>
+						</form>
+						<table class="layui-hide" id="table_complete" lay-filter="complete"></table>
+					</div>
+				</div>
+			</div>
+
+
+
+		</div>
+	</div>
+	<!-- 左侧表格的行中按钮 -->
+	<script type="text/html" id="LeftToCenterBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="LeftToCenter">
+				<i class="layui-icon layui-icon-next"></i>
+			</button>
+		</div>
+	</script>
+
+	<!-- 中间表格的左侧按钮 -->
+	<script type="text/html" id="CenterToLeftBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="CenterToLeft">
+				<i class="layui-icon layui-icon-prev"></i>
+			</button>
+		</div>
+	</script>
+
+	<!-- 中间表格的右侧按钮 -->
+	<script type="text/html" id="CenterToRightBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="CenterToRight">
+				<i class="layui-icon layui-icon-next"></i>
+			</button>
+		</div>
+	</script>
+
+	<!-- 右侧表格到中间表格的行中按钮 -->
+	<script type="text/html" id="RightToCenterBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="RightToCenter">检测完成</button>
+		</div>
+	</script>
+
+
+	<script>
+		layui.use(['form', 'layer','table' ], function() {
+			var $ = layui.$,
+				form = layui.form,
+				layer = layui.layer,
+				table = layui.table;
+
+
+			/**【左表格数据赋值到中间表格】**/
+			table.render({
+				elem: '#table_check',
+				url: 'http://127.0.0.1:8080/listChargeInfo',			//获取数据源url
+				toolbar: false, //开启头部工具栏
+				cols: [
+					[
+						{field: 'carno',title: '车牌号码'},
+						{fixed: 'right', title:'移动到待审', toolbar: '#LeftToCenterBar'}
+					]
+				],
+				limits: [15, 20, 25, 50, 100],
+				limit: 15,
+				page: true,
+			});
+			/**【左表格数据赋值到中间表格监听行工具事件】**/
+			table.on('tool(check)', function(obj){
+				var data = obj.data;
+
+				if(obj.event === 'LeftToCenter'){
+					layer.msg(JSON.stringify(data));
+
+				}
+			});
+
+			/**【中间表格数据赋值到左、右表格】**/
+			table.render({
+				elem: '#table_examination',
+				url: 'http://127.0.0.1:8080/listChargeInfo',			//获取数据源url
+				toolbar: false, //开启头部工具栏
+				cols: [
+					[
+						{fixed: 'right', title:'移动到待检', toolbar: '#CenterToLeftBar'},
+						{field: 'carno',title: '车牌号码'},
+						{fixed: 'right', title:'移动到领取证件', toolbar: '#CenterToRightBar'}
+					]
+				],
+				limits: [15, 20, 25, 50, 100],
+				limit: 15,
+				page: true,
+			});
+			/**【中间表格数据赋值到左、右表格监听行工具事件】**/
+			table.on('tool(examination)', function(obj){
+				var data = obj.data;
+
+				if(obj.event === 'CenterToLeft'){
+					layer.msg(JSON.stringify(data));
+				}
+				if(obj.event === 'CenterToRight'){
+					layer.msg(JSON.stringify(data));
+				}
+			});
+
+
+			/**【右表格数据赋值到中间表格】**/
+			table.render({
+				elem: '#table_complete',
+				url: 'http://127.0.0.1:8080/listChargeInfo',			//获取数据源url
+				toolbar: false, //开启头部工具栏
+				cols: [
+					[
+						{field: 'carno',title: '车牌号码'},
+						{fixed: 'right', title:'操作', toolbar: '#RightToCenterBar'}
+					]
+				],
+				limits: [15, 20, 25, 50, 100],
+				limit: 15,
+				page: true,
+			});
+			/**【右表格数据赋值到中间表格监听行工具事件】**/
+			table.on('tool(complete)', function(obj){
+				var data = obj.data;
+
+				if(obj.event === 'RightToCenter'){
+					layer.msg(JSON.stringify(data));
+				}
+			});
+
+
+			// 监听搜索提交操作
+			form.on('submit(check-btn)', function(data) {
+				var result = JSON.stringify(data.field);
+				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+				layer.alert(result);
+				//执行搜索重载
+				table.reload('table_check', {
+					page: {
+						curr: 1
+					},
+					where: {		//重载时数据result传回url后台处理
+						searchParams: result
+					}
+				}, 'data');			//处理后返回的数据
+
+				return false;
+			});
+
+			// 监听搜索提交操作
+			form.on('submit(examination-btn)', function(data) {
+				var result = JSON.stringify(data.field);
+				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+				layer.alert(result);
+				//执行搜索重载
+				table.reload('table_examination', {
+					page: {
+						curr: 1
+					},
+					where: {		//重载时数据result传回url后台处理
+						searchParams: result
+					}
+				}, 'data');			//处理后返回的数据
+
+				return false;
+			});
+
+			// 监听搜索提交操作
+			form.on('submit(complete-btn)', function(data) {
+				var result = JSON.stringify(data.field);
+				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+				layer.alert(result);
+				//执行搜索重载
+				table.reload('table_complete', {
+					page: {
+						curr: 1
+					},
+					where: {		//重载时数据result传回url后台处理
+						searchParams: result
+					}
+				}, 'data');			//处理后返回的数据
+
+				return false;
+			});
+
+		});
+	</script>
+	</body>
+</html>

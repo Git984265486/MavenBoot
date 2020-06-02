@@ -140,6 +140,7 @@
 					url: 'http://127.0.0.1:8080/listChargeInfo',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
 					defaultToolbar: ['filter', 'exports', 'print'],
+					totalRow: true,
 					cols: [
 						[ 
 							{field: 'autoid' , title: 'ID'},
@@ -149,13 +150,13 @@
 							{field: 'cartype' , title: '车辆类型'},
 							{field: 'cz' , title: '支付方式'},
 							{field: 'jcxm' , title: '检验总项'},
-							{field: 'zsl' , title: '总数量'},
-							{field: 'zje' , title: '总金额'},
+							{field: 'zsl' , title: '总数量',sort : true,totalRow: true},
+							{field: 'zje' , title: '总金额',sort : true,totalRow: true},
 							{field: 'memo' , title: '备注'},
 							{field: 'optname' , title: '开单员'},
 						]
 					],
-					limits: [10, 15, 20, 25, 50, 100],
+					limits: [10, 15, 20, 25, 50, 100,500,1000,5000],
 					limit: 10,
 					page: true,
 					height: 550

@@ -22,7 +22,7 @@ public class chargeInfo {
     private String memo;    //备注信息
     private String jcxm;     //检测项目
     private int zsl;        //总数量
-    private int zje;        //总金额
+    private Double zje;        //总金额
     private String optname; //操作人
     private String flag;       //
     private String dsdate;    //

@@ -139,7 +139,7 @@ public class chargeTools {
             info.setCz(jsonobject.getString("payType"));
             info.setPcode(jsonobject.getString("carVin"));
             info.setJcxm(jsonobject.getString("checkProject"));
-            info.setZsl(StrToNnmber(count));
+            info.setZsl(Integer.parseInt(count));
             info.setZje(TotalNumber(count,dj));
             info.setOptname(jsonobject.getString("opterater"));
             info.setMemo(jsonobject.getString("remark"));
@@ -151,17 +151,27 @@ public class chargeTools {
     public int StrToNnmber(String str){
         int number = 0;
         if (str != null && !str.equals("")){
-            number = Integer.parseInt(str);
+            number =Integer.parseInt(str);
+        }
+        return number;
+    }
+
+    /**【String转Double】**/
+    public Double strToDouble(String strDouble){
+        Double number = 0.0;
+        if (strDouble != null && !strDouble.equals("")){
+            number = new Double(strDouble);
         }
         return number;
     }
 
     /**【计算总价格】**/
-    public int TotalNumber(String count , String dj){   //总数量 × 单价
-        int total = 0;
+    public Double TotalNumber(String count , String dj){   //总数量 × 单价
+        Double total = 0.0;
         if (count != null && !count.equals("") && dj != null && !dj.equals("")){
-            total = StrToNnmber(count) * StrToNnmber(dj);
+            total = Integer.parseInt(count) * strToDouble(dj);
         }
+        System.out.println("【总价】" + total);
         return total;
     }
 

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*",maxAge = 3600)//解决跨域问题
 public class pagesController {
 
+    /**【首页】**/
     @RequestMapping("/index")
     public String index(){
         return "index";
@@ -57,5 +58,23 @@ public class pagesController {
     @RequestMapping("/addBasePage")
     public String addBasePage(){
         return "pages/addBase";
+    }
+
+    /**【检测发证页面】**/
+    @RequestMapping("/completePage")
+    public String completePage(){
+        return "pages/completeCheck";
+    }
+
+    /**【车辆监测页面】**/
+    @RequestMapping("/superviserCarPage")
+    public String superviserPage(){
+        return "pages/superviserCar";
+    }
+
+    /**【车辆监测详细页面】**/
+    @RequestMapping("/superviserDetailPage")
+    public String superviserDetail(){
+        return "pages/superviserDetail";
     }
 }

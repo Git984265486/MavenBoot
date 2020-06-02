@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费登记</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layui-form-item">
+			<div class="layui-inline">
+				<form class="layui-form layui-form-pane">
+					<div class="layui-input-inline">
+						<input type="tel" name="carNo" class="layui-input" placeholder="输入车牌">
+					</div>
+					<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="carNo-btn">
+						<i class="layui-icon"></i>搜 索
+					</button>
+				</form>
+			</div>
+		</div>
+		<table class="layui-hide" id="table_superviserCar" lay-filter="superviserCar"></table>
+
+		<script type="text/html" id="superviserBar">
+			<a class="layui-btn layui-btn-xs" lay-event="DataDetail">检测详情</a>
+		</script>
+		<script>
+
+			layui.use(['form','layer',"table"], function(){
+				var form = layui.form,
+					layer = layui.layer,
+					table = layui.table,
+					$ = layui.$;
+
+				/**【表格数据赋值】**/
+				table.render({
+					elem: '#table_superviserCar',
+					url: '/seleListData',			//获取数据源url
+					toolbar:false, //开启头部工具栏
+					cols: [
+						[
+							{field: 'carno',title: '车牌号码'},
+							{field: 'operator',title: '操作人' },
+							{field: 'start_time',title: '车辆录入时间'},
+							{fixed: 'right', title:'操作', toolbar: '#superviserBar'}
+						]
+					],
+					limits: [10, 15, 20, 25, 50, 100],
+					limit: 10,
+					page: true,
+				});
+
+				/**【监听搜索提交操作】**/
+				form.on('submit(carNo-btn)', function(data) {
+					var result = JSON.stringify(data.field);
+					var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+					//layer.alert(result);
+					//layer.alert(JSON.parse(result).carNo);
+					//执行搜索重载
+					table.reload('table_superviserCar', {
+						page: {
+							curr: 1
+						},
+						where: {
+							carNo:obj.carNo	//重载时数据result传回url后台处理
+						}
+					}, 'data');				//处理后返回的数据
+					return false;
+				});
+
+				/**【监听行工具事件】**/
+				table.on('tool(superviserCar)', function(obj){
+					var data = obj.data;
+
+					if(obj.event === 'DataDetail'){
+						/**【通过keyID更新车辆信息表数据】**/
+
+						layer.open({
+							title: '车辆检测信息',
+							type: 2,
+							shade: 0.2,
+							maxmin: true,
+							shadeClose: true,
+							area: ['60%', '60%'],
+							content: '/superviserDetailPage' + '?keyID='+data.keyID
+						});
+					}
+				});
+
+			});
+
+		</script>
+	</body>
+</html>

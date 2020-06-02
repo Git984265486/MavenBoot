@@ -33,10 +33,10 @@
 		  <div class="layui-tab-content" style="height: 800px;">
 			  <div class="layui-tab-item layui-show" id="chargeInfo" style="height: 100%;"></div>
 			  <div class="layui-tab-item" id="userInfo" style="height: 100%;"></div>
-			  <div class="layui-tab-item" id="carInfo" style="height: 100%;">车辆实时状态</div>
+			  <div class="layui-tab-item" id="carInfo" style="height: 100%;"></div>
 			  <div class="layui-tab-item" id="employeeInfo" style="height: 100%;"></div>
 			  <div class="layui-tab-item" id="registerCharge" style="height: 100%;"></div>
-			  <div class="layui-tab-item" id="checkOver" style="height: 100%;">检验发证</div>
+			  <div class="layui-tab-item" id="checkOver" style="height: 100%;"></div>
 		  </div>
 		</div>
 		<script>
@@ -48,6 +48,8 @@
 		  	var userPage = '<object type="text/html" data="/userPage" width="100%" height="100%"></object>';
 		  	var employeePage = '<object type="text/html" data="/editEmployeePage" width="100%" height="100%"></object>';
 		  	var registerPage = '<object type="text/html" data="/registerCharge" width="100%" height="100%"></object>';
+		  	var completePage = '<object type="text/html" data="/completePage" width="100%" height="100%"></object>';
+		  	var superviserCar = '<object type="text/html" data="/superviserCarPage" width="100%" height="100%"></object>';
 
 			var user = JSON.stringify(layui.sessionData('user'));
 			console.log("打印信息user:" + user);
@@ -65,7 +67,6 @@
 				}else{
 					window.location.href = "/login";
 				}
-
 			}else{
 				window.location.href = "/login";
 			}
@@ -87,10 +88,9 @@
 						window.location.reload();//刷新父页面
 					});
 				}
-
 			  },
 			  carInfo : function(){
-
+				  document.getElementById("carInfo").innerHTML= superviserCar;
 			  },
 			  employeeInfo : function () {
 				  document.getElementById("employeeInfo").innerHTML= employeePage;
@@ -99,17 +99,15 @@
 					document.getElementById("registerCharge").innerHTML = registerPage;
 			  },
 			  checkOver : function () {
-
+					document.getElementById("checkOver").innerHTML = completePage;
 			  }
-
 		  };
 		  
 		  $('#charge .layui-btn').on('click', function(){
 		        var othis = $(this), method = othis.data('method');
 		        active[method] ? active[method].call(this, othis) : '';
 		  });
-		 
-		  
+
 		});
 		</script>
 
