@@ -110,11 +110,10 @@
 				layer = layui.layer,
 				table = layui.table;
 
-
-			/**【左表格数据赋值到中间表格】**/
+			/**【待检表格数据赋值】**/
 			table.render({
 				elem: '#table_check',
-				url: 'http://127.0.0.1:8080/listChargeInfo',			//获取数据源url
+				url: 'http://127.0.0.1:8080/selectByInCheck',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -126,7 +125,7 @@
 				limit: 15,
 				page: true,
 			});
-			/**【左表格数据赋值到中间表格监听行工具事件】**/
+			/**【待检表格监听行工具事件】**/
 			table.on('tool(check)', function(obj){
 				var data = obj.data;
 
@@ -136,10 +135,10 @@
 				}
 			});
 
-			/**【中间表格数据赋值到左、右表格】**/
+			/**【待审表格数据赋值】**/
 			table.render({
 				elem: '#table_examination',
-				url: 'http://127.0.0.1:8080/listChargeInfo',			//获取数据源url
+				url: 'http://127.0.0.1:8080/selectByExamination',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -152,7 +151,7 @@
 				limit: 15,
 				page: true,
 			});
-			/**【中间表格数据赋值到左、右表格监听行工具事件】**/
+			/**【待审表格监听行工具事件】**/
 			table.on('tool(examination)', function(obj){
 				var data = obj.data;
 
@@ -165,10 +164,10 @@
 			});
 
 
-			/**【右表格数据赋值到中间表格】**/
+			/**【发证表格数据赋值到中间表格】**/
 			table.render({
 				elem: '#table_complete',
-				url: 'http://127.0.0.1:8080/listChargeInfo',			//获取数据源url
+				url: 'http://127.0.0.1:8080/selectByComplete',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -180,70 +179,84 @@
 				limit: 15,
 				page: true,
 			});
-			/**【右表格数据赋值到中间表格监听行工具事件】**/
+			/**【发证表格监听行工具事件】**/
 			table.on('tool(complete)', function(obj){
 				var data = obj.data;
-
 				if(obj.event === 'RightToCenter'){
-					layer.msg(JSON.stringify(data));
+					layer.msg(JSON.stringify(data.keyID));
+					$.ajax({
+						type: "POST",
+						url:"/updateCarStatusByKeyID",
+						data:{
+							keyID:JSON.stringify(data.keyID)
+						},
+						dataType: "json",
+						success:function (data) {
+							if (data.result === "updateSuccess"){
+								layer.msg("更新数据成功");
+							}else {
+								layer.msg("更新数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("更新数据错误");
+						}
+					});
 				}
 			});
 
 
-			// 监听搜索提交操作
+			/**【待检监听搜索提交操作】**/
 			form.on('submit(check-btn)', function(data) {
 				var result = JSON.stringify(data.field);
 				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
 
 				layer.alert(result);
-				//执行搜索重载
-				table.reload('table_check', {
+
+				table.reload('table_check', {	//执行搜索重载
 					page: {
 						curr: 1
 					},
-					where: {		//重载时数据result传回url后台处理
-						searchParams: result
+					where: {
+						carno:obj.checkCar,	//重载时数据result传回url后台处理
 					}
-				}, 'data');			//处理后返回的数据
-
+				}, 'data');				//处理后返回的数据
 				return false;
 			});
 
-			// 监听搜索提交操作
+			/**【待审监听搜索提交操作】**/
 			form.on('submit(examination-btn)', function(data) {
 				var result = JSON.stringify(data.field);
 				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
 
-				layer.alert(result);
-				//执行搜索重载
-				table.reload('table_examination', {
+				layer.alert(obj.examinationCar);
+
+				table.reload('table_examination', { //执行搜索重载
 					page: {
 						curr: 1
 					},
 					where: {		//重载时数据result传回url后台处理
-						searchParams: result
+						carno: obj.examinationCar
 					}
 				}, 'data');			//处理后返回的数据
-
 				return false;
 			});
 
-			// 监听搜索提交操作
+			/**【发证监听搜索提交操作】**/
 			form.on('submit(complete-btn)', function(data) {
 				var result = JSON.stringify(data.field);
 				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
 
-				layer.alert(result);
-				//执行搜索重载
-				table.reload('table_complete', {
+				layer.alert(obj.completeCar);
+
+				table.reload('table_complete', {	//执行搜索重载
 					page: {
 						curr: 1
 					},
 					where: {		//重载时数据result传回url后台处理
-						searchParams: result
+						carno : obj.completeCar
 					}
 				}, 'data');			//处理后返回的数据
-
 				return false;
 			});
 

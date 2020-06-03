@@ -2,49 +2,129 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
-		<title>收费登记</title>
+		<title>车辆检测信息</title>
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
 		<style type="text/css">
-			.layui-form-item{
+			.layui-form-item {
 				width: 100%;
 				text-align: center;
 			}
 		</style>
 	</head>
 	<body>
-		<table class="layui-table" lay-size="lg">
-			<colgroup>
-				<col width="150">
-				<col width="200">
-				<col>
-			</colgroup>
-			<thead>
-			<tr>
-				<th>昵称</th>
-				<th>加入时间</th>
-				<th>签名</th>
-			</tr>
-			</thead>
-			<tbody>
-			<tr>
-				<td>贤心</td>
-				<td>2016-11-29</td>
-				<td>人生就像是一场修行</td>
-			</tr>
-			<tr>
-				<td>许闲心</td>
-				<td>2016-11-28</td>
-				<td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
-			</tr>
-			<tr>
-				<td>sentsin</td>
-				<td>2016-11-27</td>
-				<td> Life is either a daring adventure or nothing.</td>
-			</tr>
-			</tbody>
-		</table>
+
+	<div class="layuimini-container">
+		<div class="layuimini-main">
+
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
+				<legend>车辆检测信息详情</legend>
+			</fieldset>
+
+			<div class="layui-form-item">
+				<div class="layui-inline" style="width: 95%">
+					<label class="layui-form-label" style="width: 15%">车牌</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="carNo" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">检验状态</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="carStatus" readonly="readonly">
+					</div>
+
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline" style="width: 95%">
+
+					<label class="layui-form-label" style="width: 15%">外检开始时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="wjSt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">安检开始时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="ajSt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">环检开始时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="hjSt" readonly="readonly">
+					</div>
+
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline" style="width: 95%">
+
+					<label class="layui-form-label" style="width: 15%">外检结束时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="wjEt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">安检结束时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="ajEt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">环检结束时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="hjEt" readonly="readonly">
+					</div>
+
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline" style="width: 95%">
+
+					<label class="layui-form-label" style="width: 15%">外检耗时</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="wjUt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">安检耗时</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="ajUt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">环检耗时</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="hjUt" readonly="readonly">
+					</div>
+
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-inline" style="width: 95%">
+
+					<label class="layui-form-label" style="width: 15%">检验开始时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="checkSt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">检验结束时间</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="checkEt" readonly="readonly">
+					</div>
+
+					<label class="layui-form-label" style="width: 15%">检验共耗时</label>
+					<div class="layui-input-inline" style="width: 15%">
+						<input type="text" autocomplete="off" class="layui-input" id="checkUt" readonly="readonly">
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+
 		<script>
 			layui.use(['layer'], function(){
 				var layer = layui.layer,
@@ -54,7 +134,109 @@
 				$(function () {
 					var href = window.location.href;     //获得url
 					var keyID = href.split("?keyID=")[1];   //从url获得id参数
-					layer.msg("传过来的code值："+keyID);
+					//layer.msg("传过来的code值："+keyID);
+					$.ajax({
+						type:"POST",
+						url:"/selectDetailBykeyID",
+						data:{
+							keyID : keyID,
+						},
+						dataType:'json',
+						success:function (data) {
+							if (data.result === "Success"){
+								console.log("【通过keyID获取成功返回的数据】"+JSON.stringify(data.detailData));
+								InitData(data.detailData);
+							}else{
+								layer.msg("获取数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("获取数据错误");
+						}
+					});
+
+					/**【数据赋值到页面上显示】**/
+					function InitData(data) {
+						$('#carNo').val(data.carno);										//车牌号码
+
+						if (data.result === "1"){										//检验状态
+							$('#carStatus').val("检验完成");
+						}else {
+							$('#carStatus').val("待检");
+						}
+
+						if (data.wj_start === null || data.wj_start === ''){	//外检开始时间
+							$('#wjSt').val("待检");
+						}else {
+							$('#wjSt').val(data.wj_start);
+						}
+
+						if (data.wj_end === null || data.wj_end === ''){		//外检结束时间
+							$('#wjEt').val("待检");
+						}else {
+							$('#wjEt').val(data.wj_end);
+						}
+
+						if (data.aj_start === null || data.aj_start === ''){	//安检开始时间
+							$('#ajSt').val("待检");
+						}else {
+							$('#ajSt').val(data.aj_start);
+						}
+
+						if (data.aj_end === null || data.aj_end === ''){		//安检结束时间
+							$('#ajEt').val("待检");
+						}else {
+							$('#ajEt').val(data.aj_end);
+						}
+
+						if (data.hj_start === null || data.hj_start === ''){	//环检开始时间
+							$('#hjSt').val("待检");
+						}else {
+							$('#hjSt').val(data.hj_start);
+						}
+
+						if (data.hj_end === null || data.hj_end === ''){		//环检结束时间
+							$('#hjEt').val("待检");
+						}else {
+							$('#hjEt').val(data.hj_end);
+						}
+
+						if (data.wj_usetime === null || data.wj_usetime === ''){	//外检耗时
+							$('#wjUt').val("待检");
+						}else {
+							$('#wjUt').val(data.wj_usetime);
+						}
+
+						if (data.aj_usetime === null || data.aj_usetime === ''){	//安检耗时
+							$('#ajUt').val("待检");
+						}else {
+							$('#ajUt').val(data.aj_usetime);
+						}
+
+						if (data.hj_usetime === null || data.hj_usetime === ''){	//环检耗时
+							$('#hjUt').val("待检");
+						}else {
+							$('#hjUt').val(data.hj_usetime);
+						}
+
+						if (data.start_time === null || data.start_time === ''){	//录入数据时间
+							$('#checkSt').val("数据错误");
+						}else {
+							$('#checkSt').val(data.start_time);
+						}
+
+						if (data.end_time === null || data.end_time === ''){	//检验完成时间
+							$('#checkEt').val("检验中");
+						}else {
+							$('#checkEt').val(data.end_time);
+						}
+
+						if (data.usetime === null || data.usetime === ''){	//检验完成总耗时
+							$('#checkUt').val("检验中");
+						}else {
+							$('#checkUt').val(data.usetime);
+						}
+					}
 				});
 
 

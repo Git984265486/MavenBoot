@@ -28,6 +28,10 @@ public class superviserCarTools {
             updateCar.setUsetime(getUseTime(carInfo.getStart_time(),carInfo.getEnd_time()));
             updateCar.setOperator(carInfo.getOperator());
             updateCar.setResult(carInfo.getResult());
+            System.out.println("【拿到外检耗时】" + updateCar.getWj_usetime());
+            System.out.println("【拿到安检耗时】" + updateCar.getAj_usetime());
+            System.out.println("【拿到环检耗时】" + updateCar.getHj_usetime());
+            System.out.println("【拿到总耗时】" + updateCar.getUsetime());
         }
         return updateCar;
     }
@@ -53,7 +57,6 @@ public class superviserCarTools {
             }else {
                 useTime =  minutes + "分";
             }
-
             System.out.println("【最终时间转换得到的值】" + useTime);
         }
         return useTime;
