@@ -64,6 +64,7 @@
 									<option value="微信">微信</option>
 									<option value="转账">转账</option>
 									<option value="月结">月结</option>
+									<option value="现金">现金</option>
 								</select>
 							</div>
 
@@ -374,7 +375,9 @@
 							dataType:'json',
 							success:function (data) {
 								if (data.result === "success"){
-									layer.msg("数据添加成功");
+									layer.alert("数据添加成功",function () {
+										window.location.reload();
+									});
 								}else{
 									layer.msg("数据添加失败");
 								}

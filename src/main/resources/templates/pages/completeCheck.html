@@ -18,7 +18,7 @@
 			<div class="layui-form-item">
 
 				<div class="layui-inline" style="width: 28% ; float: center;">
-					<label style="color: red;">待检车辆</label>
+					<p style="color: red;margin-bottom: 50px">待检车辆</p>
 					<div class="layui-inline">
 						<form class="layui-form layui-form-pane">
 							<div class="layui-input-inline">
@@ -33,7 +33,7 @@
 				</div>
 
 				<div class="layui-inline" style="width: 28% ; float: center;">
-					<label style="color: red;">待审车辆</label>
+					<p style="color: red;margin-bottom: 50px">待审车辆</p>
 
 					<div class="layui-inline">
 						<form class="layui-form layui-form-pane">
@@ -49,7 +49,7 @@
 				</div>
 
 				<div class="layui-inline" style="width: 28% ; float: center;">
-					<label style="color: red;">领取证件</label>
+					<p style="color: red;margin-bottom: 50px;">领取证件</p>
 					<div class="layui-inline">
 						<form class="layui-form layui-form-pane">
 							<div class="layui-input-inline">
@@ -77,16 +77,7 @@
 		</div>
 	</script>
 
-	<!-- 中间表格的左侧按钮 -->
-	<script type="text/html" id="CenterToLeftBar">
-		<div class="layui-btn-container layui-transfer-active">
-			<button type="button" class="layui-btn layui-btn-sm " lay-event="CenterToLeft">
-				<i class="layui-icon layui-icon-prev"></i>
-			</button>
-		</div>
-	</script>
-
-	<!-- 中间表格的右侧按钮 -->
+	<!-- 中间表格的行中按钮 -->
 	<script type="text/html" id="CenterToRightBar">
 		<div class="layui-btn-container layui-transfer-active">
 			<button type="button" class="layui-btn layui-btn-sm " lay-event="CenterToRight">
@@ -113,7 +104,7 @@
 			/**【待检表格数据赋值】**/
 			table.render({
 				elem: '#table_check',
-				url: 'http://127.0.0.1:8080/selectByInCheck',			//获取数据源url
+				url: 'http://127.0.0.1:8080/selectTableData'+'?DataType=0',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -131,18 +122,36 @@
 
 				if(obj.event === 'LeftToCenter'){
 					layer.msg(JSON.stringify(data));
-
+					$.ajax({
+						type: "POST",
+						url:"/updateCarStatusByKeyID",
+						data:{
+							keyID : JSON.stringify(data.keyID),
+							instruction : "check"
+						},
+						dataType: "json",
+						success:function (data) {
+							if (data.result === "updateSuccess"){
+								layer.msg("更新数据成功");
+								window.location.reload();
+							}else {
+								layer.msg("更新数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("更新数据错误");
+						}
+					});
 				}
 			});
 
 			/**【待审表格数据赋值】**/
 			table.render({
 				elem: '#table_examination',
-				url: 'http://127.0.0.1:8080/selectByExamination',			//获取数据源url
+				url: 'http://127.0.0.1:8080/selectTableData'+'?DataType=1',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
-						{fixed: 'right', title:'移动到待检', toolbar: '#CenterToLeftBar'},
 						{field: 'carno',title: '车牌号码'},
 						{fixed: 'right', title:'移动到领取证件', toolbar: '#CenterToRightBar'}
 					]
@@ -160,6 +169,26 @@
 				}
 				if(obj.event === 'CenterToRight'){
 					layer.msg(JSON.stringify(data));
+					$.ajax({
+						type: "POST",
+						url:"/updateCarStatusByKeyID",
+						data:{
+							keyID : JSON.stringify(data.keyID),
+							instruction : "examination"
+						},
+						dataType: "json",
+						success:function (data) {
+							if (data.result === "updateSuccess"){
+								layer.msg("更新数据成功");
+								window.location.reload();
+							}else {
+								layer.msg("更新数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("更新数据错误");
+						}
+					});
 				}
 			});
 
@@ -167,7 +196,7 @@
 			/**【发证表格数据赋值到中间表格】**/
 			table.render({
 				elem: '#table_complete',
-				url: 'http://127.0.0.1:8080/selectByComplete',			//获取数据源url
+				url: 'http://127.0.0.1:8080/selectTableData'+'?DataType=2',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -184,24 +213,25 @@
 				var data = obj.data;
 				if(obj.event === 'RightToCenter'){
 					layer.msg(JSON.stringify(data.keyID));
-					$.ajax({
-						type: "POST",
-						url:"/updateCarStatusByKeyID",
-						data:{
-							keyID:JSON.stringify(data.keyID)
-						},
-						dataType: "json",
-						success:function (data) {
-							if (data.result === "updateSuccess"){
-								layer.msg("更新数据成功");
-							}else {
-								layer.msg("更新数据失败");
-							}
-						},
-						error:function () {
-							layer.msg("更新数据错误");
-						}
-					});
+					// $.ajax({
+					// 	type: "POST",
+					// 	url:"/updateCarStatusByKeyID",
+					// 	data:{
+					// 		keyID : JSON.stringify(data.keyID),
+					// 		instruction : "complete"
+					// 	},
+					// 	dataType: "json",
+					// 	success:function (data) {
+					// 		if (data.result === "updateSuccess"){
+					// 			layer.msg("更新数据成功");
+					// 		}else {
+					// 			layer.msg("更新数据失败");
+					// 		}
+					// 	},
+					// 	error:function () {
+					// 		layer.msg("更新数据错误");
+					// 	}
+					// });
 				}
 			});
 

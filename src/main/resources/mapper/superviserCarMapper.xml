@@ -34,6 +34,11 @@
         select * from superviserCar where superviserCar.carno like '%'+#{carNo}+'%' order by keyID desc
     </select>
 
+    <!--通过车牌号码精准查询-->
+    <select id="selectByCarNo" resultMap="superviserCarResult">
+        select * from superviserCar where superviserCar.carno = #{carno} order by keyID desc
+    </select>
+
     <!--通过keyID精准查询-->
     <select id="selectDetailBykeyID" resultMap="superviserCarResult">
         select * from superviserCar where superviserCar.keyID = #{keyID}
@@ -53,6 +58,13 @@
         update superviserCar set in_check = #{check} , wj_start = #{wjStart} , wj_end = #{wjEnd}, aj_start = #{ajStart} , aj_end = #{ajEnd} ,
          hj_start = #{hjStart} , hj_end = #{hjEnd} , start_time = #{startTime} , end_time = #{endTime} , wj_usetime = #{wjUsetime} ,
          aj_usetime = #{ajUsetime} , hj_usetime = #{hjUsetime} , usetime = #{usetime} , result = #{result} where keyID = #{keyID}
+    </update>
+    
+    <!--通过车牌号码更新车辆状态-->
+    <update id="updateCarByCarNo">
+        update superviserCar set in_check = #{check} , wj_start = #{wjStart} , wj_end = #{wjEnd}, aj_start = #{ajStart} , aj_end = #{ajEnd} ,
+         hj_start = #{hjStart} , hj_end = #{hjEnd} , start_time = #{startTime} , end_time = #{endTime} , wj_usetime = #{wjUsetime} ,
+         aj_usetime = #{ajUsetime} , hj_usetime = #{hjUsetime} , usetime = #{usetime} , result = #{result} where carno = #{carno}
     </update>
 
 

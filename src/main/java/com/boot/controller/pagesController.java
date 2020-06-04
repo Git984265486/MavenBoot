@@ -77,4 +77,10 @@ public class pagesController {
     public String superviserDetail(){
         return "pages/superviserDetail";
     }
+
+    /**【数据模拟页面】**/
+    @RequestMapping("/dataTestPage")
+    public String dataTestPage(){
+        return "pages/testData";
+    }
 }

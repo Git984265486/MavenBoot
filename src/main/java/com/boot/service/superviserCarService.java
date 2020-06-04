@@ -12,6 +12,9 @@ public interface superviserCarService {
     /**【通过车牌号码模糊查询】**/
     public List<superviserCar> selectDataByCarNo(String carNo);
 
+    /**【通过车牌号码精确查询】**/
+    public List<superviserCar> selectByCarNo(String carNo);
+
     /**【通过keyID精准查询】**/
     public superviserCar selectDetailBykeyID(String keyID);
 
@@ -20,4 +23,7 @@ public interface superviserCarService {
 
     /**【通过keyID更新车辆检查状态】**/
     public void updateCarStatus(superviserCar car);
+
+    /**【通过车牌号码更新车辆检查状态】**/
+    public void updateCarByCarNo(superviserCar car);
 }

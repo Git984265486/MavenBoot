@@ -82,6 +82,18 @@
             select i.jcxm , i.zsl , i.zje , i.zje , i.memo , i.pcode
             from inserted i
         END
+
+        创建触发器，一并插入数据到表：superviserCar
+        create trigger sfb_car
+        on tSFB
+        AFTER insert
+        as
+        begin
+            insert into
+            superviserCar(carno,in_check,start_time,operator,result)
+            select i.carno , 0 , GETDATE() , i.optname , 0
+            from inserted i
+        END
     -->
 
 </mapper>
