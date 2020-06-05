@@ -83,4 +83,10 @@ public class pagesController {
     public String dataTestPage(){
         return "pages/testData";
     }
+
+    /**【数据统计页面】**/
+    @RequestMapping("/statisticsTablePage")
+    public String statisticsTablePage(){
+        return "pages/statisticsTable";
+    }
 }

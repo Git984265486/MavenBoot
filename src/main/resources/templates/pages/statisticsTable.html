@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>统计表</title>
+		<script th:src="@{/layui/echarts/echarts.min.js}" src="../../static/layui/echarts/echarts.min.js" charset="utf-8"></script>
+		
+	</head>
+	<body>
+	    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
+	    <div id="main" style="width: 100%;height:600px;"></div>
+	    <script type="text/javascript">
+	        // 基于准备好的dom，初始化echarts实例
+	        var myChart = echarts.init(document.getElementById('main'));
+	 
+	        var option = {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						crossStyle: {
+							color: '#999'
+						}
+					}
+				},
+				toolbox: {			//右上角工具
+					feature: {
+						dataView: {show: true, readOnly: false},
+						magicType: {show: true, type: ['line', 'bar']},
+						restore: {show: true},
+						saveAsImage: {show: false}
+					}
+				},
+				legend: {			//字段名称
+					data: ['小型汽车'/* ,'空数据' */, '中型汽车','大型汽车']
+				},
+				xAxis: [			//底部数据
+					{
+						type: 'category',
+						data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+						axisPointer: {
+							type: 'shadow'
+						}
+					}
+				],
+				yAxis: [		//统计数据
+					{
+						type: 'value',
+						name: '车辆',
+						min: 0,
+						max: 4000,
+						interval: 200,
+						axisLabel: {
+							formatter: '{value} 辆'
+						}
+					},
+					{
+						type: 'value',
+						name: '车辆',
+						min: 0,
+						max: 4000,
+						interval: 200,
+						axisLabel: {
+							formatter: '{value}辆'
+						}
+					}
+				],
+				series: [
+					
+					{				
+						name: '小型汽车',
+						type: 'bar',		//条形数据
+						data: [2644,1219, 2586, 2330, 2391, 2191, 2871, 2853, 2453, 2443, 2205, 3036]							
+					},
+					/* {
+						name: '空数据',
+						type: 'line',		//线形数据
+						yAxisIndex: 1,
+						data: [1738, 566, 1493, 1133, 1010, 1433, 1552, 1293, 927, 767, 667, 1175]
+					}, */
+					{
+						name: '中型汽车',
+						type: 'bar',
+						data: [163, 106, 216, 260, 158, 151, 195, 148, 120, 148, 128, 109]
+					},
+					{
+						name: '大型汽车',
+						type: 'bar',
+						data: [151, 50, 137, 260, 171, 146, 322, 318, 120, 245, 228, 307]
+					}
+				]
+			};
+		
+	 
+	        // 使用刚指定的配置项和数据显示图表。
+	        myChart.setOption(option);
+	 
+	    </script>
+	</body>
+</html>

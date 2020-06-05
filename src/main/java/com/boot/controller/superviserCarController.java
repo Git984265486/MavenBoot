@@ -2,6 +2,7 @@ package com.boot.controller;
 
 import com.boot.damain.superviserCar;
 import com.boot.service.superviserCarService;
+import com.boot.tools.staticTools;
 import com.boot.tools.superviserCarTools;
 import com.boot.tools.timeTools;
 import com.github.pagehelper.PageHelper;
@@ -173,5 +174,24 @@ public class superviserCarController {
         map.put("result",result);
         return map;
     }
+
+
+    /**【广播领证】**/
+    @RequestMapping("/finishCheck")
+    @ResponseBody
+    public Map<String ,Object> finishCheck(@RequestParam(defaultValue = "",value = "speakText")String speakText){
+        HashMap<String,Object> map = new HashMap<>();
+        String result = "";
+        System.out.println("语音播报内容：" + speakText);
+        if (!speakText.equals("")){
+            boolean isSpeak = staticTools.speakingText(speakText);
+            if (isSpeak){
+                result = "success";
+            }
+        }
+        map.put("result",result);
+        return map;
+    }
+
 
 }
