@@ -16,7 +16,7 @@
 	<body>
 		<div class="layui-form-item">
 			<div class="layui-inline">
-				<form class="layui-form layui-form-pane">
+				<form class="layui-form layui-form-pane" style="margin-top: 20px">
 					<div class="layui-input-inline">
 						<input type="tel" name="carNo" class="layui-input" placeholder="输入车牌">
 					</div>
@@ -38,11 +38,11 @@
 					layer = layui.layer,
 					table = layui.table,
 					$ = layui.$;
-
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
 				/**【表格数据赋值】**/
 				table.render({
 					elem: '#table_superviserCar',
-					url: '/seleListData',			//获取数据源url
+					url: localhostPath.path+'/seleListData',			//获取数据源url
 					toolbar:false, //开启头部工具栏
 					cols: [
 						[
@@ -86,7 +86,7 @@
 							shade: 0.2,
 							maxmin: true,
 							shadeClose: true,
-							area: ['70%', '65%'],
+							area: ['90%', '80%'],
 							content: '/superviserDetailPage' + '?keyID='+data.keyID
 						});
 					}

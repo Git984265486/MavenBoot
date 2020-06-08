@@ -34,9 +34,10 @@
 			layui.use('table', function() {
 				var $ = layui.jquery,
 					table = layui.table;
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
 				table.render({
 					elem: '#table_user_info',
-					url: '/employeeList',			//获取数据源url
+					url: localhostPath.path+'/employeeList',			//获取数据源url
 					title:"用户信息表",
 					toolbar: '#userToolbar', //开启头部工具栏，并为其绑定左侧模板
 					cols: [
@@ -75,7 +76,7 @@
 						if (obj.event === 'stopEmployee'){		//停用账号登录
 							$.ajax({
 								type:"POST",
-								url:"/stopEmployee",
+								url:localhostPath.path+"/stopEmployee",
 								data:{
 									code : code,
 									stop : "1",
@@ -100,7 +101,7 @@
 						if(obj.event === 'deleteEmployee'){		//删除员工信息
 							$.ajax({
 								type:"POST",
-								url:"/delEmployee",
+								url:localhostPath.path+"/delEmployee",
 								data:{
 									code : data[0]['code']
 								},
@@ -124,7 +125,7 @@
 						if (obj.event === 'startEmployee'){
 							$.ajax({
 								type:"POST",
-								url:"/stopEmployee",
+								url:localhostPath.path+"/stopEmployee",
 								data:{
 									code : code,
 									stop : "0",
@@ -149,7 +150,7 @@
 						if (obj.event === 'upUser'){
 							$.ajax({
 								type:"POST",
-								url:"/updateAdmin",
+								url:localhostPath.path+"/updateAdmin",
 								data:{
 									isAdmin : 1,
 									optPWD : "",
@@ -175,7 +176,7 @@
 						if (obj.event === 'downUser'){
 							$.ajax({
 								type:"POST",
-								url:"/updateAdmin",
+								url:localhostPath.path+"/updateAdmin",
 								data:{
 									isAdmin : 0,
 									optPWD : "",
@@ -201,7 +202,7 @@
 						if (obj.event === 'resetPWD'){
 							$.ajax({
 								type:"POST",
-								url:"/updateAdmin",
+								url:localhostPath.path+"/updateAdmin",
 								data:{
 									isAdmin : 5,
 									optPWD : "RS",
@@ -209,7 +210,7 @@
 								},
 								success:function (data) {
 									if (data.result == "success"){
-										layer.alert("账户重置密码成功!",function(){
+										layer.alert("账户重置密码成功!重置密码为:8个8",function(){
 											window.location.reload();//刷新页面
 										});
 									}else{

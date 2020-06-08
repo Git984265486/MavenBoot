@@ -6,6 +6,12 @@
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
 	</head>
 	<body>
 		<div class="layuimini-container">
@@ -77,13 +83,8 @@
 								
 								<div class="layui-inline">
 									<label class="layui-form-label">检测项目</label>
-									<div class="layui-input-block">
-										<select name="jcxm">
-											<option value="" selected="">选择检测项目</option>
-											<option value="在用车检验(定检）">在用车检验(定检）</option>
-											<option value="综合检测">综合检测</option>
-											<option value="汽车年审（三检合一）">汽车年审（三检合一）</option>
-										</select>
+									<div class="layui-input-inline">
+										<input type="text" name="jcxm" autocomplete="off" class="layui-input">
 									</div>
 								</div>
 							
@@ -126,6 +127,7 @@
 					laydate = layui.laydate,
 					table = layui.table;
 
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
 				//时间选择器
 				laydate.render({
 					elem: '#startTime'
@@ -137,7 +139,7 @@
 				//表格方法级渲染
 				table.render({
 					elem: '#LAY_table_charge',
-					url: 'http://127.0.0.1:8080/listChargeInfo',
+					url: localhostPath.path+'/listChargeInfo',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
 					defaultToolbar: ['filter', 'exports', 'print'],
 					totalRow: true,
@@ -158,8 +160,7 @@
 					],
 					limits: [10, 15, 20, 25, 50, 100,500,1000,5000],
 					limit: 10,
-					page: true,
-					height: 550
+					page: true
 				});
 
 				// 监听搜索提交操作

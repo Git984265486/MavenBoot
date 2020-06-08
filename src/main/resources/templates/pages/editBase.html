@@ -83,6 +83,8 @@
 			var form = layui.form,
 			$ = layui.$;
 
+			var localhostPath = layui.sessionData('pathConfig');//拿到路径前缀
+
 			/**页面赋值**/
 			$(function () {
 				var href = window.location.href;     //获得url
@@ -90,7 +92,7 @@
 				layer.msg("传过来的code值："+code);
 				$.ajax({
 					type:"POST",
-					url:"/selBaseByCode",
+					url:localhostPath.path+"/selBaseByCode",
 					data:{
 						code : code
 					},
@@ -124,7 +126,7 @@
 		    //layer.alert(requestData);
 			  $.ajax({
 				  type:"POST",
-				  url:"/updateBaseByCode",
+				  url:localhostPath.path+"/updateBaseByCode",
 				  data:{
 					  updateData : updateData,
 					  operateStr : "editData"

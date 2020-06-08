@@ -3,98 +3,165 @@
 	<head>
 		<meta charset="utf-8">
 		<title>统计表</title>
+		<!-- layui -->
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<!--echarts表格-->
 		<script th:src="@{/layui/echarts/echarts.min.js}" src="../../static/layui/echarts/echarts.min.js" charset="utf-8"></script>
 		
 	</head>
 	<body>
 	    <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 	    <div id="main" style="width: 100%;height:600px;"></div>
+
 	    <script type="text/javascript">
-	        // 基于准备好的dom，初始化echarts实例
-	        var myChart = echarts.init(document.getElementById('main'));
-	 
-	        var option = {
-				tooltip: {
-					trigger: 'axis',
-					axisPointer: {
-						type: 'cross',
-						crossStyle: {
-							color: '#999'
+
+			layui.use(['layer'], function(){
+				var layer = layui.layer,
+						$ = layui.$;
+
+				// 基于准备好的dom，初始化echarts实例
+				var myChart = echarts.init(document.getElementById('main'));
+
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+
+				$(function () {
+					$.ajax({
+						type: "POST",
+						url:localhostPath.path+"/statisticsData",
+						data:{
+							years:""
+						},
+						dataType: "json",
+						success:function (data) {
+							var small = [];		//小型汽车数据
+							var medium = [];	//中型
+							var large = [];		//大型
+							var trailer = [];	//挂车
+							if (data.result === "success"){
+								console.log("【统计数据】"+JSON.stringify(data.listData));
+								for (var i = 0 ; i < data.listData.length ; i++){
+									var objectData = data.listData[i];		//处理数据
+									var objData = [] ;						//
+
+									for (var te in objectData){
+										var da = objectData[te];//JSON.stringify()
+										objData.push(da);
+									}
+									console.log("统计数据:" + objData);
+									if (data.listData[i].carType === "小型汽车"){
+										for (var n = 2 ; n < objData.length ; n ++){
+											small.push(objData[n]);
+										}
+										console.log("【小型汽车】:" + small);
+									}else if (data.listData[i].carType === "中型汽车"){
+										for (var n = 2 ; n < objData.length ; n ++){
+											medium.push(objData[n]);
+										}
+										console.log("【中型汽车】:" + medium);
+									}else if (data.listData[i].carType === "大型汽车"){
+										for (var n = 2 ; n < objData.length ; n ++){
+											large.push(objData[n]);
+										}
+										console.log("【大型汽车】:" + large);
+									}else if (data.listData[i].carType === "挂车"){
+										for (var n = 2 ; n < objData.length ; n ++){
+											trailer.push(objData[n]);
+										}
+										console.log("【挂车】:" + trailer);
+									}
+								}
+
+								var option = {
+									tooltip: {
+										trigger: 'axis',
+										axisPointer: {
+											type: 'cross',
+											crossStyle: {
+												color: '#999'
+											}
+										}
+									},
+									toolbox: {			//右上角工具
+										feature: {
+											dataView: {show: true, readOnly: false},
+											magicType: {show: true, type: ['line', 'bar']},
+											restore: {show: true},
+											saveAsImage: {show: false}
+										}
+									},
+									legend: {			//字段名称
+										data: ['小型汽车', '中型汽车','大型汽车','挂车']
+									},
+									xAxis: [			//底部数据
+										{
+											type: 'category',
+											data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+											axisPointer: {
+												type: 'shadow'
+											}
+										}
+									],
+									yAxis: [		//统计数据
+										{
+											type: 'value',
+											name: '车辆',
+											min: 0,
+											max: 4000,
+											interval: 200,
+											axisLabel: {
+												formatter: '{value} 辆'
+											}
+										},
+										{
+											type: 'value',
+											name: '',
+											min: 0,
+											max: 4000,
+											interval: 200,
+											axisLabel: {
+												formatter: '{value}'
+											}
+										}
+									],
+									series: [
+										{
+											name: '小型汽车',
+											type: 'bar',		//条形数据
+											data: small//[2644,1219, 2586, 2330, 2391, 2191, 2871, 2853, 2453, 2443, 2205, 3036]
+										},
+
+										{
+											name: '中型汽车',
+											type: 'bar',
+											data: medium//[163, 106, 216, 260, 158, 151, 195, 148, 120, 148, 128, 109]
+										},
+										{
+											name: '大型汽车',
+											type: 'bar',
+											data: large//[151, 50, 137, 260, 171, 146, 322, 318, 120, 245, 228, 307]
+										},
+										{
+											name: '挂车',
+											type: 'line',		//线形数据
+											yAxisIndex: 1,
+											data: trailer//[1738, 566, 1493, 1133, 1010, 1433, 1552, 1293, 927, 767, 667, 1175]
+										}
+									]
+								};
+								// 使用刚指定的配置项和数据显示图表。
+								myChart.setOption(option);
+							}else {
+								layer.msg("获取统计数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("获取统计数据错误");
 						}
-					}
-				},
-				toolbox: {			//右上角工具
-					feature: {
-						dataView: {show: true, readOnly: false},
-						magicType: {show: true, type: ['line', 'bar']},
-						restore: {show: true},
-						saveAsImage: {show: false}
-					}
-				},
-				legend: {			//字段名称
-					data: ['小型汽车'/* ,'空数据' */, '中型汽车','大型汽车']
-				},
-				xAxis: [			//底部数据
-					{
-						type: 'category',
-						data: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-						axisPointer: {
-							type: 'shadow'
-						}
-					}
-				],
-				yAxis: [		//统计数据
-					{
-						type: 'value',
-						name: '车辆',
-						min: 0,
-						max: 4000,
-						interval: 200,
-						axisLabel: {
-							formatter: '{value} 辆'
-						}
-					},
-					{
-						type: 'value',
-						name: '车辆',
-						min: 0,
-						max: 4000,
-						interval: 200,
-						axisLabel: {
-							formatter: '{value}辆'
-						}
-					}
-				],
-				series: [
-					
-					{				
-						name: '小型汽车',
-						type: 'bar',		//条形数据
-						data: [2644,1219, 2586, 2330, 2391, 2191, 2871, 2853, 2453, 2443, 2205, 3036]							
-					},
-					/* {
-						name: '空数据',
-						type: 'line',		//线形数据
-						yAxisIndex: 1,
-						data: [1738, 566, 1493, 1133, 1010, 1433, 1552, 1293, 927, 767, 667, 1175]
-					}, */
-					{
-						name: '中型汽车',
-						type: 'bar',
-						data: [163, 106, 216, 260, 158, 151, 195, 148, 120, 148, 128, 109]
-					},
-					{
-						name: '大型汽车',
-						type: 'bar',
-						data: [151, 50, 137, 260, 171, 146, 322, 318, 120, 245, 228, 307]
-					}
-				]
-			};
-		
-	 
-	        // 使用刚指定的配置项和数据显示图表。
-	        myChart.setOption(option);
-	 
+					});
+				});
+
+			});
 	    </script>
 	</body>
 </html>

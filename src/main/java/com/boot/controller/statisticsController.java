@@ -32,6 +32,7 @@ public class statisticsController {
         }
         System.out.println("年份:" + year);
         List<statistics> listData = service.statisticsData(year);
+        map.put("result","success");
         map.put("listData",listData);
         return map;
     }

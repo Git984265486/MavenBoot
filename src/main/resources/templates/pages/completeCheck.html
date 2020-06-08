@@ -124,10 +124,12 @@
 				layer = layui.layer,
 				table = layui.table;
 
+			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+
 			/**【待检表格数据赋值】**/
 			table.render({
 				elem: '#table_check',
-				url: 'http://127.0.0.1:8080/selectTableData'+'?DataType=0',			//获取数据源url
+				url: localhostPath.path+'/selectTableData'+'?DataType=0',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -147,7 +149,7 @@
 					layer.msg(JSON.stringify(data));
 					$.ajax({
 						type: "POST",
-						url:"/updateCarStatusByKeyID",
+						url:localhostPath.path+"/updateCarStatusByKeyID",
 						data:{
 							keyID : JSON.stringify(data.keyID),
 							instruction : "check"
@@ -171,7 +173,7 @@
 			/**【待审表格数据赋值】**/
 			table.render({
 				elem: '#table_examination',
-				url: 'http://127.0.0.1:8080/selectTableData'+'?DataType=1',			//获取数据源url
+				url: localhostPath.path+'/selectTableData'+'?DataType=1',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -194,7 +196,7 @@
 					layer.msg(JSON.stringify(data));
 					$.ajax({
 						type: "POST",
-						url:"/updateCarStatusByKeyID",
+						url:localhostPath.path+"/updateCarStatusByKeyID",
 						data:{
 							keyID : JSON.stringify(data.keyID),
 							instruction : "examination"
@@ -219,7 +221,7 @@
 			/**【发证表格数据赋值到中间表格】**/
 			table.render({
 				elem: '#table_complete',
-				url: 'http://127.0.0.1:8080/selectTableData'+'?DataType=2',			//获取数据源url
+				url: localhostPath.path+'/selectTableData'+'?DataType=2',			//获取数据源url
 				toolbar: false, //开启头部工具栏
 				cols: [
 					[
@@ -238,7 +240,7 @@
 					console.log("【语音播报选中数据】"+JSON.stringify(data));
 					$.ajax({
 						type: "POST",
-						url:"/finishCheck",
+						url:localhostPath.path+"/finishCheck",
 						data:{
 							speakText : data.carno + "车主请到" + $('#seleWin').val() + "领取钥匙。"
 						},

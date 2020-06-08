@@ -135,7 +135,7 @@
 			var form = layui.form,
 			laydate = layui.laydate,
 			$ = layui.$;
-
+			var localhostPath = layui.sessionData('pathConfig');	//获得路径
 			var user = JSON.stringify(layui.sessionData('user'));
 			var users = JSON.parse(user);
 			console.log("打印信息users:" + JSON.stringify(users.userData));
@@ -152,7 +152,7 @@
 						/**获取员工信息**/
 						$.ajax({
 							type:"POST",
-							url:"/selectEmplByCode",
+							url:localhostPath.path+"/selectEmplByCode",
 							data:{ code : data.optCode },
 							dataType:'json',
 							success:function (data) {
@@ -203,7 +203,7 @@
 				  }else{
 					  $.ajax({
 						  type:"POST",
-						  url:"/resetPassword",
+						  url:localhostPath.path+"/resetPassword",
 						  data:{
 							  optPWD : $('#newPas').val(),
 							  code : code,
@@ -227,7 +227,7 @@
 			  }else{
 				  $.ajax({
 					  type:"POST",
-					  url:"/editEmployeeByCode",
+					  url:localhostPath.path+"/editEmployeeByCode",
 					  data:{
 						  edtiData : requestData,
 						  code : data.optCode

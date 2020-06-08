@@ -25,7 +25,7 @@
 
     <!--查询最近30天数据-->
     <select id="selectChargeList" resultMap="chargeResult">
-        select * from tSFB where datediff(DAY,dtdate,getdate())&lt;=30 ORDER BY autoid
+        select * from tSFB where datediff(DAY,dtdate,getdate())&lt;=30 ORDER BY autoid desc
     </select>
 
 
@@ -40,10 +40,10 @@
                 AND datediff(DAY,dtdate,getdate())&lt;=30
             </if>
             <if test="billno != null">
-                AND tSFB.billno = #{billno}
+                AND tSFB.billno like '%'+#{billno}+'%'
             </if>
             <if test="carno != null">
-                AND tSFB.carno = #{carno}
+                AND tSFB.carno like '%'+#{carno}+'%'
             </if>
             <if test="cartype != null">
                 AND tSFB.cartype = #{cartype}
@@ -52,13 +52,13 @@
                 AND tSFB.cz = #{cz}
             </if>
             <if test="jcxm != null">
-                AND tSFB.jcxm = #{jcxm}
+                AND tSFB.jcxm like '%'+#{jcxm}+'%'
             </if>
             <if test="memo != null">
-                AND tSFB.memo = #{memo}
+                AND tSFB.memo like '%'+#{memo}+'%'
             </if>
         </where>
-        ORDER BY autoid
+        ORDER BY autoid desc
     </select>
 
     <!--获取最近操作的一条数据-->

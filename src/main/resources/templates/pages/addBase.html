@@ -27,7 +27,7 @@
 						
 							<label class="layui-form-label">检验项目</label>
 							<div  class="layui-input-inline">
-								<input type="text" name="name" lay-verify="required" placeholder="姓名" autocomplete="off"
+								<input type="text" name="name" lay-verify="required" placeholder="检验项目" autocomplete="off"
 									   class="layui-input" id="proName">
 							</div>
 								
@@ -84,7 +84,7 @@
 			var form = layui.form,
 			$ = layui.$;
 
-
+			var localhostPath = layui.sessionData('pathConfig');	//获得路径
 		  
 		  /**监听提交**/
 		  form.on('submit(demo1)', function(data){
@@ -92,7 +92,7 @@
 		    //layer.alert(requestData);
 			  $.ajax({
 				  type:"POST",
-				  url:"/insertBaseData",
+				  url:localhostPath.path+"/insertBaseData",
 				  data:{
 					  insertData : insertData,
 				  },

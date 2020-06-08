@@ -101,7 +101,7 @@
 				if (inputCode == cardCode) {
 					$.ajax({
 						type: "POST",
-						url: "/validateUser",
+						url: "http://localhost:8080/validateUser",
 						data: {
 							username: username,
 							password: password,
@@ -155,6 +155,12 @@
 			form.on('submit(login)', function(data) {
 				validateCode();
 				return false;
+			});
+
+			/**【路径配置】**/
+			layui.sessionData('pathConfig', {
+				key: 'path',
+				value: 'http://localhost:8080'
 			});
 
 		});

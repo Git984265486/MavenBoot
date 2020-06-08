@@ -112,7 +112,9 @@
 			var form = layui.form,
 			laydate = layui.laydate,
 			$ = layui.$;
-		  
+
+			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+
 		  /**监听提交**/
 		  form.on('submit(demo1)', function(data){
 		  	var requestData = JSON.stringify(data.field);	//json字符串
@@ -121,7 +123,7 @@
 		    // });
 			  $.ajax({
 					type:"POST",
-					url:"/addEmployee",
+					url:localhostPath.path+"/addEmployee",
 					data:{
 						requestData : requestData
 					},
@@ -130,12 +132,10 @@
 						if (data.result == "success"){
 							layer.alert("用户添加成功!",function(){
 								window.parent.location.reload();//刷新父页面
-								parent.layer.close(index);//关闭弹出层
 							});
 						}else{
 							layer.alert("用户添加失败!",function(){
 								window.parent.location.reload();//刷新父页面
-								parent.layer.close(index);//关闭弹出层
 							});
 						}
 					},

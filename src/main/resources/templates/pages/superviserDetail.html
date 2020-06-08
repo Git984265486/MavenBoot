@@ -130,6 +130,7 @@
 				var layer = layui.layer,
 					$ = layui.$;
 
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
 				/**【车辆信息赋值，计算】**/
 				$(function () {
 					var href = window.location.href;     //获得url
@@ -137,7 +138,7 @@
 					//layer.msg("传过来的code值："+keyID);
 					$.ajax({
 						type:"POST",
-						url:"/selectDetailBykeyID",
+						url:localhostPath.path+"/selectDetailBykeyID",
 						data:{
 							keyID : keyID,
 						},
