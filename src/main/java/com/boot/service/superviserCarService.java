@@ -26,4 +26,7 @@ public interface superviserCarService {
 
     /**【通过车牌号码更新车辆检查状态】**/
     public void updateCarByCarNo(superviserCar car);
+
+    /**【查询当天录入两小时未完成检测车辆车牌】**/
+    public List<superviserCar> selectTwoHour();
 }

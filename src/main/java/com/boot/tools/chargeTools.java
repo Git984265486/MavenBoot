@@ -134,7 +134,10 @@ public class chargeTools {
 
             info.setBillno(billNum);                /////报错
             info.setCarno(jsonobject.getString("carNum"));
-            info.setDtdate(StrToDate(jsonobject.getString("time")));
+
+            //info.setDtdate(StrToDate(jsonobject.getString("time")));
+            info.setDtdate(getSystemTime());            //录入时间
+
             info.setCartype(jsonobject.getString("carType"));
             info.setCz(jsonobject.getString("payType"));
             info.setPcode(jsonobject.getString("carVin"));

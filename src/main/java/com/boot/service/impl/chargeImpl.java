@@ -29,6 +29,18 @@ public class chargeImpl implements chargeService {
                 ,cartype ,cz,jcxm,memo);
     }
 
+    /**【查询一段时间内的数据】**/
+    @Override
+    public List<chargeInfo> selectDataByTime(String startTime, String endTime) {
+        return chargeMapper.selectDataByTime(startTime,endTime);
+    }
+
+    /**【删除一段时间内的数据】**/
+    @Override
+    public void deleteDataByTime(String DelSTime, String DelETime) {
+        chargeMapper.deleteDataByTime(DelSTime,DelETime);
+    }
+
     /**【取最后一条数据】**/
     @Override
     public chargeInfo seleLastCharge() {

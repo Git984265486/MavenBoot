@@ -3,7 +3,9 @@ package com.boot.tools;
 import com.boot.damain.superviserCar;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class superviserCarTools {
 
@@ -89,6 +91,16 @@ public class superviserCarTools {
         return useTime;
     }
 
-
+    /**【获取车牌信息】**/
+    public List<String> getCarNoList(List<superviserCar> listCar){
+        List<String> listStr = new ArrayList<>();
+        if (listCar != null && listCar.size() != 0){
+            for (int i=0;i<listCar.size();i++){
+                listStr.add(listCar.get(i).getCarno());
+                //System.out.println("车牌："+listStr.get(i));
+            }
+        }
+        return listStr;
+    }
 
 }

@@ -6,6 +6,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*",maxAge = 3600)//解决跨域问题
 public class pagesController {
 
+    /**【登录页面】**/
+    @RequestMapping("/login")
+    public String loginPage(){
+        return "login";
+    }
+
     /**【首页】**/
     @RequestMapping("/index")
     public String index(){
@@ -28,12 +34,6 @@ public class pagesController {
     @RequestMapping("/addEmployeePage")
     public String addEmployee(){
         return "pages/addEmployee";
-    }
-
-    /**【登录页面】**/
-    @RequestMapping("/login")
-    public String loginPage(){
-        return "login";
     }
 
     /**【员工信息项编辑页面】**/
@@ -88,5 +88,17 @@ public class pagesController {
     @RequestMapping("/statisticsTablePage")
     public String statisticsTablePage(){
         return "pages/statisticsTable";
+    }
+
+    /**【右下角弹出页面】**/
+    @RequestMapping("/tipsPage")
+    public String tipsPage(){
+        return "pages/tipsCheck";
+    }
+
+    /**【数据管理页面】**/
+    @RequestMapping("/dataManagementPage")
+    public String dataManagementPage(){
+        return "pages/dataManagement";
     }
 }

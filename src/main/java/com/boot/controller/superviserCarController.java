@@ -34,15 +34,18 @@ public class superviserCarController {
                                              @RequestParam(value = "carNo",defaultValue = "")String carNo){
         HashMap<String , Object> map = new HashMap<>();
         PageHelper.startPage(page,size);
-        List<superviserCar> listData = superviserService.seleListData();
+        List<superviserCar> listData = new ArrayList<>();
         System.out.println("【carNo的值：】" + carNo);
         if (carNo != null || !carNo.equals("") ){
             listData = superviserService.selectDataByCarNo(carNo);
+        }else {
+            listData = superviserService.seleListData();
         }
         PageInfo<superviserCar> pageInfo = new PageInfo<>(listData);
-        map.put("code",0);
         map.put("count",pageInfo.getTotal());
         map.put("data",pageInfo.getList());
+        map.put("code",0);
+
         return map;
     }
 
@@ -194,4 +197,23 @@ public class superviserCarController {
     }
 
 
+    /**【查询当天录入两小时未完成检测车辆车牌】**/
+    @RequestMapping("/selectTwoHourDataList")
+    @ResponseBody
+    public Map<String ,Object> selectTwoHour(){
+        HashMap<String,Object> map = new HashMap<>();
+        String result = "";
+        List<superviserCar> listDataCarNo = superviserService.selectTwoHour();
+        //superviserCarTools tools = new superviserCarTools();
+        //List<String> listCarNo = tools.getCarNoList(listDataCarNo);
+        if (listDataCarNo.size() != 0 ){
+            result = "listData";
+        }else {
+            result = "noneData";
+        }
+        map.put("code",0);
+        map.put("result",result);
+        map.put("data",listDataCarNo);
+        return map;
+    }
 }

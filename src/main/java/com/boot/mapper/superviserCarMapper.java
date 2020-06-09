@@ -28,4 +28,7 @@ public interface superviserCarMapper {
     /**【通过车牌号码更新车辆状态】**/
     public void updateCarByCarNo(String check ,String wjStart ,String wjEnd ,String ajStart ,String ajEnd , String hjStart ,String hjEnd , String startTime ,
                                  String endTime ,String wjUsetime , String ajUsetime ,String hjUsetime ,String usetime ,String result ,String carno);
+
+    /**【查询当天录入两小时未完成检测车辆车牌】**/
+    public List<superviserCar> selectTwoHour();
 }

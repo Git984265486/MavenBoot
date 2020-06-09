@@ -44,11 +44,11 @@
 					layer = layui.layer,
 					table = layui.table,
 					$ = layui.$;
-				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+
 				/**【表格数据赋值】**/
 				table.render({
 					elem: '#table_superviserCar',
-					url: localhostPath.path+'/seleListData',			//获取数据源url
+					url: '/seleListData',			//获取数据源url
 					toolbar:false, //开启头部工具栏
 					cols: [
 						[
@@ -111,7 +111,7 @@
 				function chargeCheckStatus(carNo,command,operater) {
 					$.ajax({
 						type:"POST",
-						url:localhostPath.path+"/updateCarByCarNo",
+						url:"/updateCarByCarNo",
 						data:{
 							carNo : carNo,		//车牌
 							command : command,	//指令（WJS：外检开始		WJE：外检结束	AJS：安检开始	AJE：安检结束	HJS：环检开始	HJE：环检结束）

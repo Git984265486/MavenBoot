@@ -59,4 +59,10 @@ public class SuperviserCarImpl implements superviserCarService {
                 car.getHj_end(),car.getStart_time(),car.getEnd_time(),car.getWj_usetime(),car.getAj_usetime(),car.getHj_usetime(),car.getUsetime(),
                 car.getResult(),car.getCarno());
     }
+
+    /**【查询当天录入两小时未完成检测车辆车牌】**/
+    @Override
+    public List<superviserCar> selectTwoHour() {
+        return superviserMapper.selectTwoHour();
+    }
 }

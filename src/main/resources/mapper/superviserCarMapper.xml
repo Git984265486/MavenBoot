@@ -67,5 +67,10 @@
          aj_usetime = #{ajUsetime} , hj_usetime = #{hjUsetime} , usetime = #{usetime} , result = #{result} where carno = #{carno}
     </update>
 
+    <!--查询当天录入两小时未完成检测车辆车牌-->
+    <select id="selectTwoHour" resultMap="superviserCarResult">
+        select * from superviserCar where DATEDIFF(DAY,start_time,GETDATE())=0
+          and DATEDIFF(MINUTE,start_time,GETDATE())&gt;=120 and result=0 ORDER BY keyID desc
+    </select>
 
 </mapper>

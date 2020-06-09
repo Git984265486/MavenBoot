@@ -137,8 +137,8 @@
 						{fixed: 'right', title:'移动到待审', toolbar: '#LeftToCenterBar'}
 					]
 				],
-				limits: [15, 20, 25, 50, 100],
-				limit: 15,
+				limits: [10, 20, 25, 50, 100],
+				limit: 10,
 				page: true,
 			});
 			/**【待检表格监听行工具事件】**/
@@ -181,8 +181,8 @@
 						{fixed: 'right', title:'移动到领取证件', toolbar: '#CenterToRightBar'}
 					]
 				],
-				limits: [15, 20, 25, 50, 100],
-				limit: 15,
+				limits: [10, 20, 25, 50, 100],
+				limit: 10,
 				page: true,
 			});
 			/**【待审表格监听行工具事件】**/
@@ -229,8 +229,8 @@
 						{fixed: 'right', title:'操作', toolbar: '#RightToCenterBar'}
 					]
 				],
-				limits: [15, 20, 25, 50, 100],
-				limit: 15,
+				limits: [10, 20, 25, 50, 100],
+				limit: 10,
 				page: true,
 			});
 			/**【发证表格监听行工具事件】**/
@@ -265,7 +265,7 @@
 				var result = JSON.stringify(data.field);
 				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
 
-				layer.alert(result);
+				//layer.alert(result);
 
 				table.reload('table_check', {	//执行搜索重载
 					page: {
@@ -283,7 +283,7 @@
 				var result = JSON.stringify(data.field);
 				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
 
-				layer.alert(obj.examinationCar);
+				//layer.alert(obj.examinationCar);
 
 				table.reload('table_examination', { //执行搜索重载
 					page: {
@@ -301,7 +301,7 @@
 				var result = JSON.stringify(data.field);
 				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
 
-				layer.alert(obj.completeCar);
+				//layer.alert(obj.completeCar);
 
 				table.reload('table_complete', {	//执行搜索重载
 					page: {

@@ -54,6 +54,29 @@ public class chargeController {
         return map;
     }
 
+    /**【查询一段时间内的数据】**/
+    @RequestMapping("/selectDataByTime")
+    @ResponseBody
+    public Map<String,Object> selectDataByTime(@RequestParam(value = "page",defaultValue = "1") int page,
+                                               @RequestParam(value = "limit",defaultValue = "10")int size,
+                                               @RequestParam(value = "startTime",defaultValue = "")String startTime,
+                                               @RequestParam(value = "endTime",defaultValue = "")String endTime){
+        HashMap<String , Object> map = new HashMap<>();
+        System.out.println("开始时间：" + startTime + "\t结束时间:" + endTime);
+        PageHelper.startPage(page,size);
+        if (!startTime.equals("") && !endTime.equals("")){
+            startTime = startTime + " 00:00:00";
+            endTime = endTime + " 23:59:59";
+        }
+        List<chargeInfo> listData = chargeService.selectDataByTime(startTime,endTime);
+        PageInfo<chargeInfo>pageInfo = new PageInfo<>(listData);
+        map.put("code",0);
+        map.put("count",pageInfo.getTotal());
+        map.put("data",pageInfo.getList());
+        return map;
+    }
+
+
     /**【返回当天自增编号】**/
     @RequestMapping("/seleLastCharge")
     @ResponseBody
@@ -85,4 +108,22 @@ public class chargeController {
         return map;
     }
 
+    /**【删除一段时间内的数据】**/
+    @RequestMapping("/deleteDataByTime")
+    @ResponseBody
+    public Map<String ,Object> deleteDataByTime(@RequestParam String DelSTime,
+                                                @RequestParam String DelETime){
+        HashMap<String , Object> map = new HashMap<>();
+        System.out.println("传过来的日期："+ DelSTime + "\tDelETime:" + DelETime);
+        String result = "";
+        if (DelSTime != null && !DelSTime.equals("") && DelETime != null && !DelETime.equals("")){
+            DelSTime = DelSTime + " 00:00:00";
+            DelETime = DelETime + " 23:59:59";
+            System.out.println("拼接后的时间："+ DelSTime + "\tDelETime:" + DelETime);
+            chargeService.deleteDataByTime(DelSTime,DelETime);
+            result = "DelSuccess";
+        }
+        map.put("result",result);
+        return map;
+    }
 }
