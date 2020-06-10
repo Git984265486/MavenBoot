@@ -41,7 +41,7 @@ public class userController {
         if (username != null && !username.equals("") && password != null && !password.equals("")){
             tUser user = userService.validateUser(username,password);
             if (user != null){
-                System.out.println("拿到的数据：\t" + user.getOptName() + "\nStop:\t" + user.getStop());
+                //System.out.println("拿到的数据：\t" + user.getOptName() + "\nStop:\t" + user.getStop());
                 map.put("user",user);
                 map.put("result","success");
             }else{
@@ -58,7 +58,7 @@ public class userController {
     @ResponseBody
     public  Map<String ,Object> updateAdmin(@RequestParam String isAdmin ,@RequestParam String optPWD ,  @RequestParam String code){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("用户身份变更传过来的数据：" + isAdmin + "\t|识别：" + code + "\t|密码：" + optPWD);
+        //System.out.println("用户身份变更传过来的数据：" + isAdmin + "\t|识别：" + code + "\t|密码：" + optPWD);
         if (code != null && !code.equals("")){
             if (!code.equals("5") && optPWD.equals("")){
                 userService.updateAdmin(Integer.parseInt(isAdmin) , code);
@@ -77,7 +77,7 @@ public class userController {
     @ResponseBody
     public Map<String ,Object> resetPassword(@RequestParam String optPWD ,  @RequestParam String code){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("用户身份变更传过来的数据：" + "\t|识别code：" + code + "\t|密码：" + optPWD);
+        //System.out.println("用户身份变更传过来的数据：" + "\t|识别code：" + code + "\t|密码：" + optPWD);
         if (optPWD != null && !optPWD.equals("") && code != null && !code.equals("")){
             userService.updatePWD(optPWD,code);
             map.put("result","success");

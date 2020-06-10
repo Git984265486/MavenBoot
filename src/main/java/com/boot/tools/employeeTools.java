@@ -14,7 +14,7 @@ public class employeeTools {
     /**【获得以jh开头的自动递增字符串】**/
     public String getCodeNum(String lastCode){
         String returnCode = null;
-        System.out.println("传过来的code:"+ lastCode);
+        //System.out.println("传过来的code:"+ lastCode);
         if (lastCode != null){
             String s = "abcdefghijklmnopqrstuvwxyz";
             for (int j = 0; j < 26; j++){
@@ -67,7 +67,7 @@ public class employeeTools {
         if (requestData != null && !requestData.equals("")){
             user = new employee();
             JSONObject jsonobject = JSONObject.fromObject(requestData);
-            System.out.println("传过来的requestData：" + jsonobject.toString());
+            //System.out.println("传过来的requestData：" + jsonobject.toString());
 
             user.setName(jsonobject.getString("name"));
             user.setPy(jsonobject.getString("py"));
@@ -89,7 +89,7 @@ public class employeeTools {
         if (requestData != null){
             user = new employee();
             JSONObject jsonobject = JSONObject.fromObject(requestData);
-            System.out.println("传过来的requestData：" + jsonobject.toString());
+            //System.out.println("传过来的requestData：" + jsonobject.toString());
             if (jsonobject.getString("code")!=null){
                 user.setCode(jsonobject.getString("code"));
             }
@@ -156,7 +156,7 @@ public class employeeTools {
             date = dateFormat.parse(time);
             timeData = dateFormat.format(date);
         }
-        System.out.println("【时间格式转换】" + timeData);
+        //System.out.println("【时间格式转换】" + timeData);
         return timeData;
     }
 

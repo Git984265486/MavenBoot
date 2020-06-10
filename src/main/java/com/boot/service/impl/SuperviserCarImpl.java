@@ -20,6 +20,18 @@ public class SuperviserCarImpl implements superviserCarService {
         return superviserMapper.seleListData();
     }
 
+    /**【获取所有的数据】**/
+    @Override
+    public List<superviserCar> selectAll(String startTime, String endTime) {
+        return superviserMapper.selectAll(startTime,endTime);
+    }
+
+    /**【删除指定时间段内的数据】**/
+    @Override
+    public void delDataByTime(String DelSTime, String DelETime) {
+        superviserMapper.delDataByTime(DelSTime,DelETime);
+    }
+
     /**【通过车牌号码模糊查询】**/
     @Override
     public List<superviserCar> selectDataByCarNo(String carNo) {

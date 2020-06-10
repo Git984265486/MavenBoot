@@ -35,7 +35,7 @@ public class superviserCarController {
         HashMap<String , Object> map = new HashMap<>();
         PageHelper.startPage(page,size);
         List<superviserCar> listData = new ArrayList<>();
-        System.out.println("【carNo的值：】" + carNo);
+        //System.out.println("【carNo的值：】" + carNo);
         if (carNo != null || !carNo.equals("") ){
             listData = superviserService.selectDataByCarNo(carNo);
         }else {
@@ -49,6 +49,45 @@ public class superviserCarController {
         return map;
     }
 
+    /**【获取所有的数据】**/
+    @RequestMapping("/selectAll")
+    @ResponseBody
+    public Map<String ,Object> selectAll(@RequestParam(value = "page",defaultValue = "1") int page,
+                                         @RequestParam(value = "limit",defaultValue = "10") int size,
+                                         @RequestParam(value = "startTime",defaultValue = "")String startTime,
+                                         @RequestParam(value = "endTime",defaultValue = "")String endTime){
+        HashMap<String , Object> map = new HashMap<>();
+        if (!startTime.equals("") && !endTime.equals("")){
+            startTime = startTime + " 00:00:00";
+            endTime = endTime + " 23:59:59";
+        }
+        PageHelper.startPage(page,size);
+        List<superviserCar> data = superviserService.selectAll(startTime,endTime);
+        PageInfo<superviserCar> info = new PageInfo<>(data);
+        map.put("code",0);
+        map.put("count",info.getTotal());
+        map.put("data",info.getList());
+        return map;
+    }
+
+    /**【删除指定时间段内的数据】**/
+    @RequestMapping("/delDataByTime")
+    @ResponseBody
+    public Map<String ,Object> delDataByTime(@RequestParam(value = "DelSTime",defaultValue = "")String DelSTime,
+                                             @RequestParam(value = "DelETime",defaultValue = "")String DelETime){
+        HashMap<String,Object> map = new HashMap<>();
+        String result = "";
+        if (DelSTime != null && !DelSTime.equals("") && DelETime != null && !DelETime.equals("")){
+            DelSTime = DelSTime + " 00:00:00";
+            DelETime = DelETime + " 23:59:59";
+            superviserService.delDataByTime(DelSTime,DelETime);
+            result = "DelSuccess";
+        }
+        map.put("result",result);
+        return map;
+    }
+
+
     /**【检验发证表格数据】**/
     @RequestMapping("/selectTableData")
     @ResponseBody
@@ -58,10 +97,9 @@ public class superviserCarController {
                                                @RequestParam String DataType){
         HashMap<String , Object> mapCheck = new HashMap<>();
         PageHelper.startPage(page,size);
-        System.out.println("【数据类型】" + DataType);
+        //System.out.println("【数据类型】" + DataType);
         List<superviserCar> listData = new ArrayList<>();
         if (DataType != null && !DataType.equals("")){
-
             if (DataType.equals("0")){
                 listData = superviserService.selectByInCheck("0",carno);
             }else if (DataType.equals("1")){
@@ -117,7 +155,7 @@ public class superviserCarController {
                     updateData.setIn_check("2");
                 }else if (instruction.equals("complete")){          //发证广播播报
                     updateData.setResult("1");
-                    System.out.println("【进行广播播报发证】");
+                    //System.out.println("【进行广播播报发证】");
                 }
                 superviserService.updateCarStatus(updateData);                  //将计算出的各项数据更新到数据库
                 result = "updateSuccess";
@@ -136,7 +174,7 @@ public class superviserCarController {
                                                        @RequestParam String operater) throws ParseException {
         HashMap<String , Object> map = new HashMap<>();
         String result = "wait";
-        System.out.println("【车牌】" + carNo + "\t【操作指令】" + command +"\t【操作者】" + operater);
+        //System.out.println("【车牌】" + carNo + "\t【操作指令】" + command +"\t【操作者】" + operater);
         if (carNo != null && !carNo.equals("")){
             List<superviserCar> listData = superviserService.selectByCarNo(carNo);  //通过车牌获取数据
             if (listData!=null){
@@ -151,14 +189,14 @@ public class superviserCarController {
                         }else if (command.equals("WJE")){               //外检结束
                             updateData.setWj_end(time.getNowTime());
                             updateData = tool.updateCarData(updateData);//处理过的数据
-                            System.out.println("【---外检结束耗时---】" + updateData.getWj_usetime());
+                            //System.out.println("【---外检结束耗时---】" + updateData.getWj_usetime());
                         }else if (command.equals("AJS")){               //安检开始
                             updateData.setAj_start(time.getNowTime());
                             updateData = tool.updateCarData(updateData);//处理过的数据
                         }else if (command.equals("AJE")){               //安检结束
                             updateData.setAj_end(time.getNowTime());
                             updateData = tool.updateCarData(updateData);//处理过的数据
-                            System.out.println("【---安检结束耗时---】" + updateData.getAj_usetime());
+                            //System.out.println("【---安检结束耗时---】" + updateData.getAj_usetime());
                         }else if (command.equals("HJS")){               //环检开始
                             updateData.setHj_start(time.getNowTime());
                             updateData = tool.updateCarData(updateData);//处理过的数据
@@ -166,7 +204,7 @@ public class superviserCarController {
                             updateData.setHj_end(time.getNowTime());
                             updateData.setHj_usetime(updateData.getHj_usetime());
                             updateData = tool.updateCarData(updateData);//处理过的数据
-                            System.out.println("【---环检结束耗时---】" + updateData.getHj_usetime());
+                            //System.out.println("【---环检结束耗时---】" + updateData.getHj_usetime());
                         }
                     }
                     superviserService.updateCarByCarNo(updateData);
@@ -185,7 +223,7 @@ public class superviserCarController {
     public Map<String ,Object> finishCheck(@RequestParam(defaultValue = "",value = "speakText")String speakText){
         HashMap<String,Object> map = new HashMap<>();
         String result = "";
-        System.out.println("语音播报内容：" + speakText);
+        //System.out.println("语音播报内容：" + speakText);
         if (!speakText.equals("")){
             boolean isSpeak = staticTools.speakingText(speakText);
             if (isSpeak){
@@ -204,8 +242,6 @@ public class superviserCarController {
         HashMap<String,Object> map = new HashMap<>();
         String result = "";
         List<superviserCar> listDataCarNo = superviserService.selectTwoHour();
-        //superviserCarTools tools = new superviserCarTools();
-        //List<String> listCarNo = tools.getCarNoList(listDataCarNo);
         if (listDataCarNo.size() != 0 ){
             result = "listData";
         }else {

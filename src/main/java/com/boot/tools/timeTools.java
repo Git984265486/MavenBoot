@@ -14,7 +14,7 @@ public class timeTools {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = new Date();
         timeStr = format.format(time);
-        System.out.println("【时间工具:获取当前系统时间】" + timeStr);
+        //System.out.println("【时间工具:获取当前系统时间】" + timeStr);
         return timeStr;
     }
 
@@ -25,7 +25,7 @@ public class timeTools {
         if (timeStr != null && !timeStr.equals("")){
             time = format.parse(timeStr);
         }
-        System.out.println("【时间工具:字符串转换成时间】" + time);
+        //System.out.println("【时间工具:字符串转换成时间】" + time);
         return time;
     }
 
@@ -36,7 +36,7 @@ public class timeTools {
         if (date != null && !date.equals("")){
             timeStr = format.format(date);
         }
-        System.out.println("【时间工具:时间转换成字符串】" + timeStr);
+        //System.out.println("【时间工具:时间转换成字符串】" + timeStr);
         return timeStr;
     }
 

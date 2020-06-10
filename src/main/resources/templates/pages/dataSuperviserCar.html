@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
-		<title>收费数据管理</title>
+		<title>检测车辆数据管理</title>
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
@@ -106,23 +106,18 @@
 				//表格方法级渲染
 				table.render({
 					elem: '#LAY_table_charge',
-					url: localhostPath.path+'/selectDataByTime',
+					url: localhostPath.path+'/selectAll',
 					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
 					defaultToolbar: ['filter', 'exports', 'print'],
-					totalRow: true,
 					cols: [
 						[ 
-							{field: 'autoid' , title: 'ID'},
-							{field: 'billno' , title: '编号'},
-							{field: 'dtdate' , title: '日期'},
 							{field: 'carno' , title: '车牌号'},
-							{field: 'cartype' , title: '车辆类型'},
-							{field: 'cz' , title: '支付方式'},
-							{field: 'jcxm' , title: '检验总项'},
-							{field: 'zsl' , title: '总数量',sort : true,totalRow: true},
-							{field: 'zje' , title: '总金额',sort : true,totalRow: true},
-							{field: 'memo' , title: '备注'},
-							{field: 'optname' , title: '开单员'},
+							{field: 'wj_usetime' , title: '外检耗时'},
+							{field: 'aj_usetime' , title: '安检耗时'},
+							{field: 'hj_usetime' , title: '环检耗时'},
+							{field: 'usetime' , title: '总耗时'},
+							{field: 'result' , title: '检测(1：完成/0：未完成)'},
+							{field: 'operator' , title: '开单员'},
 						]
 					],
 					limits: [10,20,50,100,500,1000,5000],
@@ -153,7 +148,7 @@
 				form.on('submit(data-delete-btn)', function(data) {
 					$.ajax({
 						type:"POST",
-						url:localhostPath.path+"/deleteDataByTime",
+						url:localhostPath.path+"/delDataByTime",
 						data:{
 							DelSTime : $('#DelSTime').val(),
 							DelETime : $('#DelETime').val()

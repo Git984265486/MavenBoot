@@ -96,9 +96,27 @@ public class pagesController {
         return "pages/tipsCheck";
     }
 
-    /**【数据管理页面】**/
+    /**【数据管理首页】**/
+    @RequestMapping("/dataIndexPage")
+    public String dataIndexPage(){
+        return "pages/dataIndex";
+    }
+
+    /**【收费信息数据页面】**/
     @RequestMapping("/dataManagementPage")
     public String dataManagementPage(){
         return "pages/dataManagement";
+    }
+
+    /**【监管车辆数据页面】**/
+    @RequestMapping("/dataSuperviserCar")
+    public String dataSuperViserCar(){
+        return "pages/dataSuperviserCar";
+    }
+
+    /**【收费信息tSFMXB表数据页面】**/
+    @RequestMapping("/chargeOtherPage")
+    public String chargeOtherPage(){
+        return "pages/dataChargeOther";
     }
 }

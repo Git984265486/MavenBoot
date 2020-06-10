@@ -62,7 +62,7 @@ public class chargeController {
                                                @RequestParam(value = "startTime",defaultValue = "")String startTime,
                                                @RequestParam(value = "endTime",defaultValue = "")String endTime){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("开始时间：" + startTime + "\t结束时间:" + endTime);
+        //System.out.println("开始时间：" + startTime + "\t结束时间:" + endTime);
         PageHelper.startPage(page,size);
         if (!startTime.equals("") && !endTime.equals("")){
             startTime = startTime + " 00:00:00";
@@ -85,7 +85,7 @@ public class chargeController {
         chargeInfo lastData = chargeService.seleLastCharge();   //最近插入的数据，billno != tmpLR
         chargeTools tools = new chargeTools("");
         String billNum = tools.getBillNo(lastData.getBillno());
-        System.out.println("获得当天自增编号为:\t" + billNum);
+        //System.out.println("获得当天自增编号为:\t" + billNum);
         map.put("data",billNum);
         return map;
     }
@@ -114,12 +114,12 @@ public class chargeController {
     public Map<String ,Object> deleteDataByTime(@RequestParam String DelSTime,
                                                 @RequestParam String DelETime){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("传过来的日期："+ DelSTime + "\tDelETime:" + DelETime);
+        //System.out.println("传过来的日期："+ DelSTime + "\tDelETime:" + DelETime);
         String result = "";
         if (DelSTime != null && !DelSTime.equals("") && DelETime != null && !DelETime.equals("")){
             DelSTime = DelSTime + " 00:00:00";
             DelETime = DelETime + " 23:59:59";
-            System.out.println("拼接后的时间："+ DelSTime + "\tDelETime:" + DelETime);
+            //System.out.println("拼接后的时间："+ DelSTime + "\tDelETime:" + DelETime);
             chargeService.deleteDataByTime(DelSTime,DelETime);
             result = "DelSuccess";
         }

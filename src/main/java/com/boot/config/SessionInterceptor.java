@@ -26,7 +26,7 @@ public class SessionInterceptor implements HandlerInterceptor {
 
         String basePath = request.getContextPath();
         String path = request.getRequestURI();
-        System.out.println("拦截器启动成功！\t" + path + "\nbasePath:\t" + basePath);
+        //System.out.println("拦截器启动成功！\t" + path + "\nbasePath:\t" + basePath);
         //重定向
         //每一个项目对于登陆的实现逻辑都有所区别，我这里使用最简单的Session提取User来验证登陆。
         HttpSession session = request.getSession();

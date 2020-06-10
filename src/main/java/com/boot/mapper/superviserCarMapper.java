@@ -9,6 +9,12 @@ public interface superviserCarMapper {
     /**【获取30天内的数据】**/
     public List<superviserCar> seleListData();
 
+    /**【获取所有的数据】**/
+    public List<superviserCar> selectAll(String startTime, String endTime);
+
+    /**【删除指定时间段内的数据】**/
+    public void delDataByTime(String DelSTime,String DelETime);
+
     /**【通过车牌号码模糊查询】**/
     public List<superviserCar> selectDataByCarNo(String carNo);
 

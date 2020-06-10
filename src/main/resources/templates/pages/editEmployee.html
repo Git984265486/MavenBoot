@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
-		<title>员工信息</title>
+		<title>修改个人信息</title>
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
@@ -29,19 +29,19 @@
 					<div class="layui-form-item">
 						<div class="layui-inline">
 						
-							<label class="layui-form-label" style="color: red">姓名</label>
+							<label class="layui-form-label layui-bg-gray" style="color: red">姓名</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="name" lay-verify="required" placeholder="姓名" autocomplete="off"
 									   class="layui-input" id="nameval" readonly="readonly" style="color: red">
 							</div>
 								
-							<label class="layui-form-label" style="color: red">姓名首字母</label>
+							<label class="layui-form-label layui-bg-gray" style="color: red">姓名首字母</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="py" placeholder="姓名首字母" lay-verify="required" autocomplete="off"
 									   class="layui-input" id="pyval" readonly="readonly" style="color: red">
 							</div>
 							
-							<label class="layui-form-label">生日</label>
+							<label class="layui-form-label layui-bg-gray">生日</label>
 							<div class="layui-input-inline">
 								<input type="text" name="birthday" id="date" autocomplete="off" class="layui-input">
 							</div>
@@ -51,19 +51,19 @@
 					<div class="layui-form-item">
 							<div class="layui-inline">
 
-								<label class="layui-form-label">身份证号码</label>
+								<label class="layui-form-label layui-bg-gray">身份证号码</label>
 								<div  class="layui-input-inline">
 									<input type="text" name="cardno" placeholder="身份证号码" autocomplete="off"
 										   class="layui-input" id="cardval">
 								</div>
 
-								<label class="layui-form-label">住址</label>
+								<label class="layui-form-label layui-bg-gray">住址</label>
 								<div  class="layui-input-inline">
 									<input type="text" name="address" placeholder="住址" autocomplete="off"
 										   class="layui-input" id="addressval">
 								</div>
 
-								<label class="layui-form-label">性别</label>
+								<label class="layui-form-label layui-bg-gray">性别</label>
 								<div class="layui-input-inline">
 									<input type="text" name="sex" placeholder="性别" autocomplete="off"
 										   class="layui-input" id="sexval">
@@ -75,18 +75,18 @@
 					<div class="layui-form-item">
 						<div class="layui-inline">
 						
-							<label class="layui-form-label" style="color: red">部门</label>
+							<label class="layui-form-label layui-bg-gray" style="color: red">部门</label>
 							<div class="layui-input-inline">
 								<input type="text" name="depart" placeholder="部门" autocomplete="off" class="layui-input"
 									   id="departval" readonly="readonly" style="color: red">
 							</div>
 							
-							<label class="layui-form-label">座机</label>
+							<label class="layui-form-label layui-bg-gray">座机</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="phone" placeholder="座机" autocomplete="off" class="layui-input" id="phoneval">
 							</div>
 							
-							<label class="layui-form-label">手机</label>
+							<label class="layui-form-label layui-bg-gray">手机</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="mobile" placeholder="手机" autocomplete="off" class="layui-input" id="mobileval">
 							</div>
@@ -96,17 +96,17 @@
 					<div class="layui-form-item">
 						<div class="layui-inline">
 
-							<label class="layui-form-label">旧密码</label>
+							<label class="layui-form-label layui-bg-gray">旧密码</label>
 							<div  class="layui-input-inline">
 								<input type="password" placeholder="旧密码" autocomplete="off" class="layui-input" id="oldPas">
 							</div>
 
-							<label class="layui-form-label">新密码</label>
+							<label class="layui-form-label layui-bg-gray">新密码</label>
 							<div  class="layui-input-inline">
 								<input type="password" name="password" placeholder="新密码" autocomplete="off" class="layui-input" id="newPas">
 							</div>
 
-							<label class="layui-form-label">确认密码</label>
+							<label class="layui-form-label layui-bg-gray">确认密码</label>
 							<div  class="layui-input-inline">
 								<input type="password" placeholder="确认密码" autocomplete="off" class="layui-input" id="newPass">
 							</div>
@@ -147,8 +147,8 @@
 
 			/**页面赋值**/
 			$(function () {
-				if (user != null && user != ""){
-					if (users.userData != null && users.userData != ""){
+				if (user !== null && user !== ""){
+					if (users.userData !== null && users.userData !== ""){
 						/**获取员工信息**/
 						$.ajax({
 							type:"POST",
@@ -156,7 +156,7 @@
 							data:{ code : data.optCode },
 							dataType:'json',
 							success:function (data) {
-								if (data.result == "success"){
+								if (data.result === "success"){
 									layer.msg("获取信息成功!");
 									console.log("打印信息data:" + JSON.stringify(data.employee));
 									var userInfo = JSON.parse(JSON.stringify(data.employee));
@@ -193,12 +193,12 @@
 		    // layer.alert(requestData, {			//JSON.parse()转成json对象
 		    //   title: '最终的提交信息'
 		    // });
-			  if ($('#oldPas').val().length != 0 ){
-				  if ($('#oldPas').val() != pasd){
+			  if ($('#oldPas').val().length !== 0 ){
+				  if ($('#oldPas').val() !== pasd){
 					  layer.alert("旧密码输入有误!");
-				  }else if ($('#newPas').val().length == 0 || $('#newPass').val().length == 0){
+				  }else if ($('#newPas').val().length === 0 || $('#newPass').val().length === 0){
 					  layer.alert("密码不能输入空值");
-				  }else if ($('#newPas').val() != $('#newPass').val()){
+				  }else if ($('#newPas').val() !== $('#newPass').val()){
 					  layer.alert("新密码两次输入不一致!");
 				  }else{
 					  $.ajax({
@@ -209,7 +209,7 @@
 							  code : code,
 						  },
 						  success:function (data) {
-							  if (data.result == "success"){
+							  if (data.result === "success"){
 								  layer.alert("修改密码成功!",function(){
 									  window.location.reload();//刷新页面
 								  });
@@ -234,7 +234,7 @@
 					  },
 					  dataType:'json',
 					  success:function (data) {
-						  if (data.result == "success"){
+						  if (data.result === "success"){
 							  layer.alert("用户信息修改成功!",function(){
 								  window.location.reload();//刷新页面
 							  });

@@ -49,7 +49,7 @@ public class employeeController {
         if (employee!=null){
             employeeTools tools = new employeeTools();
             String code = tools.getCodeNum(employee.getCode());
-            System.out.println("要插入的code值：" + code);
+            //System.out.println("要插入的code值：" + code);
             employee.setIsStop(tools.getStopString(employee.getStop()));
         }
         return employee;
@@ -65,7 +65,7 @@ public class employeeController {
         employee userInfo = tools.initData(requestData);
         employee lastEmp = service.selectLastData();    //获取最后插入数据库的员工，获取他的Code来生成新员工的Code
         String code = tools.getCodeNum(lastEmp.getCode());
-        System.out.println("要插入的code值：" + code);
+        //System.out.println("要插入的code值：" + code);
         if (userInfo != null){
             userInfo.setCode(code);
             service.addEmployee(userInfo);
@@ -84,7 +84,7 @@ public class employeeController {
     public Map<String , Object> delEmployee(@RequestParam String code){
         HashMap<String , Object> map = new HashMap<>();
         String result = "";
-        System.out.println("传过来的Code值：" + code);
+        //System.out.println("传过来的Code值：" + code);
         if (code != null && !code.equals("")){
             service.delEmployee(code);      //删除员工信息
             result = "success";
@@ -99,7 +99,7 @@ public class employeeController {
     public Map<String , Object> stopEmployee(@RequestParam String code ,  @RequestParam String stop){
         HashMap<String,Object> map = new HashMap<>();
         String result = "";
-        System.out.println("前端传过来的数据:\tcode:" + code + "\tstop:" + stop);
+        //System.out.println("前端传过来的数据:\tcode:" + code + "\tstop:" + stop);
         if (code != null && !code.equals("") && stop != null && !stop.equals("")){
             service.stopEmployee(code,Integer.parseInt(stop));
             result = "success";
@@ -113,7 +113,7 @@ public class employeeController {
     @ResponseBody
     public Map<String , Object> selectEmplByCode(@RequestParam String code) throws ParseException {
         HashMap<String,Object> map = new HashMap<>();
-        System.out.println("前端传过来获取员工信息数据code:\t" + code);
+        //System.out.println("前端传过来获取员工信息数据code:\t" + code);
         if (code != null && !code.equals("")){
             employee employee = service.selectEmployeeByCode(code);
             employeeTools tools = new employeeTools();
@@ -131,7 +131,7 @@ public class employeeController {
     @ResponseBody
     public Map<String , Object> editEmployeeByCode(@RequestParam String edtiData) throws ParseException {
         HashMap<String,Object> map = new HashMap<>();
-        System.out.println("前端传过来员工信息数据edtiData:\t" + edtiData);
+        //System.out.println("前端传过来员工信息数据edtiData:\t" + edtiData);
         if (edtiData != null && !edtiData.equals("")){
             employeeTools tool = new employeeTools();
             employee em = tool.initDataUpdate(edtiData);

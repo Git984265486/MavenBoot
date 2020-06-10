@@ -29,6 +29,22 @@
         select * from superviserCar where DATEDIFF(DAY , start_time , getdate()) &lt;= 30 order by keyID desc
     </select>
 
+    <!--查询所有数据-->
+    <select id="selectAll" resultMap="superviserCarResult">
+        select * from superviserCar
+        <where>
+            <if test="startTime != null and endTime != null and startTime != '' and endTime != ''">
+                AND superviserCar.start_time BETWEEN #{startTime} AND #{endTime}
+            </if>
+        </where>
+        order by keyID
+    </select>
+
+    <!--删除指定时间段内的数据-->
+    <delete id="delDataByTime">
+        DELETE FROM superviserCar WHERE start_time BETWEEN #{DelSTime} AND #{DelETime}
+    </delete>
+
     <!--通过车牌号码模糊查询-->
     <select id="selectDataByCarNo" resultMap="superviserCarResult">
         select * from superviserCar where superviserCar.carno like '%'+#{carNo}+'%' order by keyID desc

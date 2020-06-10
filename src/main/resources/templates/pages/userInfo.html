@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta charset="utf-8">
-		<title>员工信息</title>
+		<title>员工信息管理</title>
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
@@ -74,28 +74,7 @@
 						var data = checkStatus.data;	//获取到行数据
 						var code = data[0]['code'];		//拿到code值
 						if (obj.event === 'stopEmployee'){		//停用账号登录
-							$.ajax({
-								type:"POST",
-								url:localhostPath.path+"/stopEmployee",
-								data:{
-									code : code,
-									stop : "1",
-								},
-								success:function (data) {
-									if (data.result == "success"){
-										layer.alert("账户禁用成功!",function(){
-											window.location.reload();//刷新页面
-										});
-									}else{
-										layer.alert("账户禁用失败!",function(){
-											window.location.reload();//刷新页面
-										});
-									}
-								},
-								error:function () {
-									layer.msg("账户禁用错误");
-								}
-							});
+							stopUser(code,1);
 						}
 
 						if(obj.event === 'deleteEmployee'){		//删除员工信息
@@ -106,7 +85,7 @@
 									code : data[0]['code']
 								},
 								success:function (data) {
-									if (data.result == "success"){
+									if (data.result === "success"){
 										layer.alert("用户删除成功!",function(){
 											window.location.reload();//刷新父页面
 										});
@@ -122,111 +101,24 @@
 							});
 						}
 
-						if (obj.event === 'startEmployee'){
-							$.ajax({
-								type:"POST",
-								url:localhostPath.path+"/stopEmployee",
-								data:{
-									code : code,
-									stop : "0",
-								},
-								success:function (data) {
-									if (data.result == "success"){
-										layer.alert("账户启用成功!",function(){
-											window.location.reload();//刷新页面
-										});
-									}else{
-										layer.alert("账户启用失败!",function(){
-											window.location.reload();//刷新页面
-										});
-									}
-								},
-								error:function () {
-									layer.msg("账户启用错误");
-								}
-							});
+						if (obj.event === 'startEmployee'){		//启用账号
+							stopUser(code,0);
 						}
 
-						if (obj.event === 'upUser'){
-							$.ajax({
-								type:"POST",
-								url:localhostPath.path+"/updateAdmin",
-								data:{
-									isAdmin : 1,
-									optPWD : "",
-									code : code,
-								},
-								success:function (data) {
-									if (data.result == "success"){
-										layer.alert("账户更新为管理员成功!",function(){
-											window.location.reload();//刷新页面
-										});
-									}else{
-										layer.alert("账户更新为管理员失败!",function(){
-											window.location.reload();//刷新页面
-										});
-									}
-								},
-								error:function () {
-									layer.msg("账户更新管理权限错误");
-								}
-							});
+						if (obj.event === 'upUser'){			//提升为管理员
+							updateUser(1,"",code);
 						}
 
-						if (obj.event === 'downUser'){
-							$.ajax({
-								type:"POST",
-								url:localhostPath.path+"/updateAdmin",
-								data:{
-									isAdmin : 0,
-									optPWD : "",
-									code : code,
-								},
-								success:function (data) {
-									if (data.result == "success"){
-										layer.alert("账户更新为普通用户成功!",function(){
-											window.location.reload();//刷新页面
-										});
-									}else{
-										layer.alert("账户更新为普通用户失败!",function(){
-											window.location.reload();//刷新页面
-										});
-									}
-								},
-								error:function () {
-									layer.msg("账户更新管理权限错误");
-								}
-							});
+						if (obj.event === 'downUser'){			//将为普通用户
+							updateUser(0,"",code);
 						}
 
-						if (obj.event === 'resetPWD'){
-							$.ajax({
-								type:"POST",
-								url:localhostPath.path+"/updateAdmin",
-								data:{
-									isAdmin : 5,
-									optPWD : "RS",
-									code : code,
-								},
-								success:function (data) {
-									if (data.result == "success"){
-										layer.alert("账户重置密码成功!重置密码为:8个8",function(){
-											window.location.reload();//刷新页面
-										});
-									}else{
-										layer.alert("账户重置密码失败!",function(){
-											window.location.reload();//刷新页面
-										});
-									}
-								},
-								error:function () {
-									layer.msg("账户重置密码错误");
-								}
-							});
+						if (obj.event === 'resetPWD'){			//重置密码
+							updateUser(5,"RS",code);
 						}
 					}
 
-					if(obj.event === 'addEmployee'){
+					if(obj.event === 'addEmployee'){			//添加用户
 						layer.open({
 							type: 2
 							,title: '添加用户' //不显示标题栏
@@ -238,6 +130,59 @@
 						});
 					}
 				});
+
+				/**【更新数据方法】**/
+				function updateUser(isAdmin,optPWD,code) {
+					$.ajax({
+						type:"POST",
+						url:localhostPath.path+"/updateAdmin",
+						data:{
+							isAdmin : isAdmin,
+							optPWD : optPWD,
+							code : code,
+						},
+						success:function (data) {
+							if (data.result === "success"){
+								layer.alert("账户更新成功!",function(){
+									window.location.reload();//刷新页面
+								});
+							}else{
+								layer.alert("账户更新失败!",function(){
+									window.location.reload();//刷新页面
+								});
+							}
+						},
+						error:function () {
+							layer.msg("账户更新错误");
+						}
+					});
+				}
+
+				/**【停用账号方法】**/
+				function stopUser(code,stop) {
+					$.ajax({
+						type:"POST",
+						url:localhostPath.path+"/stopEmployee",
+						data:{
+							code : code,
+							stop : stop
+						},
+						success:function (data) {
+							if (data.result === "success"){
+								layer.alert("账户更新成功!",function(){
+									window.location.reload();//刷新页面
+								});
+							}else{
+								layer.alert("账户更新失败!",function(){
+									window.location.reload();//刷新页面
+								});
+							}
+						},
+						error:function () {
+							layer.msg("账户启用错误");
+						}
+					});
+				}
 			});
 		</script>
 	</body>

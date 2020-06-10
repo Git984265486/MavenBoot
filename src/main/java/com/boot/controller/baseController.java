@@ -60,7 +60,7 @@ public class baseController {
     @ResponseBody
     public Map<String , Object> selBaseByCode(@RequestParam String code){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("【删除base表格数据传过来的code】" + code);
+        //System.out.println("【删除base表格数据传过来的code】" + code);
         if (code != null && !code.equals("")){
             base base = baseService.selBaseByCode(code);
             if (base.getStop().equals("1")){
@@ -81,7 +81,7 @@ public class baseController {
     @ResponseBody
     public Map<String , Object> delBaseByCode(@RequestParam String code){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("【删除base表格数据传过来的code】" + code);
+        //System.out.println("【删除base表格数据传过来的code】" + code);
         if (code != null && !code.equals("")){
             baseService.delBaseByCode(code);
             map.put("result","success");
@@ -96,7 +96,7 @@ public class baseController {
     @ResponseBody
     public Map<String ,Object> updateBaseByCode(@RequestParam String updateData,@RequestParam String operateStr){
         HashMap<String , Object> map = new HashMap<>();
-        System.out.println("【更新收费项目表传过来的数据updateData】"+ updateData + "\t【操作字段operateStr】" + operateStr);
+        //System.out.println("【更新收费项目表传过来的数据updateData】"+ updateData + "\t【操作字段operateStr】" + operateStr);
         if (updateData != null && !updateData.equals("")){      //更新的字段
             if (operateStr != null && !operateStr.equals("")){  //更新指令
                 if (operateStr.equals("editData")){             //修改数据
@@ -133,7 +133,7 @@ public class baseController {
     @ResponseBody
     public Map<String ,Object> insertBaseData(@RequestParam String insertData){
         HashMap<String ,Object> map = new HashMap<>();
-        System.out.println("【插入收费项目表传过来的数据insertData】"+ insertData );
+        //System.out.println("【插入收费项目表传过来的数据insertData】"+ insertData );
         if (insertData != null && !insertData.equals("")){
             baseTools tool = new baseTools();
             base baseData = tool.insertJsonData(insertData);
@@ -141,7 +141,7 @@ public class baseController {
                 base base = baseService.lastBaseData();
                 baseData.setCode(tool.baseCode(base.getCode()));    //给code赋值
                 baseService.insertBaseData(baseData);
-                System.out.println("【code值】\t" + baseData.getCode() + "\t【name值】\t" + baseData.getName());
+                //System.out.println("【code值】\t" + baseData.getCode() + "\t【name值】\t" + baseData.getName());
                 map.put("result","insertSuccess");
             }
         }else{

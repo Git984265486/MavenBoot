@@ -64,14 +64,14 @@ public class chargeTools {
             if (memo.length() == 0){
                 memo = null;
             }
-            System.out.print("startTimeDate:" + startTimeDate);
-            System.out.print("\tendTimeDate:" + endTimeDate);
-            System.out.print("\tbillno:" + billno);
-            System.out.print("\tcarno:" + carno);
-            System.out.println("cartype:" + cartype);
-            System.out.print("\tflag:" + cz);
-            System.out.print("\tjcxm:" + jcxm);
-            System.out.print("\tmemo:" + memo);
+            //System.out.print("startTimeDate:" + startTimeDate);
+            //System.out.print("\tendTimeDate:" + endTimeDate);
+            //System.out.print("\tbillno:" + billno);
+            //System.out.print("\tcarno:" + carno);
+            //System.out.println("cartype:" + cartype);
+            //System.out.print("\tflag:" + cz);
+           // System.out.print("\tjcxm:" + jcxm);
+           // System.out.print("\tmemo:" + memo);
         }
 
     }
@@ -82,9 +82,9 @@ public class chargeTools {
         if (!billno.equals("") && billno != null){
             String bills [] = billno.split("-");
             if (bills.length != 0){
-                for (int i = 0 ; i < bills.length ; i ++ ) {
-                    System.out.println("切割的字符串:\t" + bills[i]);
-                }
+                //for (int i = 0 ; i < bills.length ; i ++ ) {
+                   //System.out.println("切割的字符串:\t" + bills[i]);
+                //}
                 if (bills[0].equals(timeNumber())){     //判断最后处理的数据的日期是否是当天
                     billNum = timeNumber() + "-" +getNumber(bills[1]);
                 }else{                                  //不是当天则编号从0001重新开始
@@ -109,7 +109,7 @@ public class chargeTools {
                 numStr = "0" + num;
             }
         }
-        System.out.println("【获得四位数的数字字符串】" + numStr);
+        //System.out.println("【获得四位数的数字字符串】" + numStr);
         return numStr;
     }
 
@@ -117,7 +117,7 @@ public class chargeTools {
     public String timeNumber(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         String timeData = dateFormat.format(new Date());
-        System.out.println("获取指定的时间格式【yyyyMMdd】数据:\t" + timeData);
+        //System.out.println("获取指定的时间格式【yyyyMMdd】数据:\t" + timeData);
         return timeData;
     }
 
@@ -126,7 +126,7 @@ public class chargeTools {
         chargeInfo info = new chargeInfo();
         if (addData != null && !addData.equals("")){
             JSONObject jsonobject = JSONObject.fromObject(addData);
-            System.out.println("传过来的requestData：" + jsonobject.toString());
+            //System.out.println("传过来的requestData：" + jsonobject.toString());
             //System.out.println("传过来的billNum：" + jsonobject.getString("billNum"));
             String dj = jsonobject.getString("dj"); //单价
             String count = jsonobject.getString("count");//总数
@@ -174,7 +174,7 @@ public class chargeTools {
         if (count != null && !count.equals("") && dj != null && !dj.equals("")){
             total = Integer.parseInt(count) * strToDouble(dj);
         }
-        System.out.println("【总价】" + total);
+        //System.out.println("【总价】" + total);
         return total;
     }
 
@@ -193,7 +193,7 @@ public class chargeTools {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date time = new Date();
         String times = format.format(time);
-        System.out.println("【拿到当前系统时间】" + times);
+        //System.out.println("【拿到当前系统时间】" + times);
         return time;
     }
 

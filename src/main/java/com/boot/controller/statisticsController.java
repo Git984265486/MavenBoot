@@ -30,7 +30,7 @@ public class statisticsController {
             Calendar calendar = Calendar.getInstance();
             year = calendar.get(Calendar.YEAR) + "";
         }
-        System.out.println("年份:" + year);
+        //System.out.println("年份:" + year);
         List<statistics> listData = service.statisticsData(year);
         map.put("result","success");
         map.put("listData",listData);

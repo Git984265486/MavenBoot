@@ -27,17 +27,17 @@
 					<div class="layui-form-item">
 						<div class="layui-inline">
 						
-							<label class="layui-form-label">车牌号</label>
+							<label class="layui-form-label layui-bg-gray">车牌号</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="carNum" lay-verify="required" placeholder="车牌号" autocomplete="off" class="layui-input">
 							</div>
 
-							<label class="layui-form-label">车辆识别号</label>
+							<label class="layui-form-label layui-bg-gray">车辆识别号</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="carVin" placeholder="车辆识别号" autocomplete="off" class="layui-input" lay-verify="required">
 							</div>
 
-							<label class="layui-form-label">车辆类型</label>
+							<label class="layui-form-label layui-bg-gray">车辆类型</label>
 							<div class="layui-input-inline">
 								<select name="carType" lay-filter="aihao" id="carType">
 									<option value="">选择类型</option>
@@ -48,7 +48,7 @@
 								</select>
 							</div>
 							
-							<label class="layui-form-label">日期</label>
+							<label class="layui-form-label layui-bg-gray">日期</label>
 							<div class="layui-input-inline">
 								<input type="text" name="time" id="date" autocomplete="off" class="layui-input">
 							</div>
@@ -61,7 +61,7 @@
 					<div class="layui-form-item">
 						<div class="layui-inline">
 
-							<label class="layui-form-label">支付方式</label>
+							<label class="layui-form-label layui-bg-gray">支付方式</label>
 							<div class="layui-input-inline">
 								<select name="payType" lay-filter="aihao" id="payType">
 									<option value="">选择支付方式</option>
@@ -72,19 +72,20 @@
 								</select>
 							</div>
 
-							<label class="layui-form-label">备注</label>
+							<label class="layui-form-label layui-bg-gray">备注</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="remark" placeholder="备注" autocomplete="off" class="layui-input">
 							</div>
 
-							<label class="layui-form-label" style="color: red">检测项目</label>
+							<label class="layui-form-label layui-bg-gray">检测项目</label>
 							<div  class="layui-input-inline">
-								<input type="text" name="checkProject" placeholder="检测项目" autocomplete="off" class="layui-input" id="checkProject">
+								<input type="text" name="checkProject" placeholder="检测项目" autocomplete="off"
+									   class="layui-input" id="checkProject" style="color: red">
 							</div>
 
-							<label class="layui-form-label" style="color: red">数量</label>
+							<label class="layui-form-label layui-bg-gray">数量</label>
 							<div  class="layui-input-inline">
-								<input type="text" name="count" placeholder="数量" autocomplete="off" class="layui-input" id="count">
+								<input type="text" name="count" placeholder="数量" autocomplete="off" class="layui-input" id="count" style="color: red">
 							</div>
 
 						</div>
@@ -93,23 +94,23 @@
 					<div class="layui-form-item">
 						<div class="layui-inline">
 
-							<label class="layui-form-label" style="color: red">编码</label>
+							<label class="layui-form-label layui-bg-gray">编码</label>
 							<div  class="layui-input-inline">
-								<input type="text" name="billNum" placeholder="编码" autocomplete="off" class="layui-input" id="billStr">
+								<input type="text" name="billNum" placeholder="编码" autocomplete="off" class="layui-input" id="billStr" style="color: red">
 							</div>
 
-							<label class="layui-form-label" style="color: red">单价</label>
+							<label class="layui-form-label layui-bg-gray">单价</label>
 							<div  class="layui-input-inline">
-								<input type="text" name="dj" placeholder="单价" autocomplete="off" class="layui-input" id="price">
+								<input type="text" name="dj" placeholder="单价" autocomplete="off" class="layui-input" id="price" style="color: red">
 							</div>
 
-							<label class="layui-form-label" style="color: red">金额</label>
+							<label class="layui-form-label layui-bg-gray">金额</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="je" placeholder="金额" autocomplete="off"
 									   class="layui-input" readonly="readonly"  style="color: red" id="amount">
 							</div>
 
-							<label class="layui-form-label" style="color: red">开单员</label>
+							<label class="layui-form-label layui-bg-gray">开单员</label>
 							<div  class="layui-input-inline">
 								<input type="text" name="opterater" placeholder="开单员" autocomplete="off"
 									   class="layui-input" readonly="readonly"  style="color: red" id="operate">
