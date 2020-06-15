@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8082
 
 spring:
   datasource:
@@ -17,7 +17,6 @@ spring:
   #静态页面JS,CSS配置
   mvc:
     static-path-pattern: /**
-
 
 mybatis-plus:
   mapper-locations: classpath:mapper/*.xml

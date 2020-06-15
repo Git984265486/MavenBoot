@@ -171,7 +171,7 @@ public class superviserCarController {
     @RequestMapping("/updateCarByCarNo")
     @ResponseBody
     public Map<String , Object> updateCarStatusByKeyID(@RequestParam String carNo,@RequestParam String command,
-                                                       @RequestParam String operater) throws ParseException {
+                                                       @RequestParam(value = "operater" ,defaultValue = "") String operater) throws ParseException {
         HashMap<String , Object> map = new HashMap<>();
         String result = "wait";
         //System.out.println("【车牌】" + carNo + "\t【操作指令】" + command +"\t【操作者】" + operater);

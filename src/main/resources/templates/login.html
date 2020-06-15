@@ -12,8 +12,10 @@
 	</head>
 	<body>
 	<div class="wrap">
+		<!--/MavenBoot为发布项目名称-->
 		<!--<img src="../images/background.jpg" class="imgStyle">-->
-		<img src="/layui/images/background.jpg" class="imgStyle">
+		<img src="/MavenBoot/layui/images/background.jpg" class="imgStyle">
+		<!--<img src="/MavenBootFinish/layui/images/background.jpg" class="imgStyle">-->
 		<div class="loginForm">
 			<form class="layui-form" lay-filter="example">
 				<div class="logoHead">
@@ -101,7 +103,9 @@
 				if (inputCode == cardCode) {
 					$.ajax({
 						type: "POST",
-						url: "http://localhost:8080/validateUser",
+						//url: "http://localhost:8081/MavenBootFinish/validateUser",
+						url: "http://192.168.1.190:8081/MavenBoot/validateUser",	//打包war访问路径
+						//url: "http://localhost:8081/validateUser",				//软件启动访问路径
 						data: {
 							username: username,
 							password: password,
@@ -124,7 +128,9 @@
 										}
 									});
 									layer.msg("用户登录成功");
-									window.location.href = "/index";
+									//window.location.href = "/MavenBootFinish/index";
+									window.location.href = "/MavenBoot/index";	//打包war访问路径
+									//window.location.href = "/index";				//本地软件访问路径
 									return true;
 								}else{
 									//layui.sessionData('user',{ user : obj });
@@ -160,7 +166,9 @@
 			/**【路径配置】**/
 			layui.sessionData('pathConfig', {
 				key: 'path',
-				value: 'http://localhost:8080'
+				//value: 'http://localhost:8081/MavenBootFinish'
+				value: 'http://192.168.1.190:8081/MavenBoot'	//打包war访问路径
+				//value: 'http://localhost:8081'				//本地软件访问路径
 			});
 
 		});

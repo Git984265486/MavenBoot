@@ -59,14 +59,32 @@
 			console.log("【路径】" + localhostPath.path);
 
 
-		  	var chargePage = '<object type="text/html" data="/chargePage" width="100%" height="100%"></object>';			//收费信息
-		  	var userPage = '<object type="text/html" data="/userPage" width="100%" height="100%"></object>';				//用户管理
-		  	var employeePage = '<object type="text/html" data="/editEmployeePage" width="100%" height="100%"></object>';	//个人信息
-		  	var registerPage = '<object type="text/html" data="/registerCharge" width="100%" height="100%"></object>';		//收费登记
-		  	var completePage = '<object type="text/html" data="/completePage" width="100%" height="100%"></object>';		//检测发证
-		  	var superviserCar = '<object type="text/html" data="/superviserCarPage" width="100%" height="100%"></object>';	//车辆状态
-		  	var taticticsPage = '<object type="text/html" data="/statisticsTablePage" width="100%" height="100%"></object>';//数据统计
-			var dataManagPage = '<object type="text/html" data="/dataIndexPage" width="100%" height="100%"></object>';		//数据管理
+			// var chargePage = '<object type="text/html" data="/MavenBootFinish/chargePage" width="100%" height="100%"></object>';			//收费信息
+			// var userPage = '<object type="text/html" data="/MavenBootFinish/userPage" width="100%" height="100%"></object>';				//用户管理
+			// var employeePage = '<object type="text/html" data="/MavenBootFinish/editEmployeePage" width="100%" height="100%"></object>';	//个人信息
+			// var registerPage = '<object type="text/html" data="/MavenBootFinish/registerCharge" width="100%" height="100%"></object>';		//收费登记
+			// var completePage = '<object type="text/html" data="/MavenBootFinish/completePage" width="100%" height="100%"></object>';		//检测发证
+			// var superviserCar = '<object type="text/html" data="/MavenBootFinish/superviserCarPage" width="100%" height="100%"></object>';	//车辆状态
+			// var taticticsPage = '<object type="text/html" data="/MavenBootFinish/statisticsTablePage" width="100%" height="100%"></object>';//数据统计
+			// var dataManagPage = '<object type="text/html" data="/MavenBootFinish/dataIndexPage" width="100%" height="100%"></object>';		//数据管理
+
+		  	var chargePage = '<object type="text/html" data="/MavenBoot/chargePage" width="100%" height="100%"></object>';			//收费信息
+		  	var userPage = '<object type="text/html" data="/MavenBoot/userPage" width="100%" height="100%"></object>';				//用户管理
+		  	var employeePage = '<object type="text/html" data="/MavenBoot/editEmployeePage" width="100%" height="100%"></object>';	//个人信息
+		  	var registerPage = '<object type="text/html" data="/MavenBoot/registerCharge" width="100%" height="100%"></object>';		//收费登记
+		  	var completePage = '<object type="text/html" data="/MavenBoot/completePage" width="100%" height="100%"></object>';		//检测发证
+		  	var superviserCar = '<object type="text/html" data="/MavenBoot/superviserCarPage" width="100%" height="100%"></object>';	//车辆状态
+		  	var taticticsPage = '<object type="text/html" data="/MavenBoot/statisticsTablePage" width="100%" height="100%"></object>';//数据统计
+			var dataManagPage = '<object type="text/html" data="/MavenBoot/dataIndexPage" width="100%" height="100%"></object>';		//数据管理
+
+			// var chargePage = '<object type="text/html" data="/chargePage" width="100%" height="100%"></object>';			//收费信息
+			// var userPage = '<object type="text/html" data="/userPage" width="100%" height="100%"></object>';				//用户管理
+			// var employeePage = '<object type="text/html" data="/editEmployeePage" width="100%" height="100%"></object>';	//个人信息
+			// var registerPage = '<object type="text/html" data="/registerCharge" width="100%" height="100%"></object>';		//收费登记
+			// var completePage = '<object type="text/html" data="/completePage" width="100%" height="100%"></object>';		//检测发证
+			// var superviserCar = '<object type="text/html" data="/superviserCarPage" width="100%" height="100%"></object>';	//车辆状态
+			// var taticticsPage = '<object type="text/html" data="/statisticsTablePage" width="100%" height="100%"></object>';//数据统计
+			// var dataManagPage = '<object type="text/html" data="/dataIndexPage" width="100%" height="100%"></object>';		//数据管理
 
 		  	var layuiBody = document.getElementById("layuiBody");	//主体窗口
 			var user = JSON.stringify(layui.sessionData('user'));	//登录保存的身份信息
@@ -79,16 +97,19 @@
 					console.log("打印信息data:" + data.optCode);
 					isAdmin = data.badmin;
 				}else{
-					window.location.href = "/login";
+					//window.location.href = "/MavenBootFinish/login";
+					window.location.href = "/MavenBoot/login";
 				}
 			}else{
-				window.location.href = "/login";
+				//window.location.href = "/MavenBootFinish/login";
+				window.location.href = "/MavenBoot/login";
 			}
 
 			/**【退出登录】**/
 			$("#exit").click(function () {
 				layui.sessionData('user', null);
-				window.location.href = "/login";
+				//window.location.href = "/MavenBootFinish/login";
+				window.location.href = "/MavenBoot/login";
 			});
 
 			/**【修改个人信息】**/

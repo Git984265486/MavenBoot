@@ -114,6 +114,7 @@
 			$ = layui.$;
 
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+			console.log("添加员工获得的路径："+ localhostPath.path);
 
 		  /**监听提交**/
 		  form.on('submit(demo1)', function(data){
@@ -129,7 +130,7 @@
 					},
 					dataType:'json',
 					success:function (data) {
-						if (data.result == "success"){
+						if (data.result === "success"){
 							layer.alert("用户添加成功!",function(){
 								window.parent.location.reload();//刷新父页面
 							});
