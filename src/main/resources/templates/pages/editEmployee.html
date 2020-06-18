@@ -131,11 +131,12 @@
 		</div>
 		
 		<script>
-		layui.use(['form', 'laydate',"jquery"], function(){
+		layui.use(['form', 'laydate'], function(){
 			var form = layui.form,
 			laydate = layui.laydate,
 			$ = layui.$;
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+			console.log("【编辑信息路径】" + localhostPath.path);
 			var user = JSON.stringify(layui.sessionData('user'));
 			var users = JSON.parse(user);
 			console.log("打印信息users:" + JSON.stringify(users.userData));

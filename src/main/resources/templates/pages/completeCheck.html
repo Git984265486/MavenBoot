@@ -1,26 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="utf-8">
 		<title>检测发证</title>
 		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
 		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
-
 	</head>
 	<body>
 
 	<div class="layuimini-container">
 
-
-
-
 		<div class="layuimini-main" style="text-align: center;">
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
 				<legend>检测车辆信息表</legend>
 			</fieldset>
-
-
 
 			<div class="layui-form-item">
 
@@ -125,6 +119,7 @@
 				table = layui.table;
 
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+			console.log("【检测发证路径】" + localhostPath.path);
 
 			/**【待检表格数据赋值】**/
 			table.render({
@@ -237,9 +232,12 @@
 			table.on('tool(complete)', function(obj){
 				var data = obj.data;
 				if(obj.event === 'RightToCenter'){
-					console.log("【语音播报选中数据】"+JSON.stringify(data));
+					var readText = data.carno + "车主请到" + $('#seleWin').val() + "领取钥匙。";
+					console.log("【语音播报选中数据】" + readText);
+					
 					$.ajax({
 						type: "POST",
+						//url:"/MavenBoot/finishCheck",
 						url:localhostPath.path+"/finishCheck",
 						data:{
 							speakText : data.carno + "车主请到" + $('#seleWin').val() + "领取钥匙。"

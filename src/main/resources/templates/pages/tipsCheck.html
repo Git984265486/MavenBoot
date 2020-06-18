@@ -16,12 +16,12 @@
 			var table = layui.table;
 
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
-			console.log("路径："+localhostPath.path);
+			console.log("【超时提示路径】"+localhostPath.path);
 			/**【待检表格数据赋值】**/
 
 			table.render({
 				elem: '#test'
-				,url:localhostPath.path+'/selectTwoHourDataList'
+				,url:/*localhostPath.path+*/'/MavenBoot/selectTwoHourDataList'
 				,cols: [
 				  [
 					{field:'carno', title: '两小时内未完成检测车牌号码'}

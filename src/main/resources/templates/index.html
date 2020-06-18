@@ -58,16 +58,6 @@
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
 			console.log("【路径】" + localhostPath.path);
 
-
-			// var chargePage = '<object type="text/html" data="/MavenBootFinish/chargePage" width="100%" height="100%"></object>';			//收费信息
-			// var userPage = '<object type="text/html" data="/MavenBootFinish/userPage" width="100%" height="100%"></object>';				//用户管理
-			// var employeePage = '<object type="text/html" data="/MavenBootFinish/editEmployeePage" width="100%" height="100%"></object>';	//个人信息
-			// var registerPage = '<object type="text/html" data="/MavenBootFinish/registerCharge" width="100%" height="100%"></object>';		//收费登记
-			// var completePage = '<object type="text/html" data="/MavenBootFinish/completePage" width="100%" height="100%"></object>';		//检测发证
-			// var superviserCar = '<object type="text/html" data="/MavenBootFinish/superviserCarPage" width="100%" height="100%"></object>';	//车辆状态
-			// var taticticsPage = '<object type="text/html" data="/MavenBootFinish/statisticsTablePage" width="100%" height="100%"></object>';//数据统计
-			// var dataManagPage = '<object type="text/html" data="/MavenBootFinish/dataIndexPage" width="100%" height="100%"></object>';		//数据管理
-
 		  	var chargePage = '<object type="text/html" data="/MavenBoot/chargePage" width="100%" height="100%"></object>';			//收费信息
 		  	var userPage = '<object type="text/html" data="/MavenBoot/userPage" width="100%" height="100%"></object>';				//用户管理
 		  	var employeePage = '<object type="text/html" data="/MavenBoot/editEmployeePage" width="100%" height="100%"></object>';	//个人信息
@@ -92,23 +82,23 @@
 			if (user != null && user != ""){						//判断是否通过登录进入界面
 				var users = JSON.parse(user);
 				console.log("打印信息users:" + JSON.stringify(users.userData));
-				if (users.userData != null && users.userData != ""){
+				if (users.userData != null && users.userData !== ""){
 					var data = JSON.parse(JSON.stringify(users.userData));
 					console.log("打印信息data:" + data.optCode);
 					isAdmin = data.badmin;
 				}else{
-					//window.location.href = "/MavenBootFinish/login";
+					//window.location.href = "/login";
 					window.location.href = "/MavenBoot/login";
 				}
 			}else{
-				//window.location.href = "/MavenBootFinish/login";
+				//window.location.href = "/login";
 				window.location.href = "/MavenBoot/login";
 			}
 
 			/**【退出登录】**/
 			$("#exit").click(function () {
 				layui.sessionData('user', null);
-				//window.location.href = "/MavenBootFinish/login";
+				//window.location.href = "/login";
 				window.location.href = "/MavenBoot/login";
 			});
 

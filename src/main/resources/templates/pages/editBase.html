@@ -45,30 +45,30 @@
 					</div>
 
 					<div class="layui-form-item">
-							<div class="layui-inline">
+						<div class="layui-inline">
 
-								<label class="layui-form-label">备注信息</label>
-								<div  class="layui-input-inline">
-									<input type="text" name="remark" placeholder="备注信息" autocomplete="off"
-										   class="layui-input" id="remarkVal">
-								</div>
-
-								<label class="layui-form-label">车辆类型</label>
-								<div  class="layui-input-inline">
-									<input type="text" name="carType" placeholder="车辆类型" autocomplete="off"
-										   class="layui-input" id="carTypeVal" lay-verify="required">
-								</div>
-
-								<label class="layui-form-label">收费标准</label>
-								<div class="layui-input-inline">
-									<input type="text" name="charge" placeholder="收费标准" autocomplete="off"
-										   class="layui-input" id="chargeVal" lay-verify="required">
-								</div>
-
-								<input name="code" class="layui-hide" id="codeVal">
-
+							<label class="layui-form-label">备注信息</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="remark" placeholder="备注信息" autocomplete="off"
+									   class="layui-input" id="remarkVal">
 							</div>
+
+							<label class="layui-form-label">车辆类型</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="carType" placeholder="车辆类型" autocomplete="off"
+										   class="layui-input" id="carTypeVal" lay-verify="required">
+							</div>
+
+							<label class="layui-form-label">收费标准</label>
+							<div class="layui-input-inline">
+								<input type="text" name="charge" placeholder="收费标准" autocomplete="off"
+									   class="layui-input" id="chargeVal" lay-verify="required">
+							</div>
+
+							<input name="code" class="layui-hide" id="codeVal">
+
 						</div>
+					</div>
 
 				    <div class="layui-input-block" style="text-align: center;">
 				      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">修改信息</button>
@@ -79,20 +79,25 @@
 		</div>
 		
 		<script>
-		layui.use(['form', "jquery"], function(){
+		layui.use(['form',"jquery"], function(){
 			var form = layui.form,
 			$ = layui.$;
 
 			var localhostPath = layui.sessionData('pathConfig');//拿到路径前缀
+			console.log("【编辑收费项路径】" + localhostPath.path);
 
 			/**页面赋值**/
 			$(function () {
 				var href = window.location.href;     //获得url
 				var code = href.split("?code=")[1];   //从url获得id参数
-				layer.msg("传过来的code值："+code);
+				//layer.msg("传过来的code值："+code);
+				console.log("code[0]:"+href.split("?code=")[0]);
+				console.log("code[1]:"+href.split("?code=")[1]);
 				$.ajax({
 					type:"POST",
-					url:localhostPath.path+"/selBaseByCode",
+					//url:localhostPath.path+"/selBaseByCode",
+					url:"/MavenBoot/selBaseByCode",//war打包路径
+					//url:"/selBaseByCode",
 					data:{
 						code : code
 					},
@@ -120,34 +125,34 @@
 				});
 			});
 		  
-		  /**监听提交**/
-		  form.on('submit(demo1)', function(data){
-		  	var updateData = JSON.stringify(data.field);	//json字符串
-		    //layer.alert(requestData);
-			  $.ajax({
-				  type:"POST",
-				  url:localhostPath.path+"/updateBaseByCode",
-				  data:{
-					  updateData : updateData,
-					  operateStr : "editData"
-				  },
-				  dataType:'json',
-				  success:function (data) {
-					  if (data.result === "editSuccess"){
-						  layer.alert("修改数据成功",function () {
-							  window.parent.location.reload();//刷新父页面
-							  parent.layer.close(index);//关闭弹出层
-						  });
-					  }else{
-						  layer.msg("修改数据失败");
+			  /**监听提交**/
+			form.on('submit(demo1)', function(data){
+				var updateData = JSON.stringify(data.field);	//json字符串
+				//layer.alert(requestData);
+				   $.ajax({
+					  type:"POST",
+					  //url:localhostPath.path+"/updateBaseByCode",
+					  url:"/MavenBoot/updateBaseByCode",	//war打包路径
+					  data:{
+						  updateData : updateData,
+						  operateStr : "editData"
+					  },
+					  dataType:'json',
+					  success:function (data) {
+						  if (data.result === "editSuccess"){
+							  layer.alert("修改数据成功");
+						  }else{
+							  layer.msg("修改数据失败");
+						  }
+					  },
+					  error:function () {
+						  layer.msg("修改数据错误");
 					  }
-				  },
-				  error:function () {
-					  layer.msg("修改数据错误");
-				  }
-			  });
-		    return false;
-		  });
+				   });
+				return false;
+			});
+
+
 
 		});
 		</script>

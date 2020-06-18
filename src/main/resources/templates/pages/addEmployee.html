@@ -114,7 +114,7 @@
 			$ = layui.$;
 
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
-			console.log("添加员工获得的路径："+ localhostPath.path);
+			console.log("【添加员工路径】"+ localhostPath.path);
 
 		  /**监听提交**/
 		  form.on('submit(demo1)', function(data){
@@ -122,26 +122,27 @@
 		    // layer.alert(requestData, {			//JSON.parse()转成json对象
 		    //   title: '最终的提交信息'
 		    // });
-			  $.ajax({
+			  	$.ajax({
 					type:"POST",
-					url:localhostPath.path+"/addEmployee",
+					//url:localhostPath.path+"/addEmployee",
+				  	url:"/MavenBoot/addEmployee",
 					data:{
 						requestData : requestData
 					},
 					dataType:'json',
 					success:function (data) {
 						if (data.result === "success"){
-							layer.alert("用户添加成功!",function(){
-								window.parent.location.reload();//刷新父页面
-							});
+							// layer.alert("用户添加成功!",function(){
+							// 	window.parent.location.reload();//刷新父页面
+							// 	parent.layer.close();
+							// });
+							layer.alert("用户添加成功!");
 						}else{
-							layer.alert("用户添加失败!",function(){
-								window.parent.location.reload();//刷新父页面
-							});
+							layer.msg("用户添加失败!");
 						}
 					},
 					error:function () {
-						layer.msg("添加错误\n");
+						layer.msg("添加错误!");
 					}
 			});
 		    return false;

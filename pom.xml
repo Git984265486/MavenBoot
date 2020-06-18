@@ -8,6 +8,9 @@
     <artifactId>MavenBoot</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <!--打包war-->
+    <packaging>war</packaging>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -18,6 +21,32 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions><!--打包war添加-->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 打war包时加入此项， 告诉spring-boot tomcat相关jar包用外部的，不要打进去 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- springboot自带的tomcat并没有携带tomcat-embed-jasper的依赖,如果不引入tomcat-embed-jasper依赖，使用SPringboot启动项目则会无法成功-->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+        </dependency>
+
+        <!--语音播报依赖          若报错尝试注释掉这依赖-->
+        <dependency>
+            <groupId>com.hynnet</groupId>
+            <artifactId>jacob</artifactId>
+            <version>1.18</version>
         </dependency>
 
         <!--mybatis依赖-->
@@ -68,9 +97,18 @@
             <scope>true</scope>
         </dependency>
 
+        <!--数据库依赖，手动添加--><!--打包添加-->
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>sqljdbc4</artifactId>
+            <version>4.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
+        <!--指定打包名称-->
+        <finalName>MavenBoot</finalName>
         <resources>
             <!-- maven项目中src源代码下的xml等资源文件编译进classes文件夹，
               注意：如果没有这个，它会自动搜索resources下是否有mapper.xml文件，

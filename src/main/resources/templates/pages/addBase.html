@@ -85,31 +85,35 @@
 			$ = layui.$;
 
 			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+			console.log("【添加基础收费路径】" + localhostPath.path);
 		  
-		  /**监听提交**/
-		  form.on('submit(demo1)', function(data){
-		  	var insertData = JSON.stringify(data.field);	//json字符串
+		  	/**监听提交**/
+		  	form.on('submit(demo1)', function(data){
+		  		var insertData = JSON.stringify(data.field);	//json字符串
 		    //layer.alert(requestData);
-			  $.ajax({
-				  type:"POST",
-				  url:localhostPath.path+"/insertBaseData",
-				  data:{
-					  insertData : insertData,
-				  },
-				  dataType:'json',
-				  success:function (data) {
-					  if (data.result === "insertSuccess"){
-						  layer.alert("添加数据成功",function () {
-							  window.parent.location.reload();//刷新父页面
-							  parent.layer.close(index);//关闭弹出层
-						  });
-					  }else{
-						  layer.msg("添加数据失败");
-					  }
-				  },
-				  error:function () {
-					  layer.msg("添加数据错误");
-				  }
+			  	$.ajax({
+					type:"POST",
+					  //url:localhostPath.path+"/insertBaseData",
+					url:"/MavenBoot/insertBaseData",
+					//url:"/insertBaseData",
+					data:{
+						  insertData : insertData,
+					},
+					dataType:'json',
+					success:function (data) {
+						if (data.result === "insertSuccess"){
+							layer.alert("添加数据成功");
+							// layer.alert("添加数据成功",function () {
+							// 	window.parent.location.reload();//刷新父页面
+							// 	parent.layer.close();
+							// });
+						}else{
+							layer.msg("添加数据失败");
+						}
+					},
+					error:function () {
+						layer.msg("添加数据错误");
+					}
 			  });
 		    return false;
 		  });

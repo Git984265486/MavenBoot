@@ -103,9 +103,8 @@
 				if (inputCode == cardCode) {
 					$.ajax({
 						type: "POST",
-						//url: "http://localhost:8081/MavenBootFinish/validateUser",
 						url: "http://192.168.1.190:8081/MavenBoot/validateUser",	//打包war访问路径
-						//url: "http://localhost:8081/validateUser",				//软件启动访问路径
+						//url: "http://192.168.1.190:8082/validateUser",				//软件启动访问路径
 						data: {
 							username: username,
 							password: password,
@@ -114,10 +113,6 @@
 							if (data.result == "success") {
 								var userData = JSON.stringify(data.user);
 								var obj = JSON.parse(userData);
-								// for (var i in obj){
-								// 	console.log("键值对名称:\t" + i + "键值对值:\t" +obj[i]);
-								//
-								// }
 								if ( obj['stop'] != "1" ){
 									layui.sessionData('user',{
 										key:"userData" , value:{
@@ -128,7 +123,6 @@
 										}
 									});
 									layer.msg("用户登录成功");
-									//window.location.href = "/MavenBootFinish/index";
 									window.location.href = "/MavenBoot/index";	//打包war访问路径
 									//window.location.href = "/index";				//本地软件访问路径
 									return true;
@@ -138,8 +132,6 @@
 									//console.log("键值对名称:\t" + obj["stop"]);
 									return false;
 								}
-								//layer.alert(obj["stop"]);
-
 							} else if (data.result == "fail"){
 								layer.msg("请确认用户名和密码是否正确！");
 								return false;
@@ -166,9 +158,8 @@
 			/**【路径配置】**/
 			layui.sessionData('pathConfig', {
 				key: 'path',
-				//value: 'http://localhost:8081/MavenBootFinish'
 				value: 'http://192.168.1.190:8081/MavenBoot'	//打包war访问路径
-				//value: 'http://localhost:8081'				//本地软件访问路径
+				//value: 'http://192.168.1.190:8082'				//本地软件访问路径
 			});
 
 		});

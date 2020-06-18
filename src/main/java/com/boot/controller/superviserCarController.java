@@ -7,6 +7,9 @@ import com.boot.tools.superviserCarTools;
 import com.boot.tools.timeTools;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jacob.activeX.ActiveXComponent;
+import com.jacob.com.Dispatch;
+import com.jacob.com.Variant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -220,15 +226,20 @@ public class superviserCarController {
     /**【广播领证】**/
     @RequestMapping("/finishCheck")
     @ResponseBody
-    public Map<String ,Object> finishCheck(@RequestParam(defaultValue = "",value = "speakText")String speakText){
+    public Map<String ,Object> finishCheck(@RequestParam(value = "speakText",defaultValue = "") String speakText) throws IOException {
         HashMap<String,Object> map = new HashMap<>();
         String result = "";
-        //System.out.println("语音播报内容：" + speakText);
+        System.out.println("语音播报内容：" + speakText);
         if (!speakText.equals("")){
+            //staticTools tools = new staticTools();
+
             boolean isSpeak = staticTools.speakingText(speakText);
+
             if (isSpeak){
                 result = "success";
             }
+
+            map.put("msg",isSpeak);
         }
         map.put("result",result);
         return map;

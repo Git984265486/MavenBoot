@@ -2,6 +2,7 @@ package com.boot.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -9,8 +10,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 class MyWebAppConfigurationextends implements WebMvcConfigurer {
 
-    @Autowired
-    private SessionInterceptor interceptor;
     /**
      * 不需要登录拦截的url
      */
@@ -29,8 +28,17 @@ class MyWebAppConfigurationextends implements WebMvcConfigurer {
     /**【拦截器】**/
     @Override
     public void addInterceptors(InterceptorRegistry registry ){
-        //网站配置生成器：添加一个拦截器，拦截路径为整个项目
-        //registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns(notLoginInterceptPaths);
-        //registry.addInterceptor(interceptor).addPathPatterns("/**").excludePathPatterns("/**");;
+
     }
+
+    /**【允许跨域请求】**/
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("*")
+                .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                .maxAge(3600)
+                .allowCredentials(true);
+    }
+
 }

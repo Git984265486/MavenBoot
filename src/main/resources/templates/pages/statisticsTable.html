@@ -24,6 +24,7 @@
 				var myChart = echarts.init(document.getElementById('main'));
 
 				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+				console.log("【数据统计路径】" + localhostPath.path);
 
 				$(function () {
 					$.ajax({
