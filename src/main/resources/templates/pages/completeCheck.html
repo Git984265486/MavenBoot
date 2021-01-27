@@ -13,12 +13,12 @@
 
 		<div class="layuimini-main" style="text-align: center;">
 			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
-				<legend>检测车辆信息表</legend>
+				<legend>检测发证</legend>
 			</fieldset>
 
 			<div class="layui-form-item">
 
-				<div class="layui-inline" style="width: 28% ; float: center;">
+				<div class="layui-inline" style="width: 28% ; float: left;">
 					<p style="color: red;margin-bottom: 50px">待检车辆</p>
 					<div class="layui-inline">
 						<form class="layui-form layui-form-pane">
@@ -49,7 +49,7 @@
 					</div>
 				</div>
 
-				<div class="layui-inline" style="width: 28% ; float: center;">
+				<div class="layui-inline" style="width: 28% ; float: right;">
 					<p style="color: red;margin-bottom: 50px;">领取证件</p>
 					<div class="layui-inline">
 						<form class="layui-form layui-form-pane">
@@ -135,6 +135,7 @@
 				limits: [10, 20, 25, 50, 100],
 				limit: 10,
 				page: true,
+				width:450
 			});
 			/**【待检表格监听行工具事件】**/
 			table.on('tool(check)', function(obj){
@@ -179,6 +180,7 @@
 				limits: [10, 20, 25, 50, 100],
 				limit: 10,
 				page: true,
+				width:450
 			});
 			/**【待审表格监听行工具事件】**/
 			table.on('tool(examination)', function(obj){
@@ -227,6 +229,7 @@
 				limits: [10, 20, 25, 50, 100],
 				limit: 10,
 				page: true,
+				width:450
 			});
 			/**【发证表格监听行工具事件】**/
 			table.on('tool(complete)', function(obj){

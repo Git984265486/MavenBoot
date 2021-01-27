@@ -43,7 +43,7 @@ public class superviserCarTools {
             //System.out.println("【拿到总耗时】" + useTime);
 
             /**【判断检验项是否完成】**/
-            if (wjUseTime != null &&  ajUseTime != null && hjUseTime != null){
+            if (wjUseTime != null &&  ajUseTime != null && hjUseTime != null && carInfo.getResult().equals("0")){
                 timeTools time = new timeTools();
                 updateCar.setEnd_time(time.getNowTime());
                 updateCar.setResult("1");

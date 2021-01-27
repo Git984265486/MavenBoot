@@ -13,9 +13,9 @@
 	<body>
 	<div class="wrap">
 		<!--/MavenBoot为发布项目名称-->
-		<!--<img src="../images/background.jpg" class="imgStyle">-->
+<!--		<img src="../images/background.jpg" class="imgStyle">-->
 		<img src="/MavenBoot/layui/images/background.jpg" class="imgStyle">
-		<!--<img src="/MavenBootFinish/layui/images/background.jpg" class="imgStyle">-->
+<!--		<img src="/layui/images/background.jpg" class="imgStyle">-->
 		<div class="loginForm">
 			<form class="layui-form" lay-filter="example">
 				<div class="logoHead">
@@ -100,20 +100,20 @@
 				var cardCode = $('#loginCode').val();
 				var username = $('#name').val();
 				var password = $('#pasd').val();
-				if (inputCode == cardCode) {
+				if (inputCode === cardCode) {
 					$.ajax({
 						type: "POST",
-						url: "http://192.168.1.190:8081/MavenBoot/validateUser",	//打包war访问路径
-						//url: "http://192.168.1.190:8082/validateUser",				//软件启动访问路径
+						url: "http://localhost:8080/MavenBoot/validateUser",	//打包war访问路径
+						//url: "http://localhost:8080/validateUser",				//软件启动访问路径
 						data: {
 							username: username,
 							password: password,
 						},
 						success: function(data) {
-							if (data.result == "success") {
+							if (data.result === "success") {
 								var userData = JSON.stringify(data.user);
 								var obj = JSON.parse(userData);
-								if ( obj['stop'] != "1" ){
+								if ( obj['stop'] !== "1" ){
 									layui.sessionData('user',{
 										key:"userData" , value:{
 											optCode : obj.optCode,
@@ -132,7 +132,7 @@
 									//console.log("键值对名称:\t" + obj["stop"]);
 									return false;
 								}
-							} else if (data.result == "fail"){
+							} else if (data.result === "fail"){
 								layer.msg("请确认用户名和密码是否正确！");
 								return false;
 							}
@@ -158,7 +158,8 @@
 			/**【路径配置】**/
 			layui.sessionData('pathConfig', {
 				key: 'path',
-				value: 'http://192.168.1.190:8081/MavenBoot'	//打包war访问路径
+				value: 'http://localhost:8080/MavenBoot'	//打包war访问路径
+				//value: 'http://localhost:8080'
 				//value: 'http://192.168.1.190:8082'				//本地软件访问路径
 			});
 

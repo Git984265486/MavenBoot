@@ -149,7 +149,7 @@ public class employeeTools {
 
     /**【指定时间格式转换】**/
     public String timeFormat(String time) throws ParseException {
-        String timeData = null;
+        String timeData = "";
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         if (time != null && !time.equals("")){
             Date date = new Date();
