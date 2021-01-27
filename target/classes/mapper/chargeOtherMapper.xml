@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.chargeOtherMapper">
+
+    <resultMap type="com.boot.damain.chargeOther" id="chargeOtherResult">
+        <result property="autoid" column="autoid"/>
+        <result property="jcx" column="jcx"/>
+        <result property="sl" column="sl"/>
+        <result property="dj" column="dj"/>
+        <result property="je" column="je"/>
+        <result property="mxmemo" column="mxmemo"/>
+        <result property="pcode" column="pcode"/>
+    </resultMap>
+
+    <!--拿到所有的数据-->
+    <select id="selectAllData" resultMap="chargeOtherResult">
+        select * from tSFMXB order by autoid
+    </select>
+
+    <!--删除前countNum条数据-->
+    <delete id="delCountData">
+        DELETE tSFMXB WHERE autoid IN(SELECT TOP ${countNum} autoid FROM tSFMXB)
+    </delete>
+
+</mapper>

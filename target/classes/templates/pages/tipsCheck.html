@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>超时检测提示</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<body>
+
+	<table class="layui-hide" id="test"></table>
+
+	<script>
+		layui.use('table', function(){
+			var table = layui.table;
+
+			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+			console.log("【超时提示路径】"+localhostPath.path);
+			/**【待检表格数据赋值】**/
+
+			table.render({
+				elem: '#test'
+				,url:/*localhostPath.path+*/'/MavenBoot/selectTwoHourDataList'
+				,cols: [
+				  [
+					{field:'carno', title: '两小时内未完成检测车牌号码'}
+				  ]
+				],
+
+			});
+
+		});
+	</script>
+	</body>
+</html>

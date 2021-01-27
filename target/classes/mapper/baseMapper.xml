@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.baseMapper">
+
+    <resultMap type="com.boot.damain.base" id="baseResult">
+        <result property="autoid" column="autoid"/>
+        <result property="code" column="code"/>
+        <result property="name" column="name"/>
+        <result property="py" column="py"/>
+        <result property="stop" column="stop"/>
+        <result property="memo" column="memo"/>
+        <result property="ccode" column="ccode"/>
+        <result property="spdl" column="spdl"/>
+        <result property="sfbz" column="sfbz"/>
+    </resultMap>
+
+    <!--查询全部数据-->
+    <select id="selectBaseList" resultMap="baseResult">
+        select * from tBase where ccode = '2' ORDER BY autoid
+    </select>
+
+    <!--查询最后操作的一条数据-->
+    <select id="lastBaseData" resultMap="baseResult">
+        select top 1 * from tBase order by code desc
+    </select>
+
+    <!--通过code查询数据-->
+    <select id="selBaseByCode" resultMap="baseResult">
+        select * from tBase where code = #{code}
+    </select>
+
+
+    <!--通过code删除数据-->
+    <delete id="delBaseByCode">
+        delete from tBase where code = #{code}
+    </delete>
+
+    <!--通过code更新数据-->
+    <update id="updateBaseByCode">
+        update tBase set name = #{name} , py=#{py} , stop=#{stop} , memo=#{memo} ,
+         spdl=#{spdl} , sfbz=#{sfbz} where tBase.code = #{code}
+    </update>
+
+    <!--插入数据-->
+    <insert id="insertBaseData">
+        insert into tBase(code , name , py , stop , memo , ccode , spdl ,sfbz)
+            values(#{code},#{name},#{py},#{stop},#{memo},'2',#{spdl},#{sfbz})
+    </insert>
+
+</mapper>

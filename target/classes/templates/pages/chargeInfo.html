@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费信息</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+
+				<fieldset class="table-search-fieldset">
+					<legend>搜索信息</legend>
+					<div style="margin: 10px 10px 10px 10px">
+						<form class="layui-form layui-form-pane" action="">
+							<div class="layui-form-item">
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">开始日期</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="startTime" id="startTime" placeholder="yyyy-MM-dd">
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">结束日期</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="endTime" id="endTime" placeholder="yyyy-MM-dd">
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">编号</label>
+									<div class="layui-input-inline">
+										<input type="text" name="billno" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">车牌</label>
+									<div class="layui-input-inline">
+										<input type="text" name="carno" id="cphh" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="layui-form-item">
+							
+								<div class="layui-inline">
+									<label class="layui-form-label">车辆类型</label>
+									<div class="layui-input-block">
+										<select name="cartype">
+											<option value="" selected="">选择车辆类型</option>
+											<option value="小型汽车">小型汽车</option>
+											<option value="中型汽车">中型汽车</option>
+											<option value="大型汽车">大型汽车</option>
+											<option value="挂车">挂车</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">支付</label>
+									<div class="layui-input-block">
+										<select name="cz">
+											<option value="" selected="">选择支付方式</option>
+											<option value="现金">现金</option>
+											<option value="转账">转账</option>
+											<option value="微信">微信</option>
+											<option value="月结">月结</option>
+										</select>
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">检测项目</label>
+									<div class="layui-input-inline">
+										<input type="text" name="jcxm" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+							
+								<div class="layui-inline">
+									<label class="layui-form-label">备注</label>
+									<div class="layui-input-inline">
+										<input type="text" name="memo" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								
+							</div>
+							
+							<div class="layui-form-item">
+								
+								<div class="layui-inline">
+									<button type="submit" class="layui-btn" lay-submit lay-filter="data-search-btn">
+										<i class="layui-icon"></i>搜 索
+									</button>
+								</div>
+								
+								<div class="layui-inline">
+									<button type="reset" class="layui-btn layui-btn-primary">
+										<i class="layui-icon"></i> 清 空
+									</button>
+								</div>
+								
+							</div>
+							
+						</form>
+					</div>
+				</fieldset>
+
+				<table class="layui-hide" id="LAY_table_charge" lay-filter="user"></table>
+			</div>
+		</div>
+
+		<script>
+			layui.use(['form', 'table', 'laydate','layer'], function() {
+				var form = layui.form,
+					laydate = layui.laydate,
+					$=layui.$,
+					layer = layui.layer,
+					table = layui.table;
+
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+				console.log("【收费信息路径】" + localhostPath.path);
+				//时间选择器
+				laydate.render({
+					elem: '#startTime'
+				});
+				laydate.render({
+					elem: '#endTime'
+				});
+
+				//表格方法级渲染
+				table.render({
+					elem: '#LAY_table_charge',
+					url: localhostPath.path+'/listChargeInfo',
+					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+					defaultToolbar: ['filter', 'exports', 'print'],
+					totalRow: true,
+					cols: [
+						[ 
+							{field: 'autoid' , title: 'ID'},
+							{field: 'billno' , title: '编号'},
+							{field: 'dtdate' , title: '日期'},
+							{field: 'carno' , title: '车牌号'},
+							{field: 'cartype' , title: '车辆类型'},
+							{field: 'cz' , title: '支付方式'},
+							{field: 'jcxm' , title: '检验总项'},
+							{field: 'zsl' , title: '总数量',sort : true,totalRow: true},
+							{field: 'zje' , title: '总金额',sort : true,totalRow: true},
+							{field: 'memo' , title: '备注'},
+							{field: 'optname' , title: '开单员'},
+						]
+					],
+					limits: [10, 15, 20, 25, 50, 100,500,1000,5000],
+					limit: 10,
+					page: true
+				});
+
+				// 监听搜索提交操作
+				form.on('submit(data-search-btn)', function(data) {
+					var result = JSON.stringify(data.field);
+					var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+					//alert(obj.remark);
+					//layer.alert(result, {title: '最终的搜索信息'});
+					//执行搜索重载
+					table.reload('LAY_table_charge', {
+						page: {
+							curr: 1
+						},
+						where: {		//重载时数据result传回url后台处理
+							searchParams: result
+						}
+					}, 'data');			//处理后返回的数据
+
+					return false;
+				});
+
+				$(function () {
+					$.ajax({
+						type: "POST",
+						url: localhostPath.path+'/selectTwoHourDataList',
+						data: "",
+						success: function(data) {
+							if (data.result === "listData") {
+								layer.open({
+									time: 30000, //30s后自动关闭
+									btn: ['关闭'],
+									btnAlign: 'c',
+									type: 2,
+									shade: 0.2,
+									offset:"rb",
+									title:"检测超时提醒",
+									maxmin: true,
+									shadeClose: true,
+									area:["250px","400px"],
+									content:localhostPath.path+"/tipsPage"
+								});
+							}
+						},
+						error: function() {
+							layer.msg("获取录入两小时未完成检测车辆信息错误！");
+						}
+					});
+
+				});
+
+			});
+		</script>
+
+	</body>
+</html>

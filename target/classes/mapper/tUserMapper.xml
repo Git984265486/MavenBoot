@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.tUserMapper">
+
+    <resultMap type="com.boot.damain.tUser" id="tUserResult">
+        <result property="AutoID" column="AutoID"/>
+        <result property="OptCode" column="OptCode"/>
+        <result property="OptName" column="OptName"/>
+        <result property="OptPY" column="OptPY"/>
+        <result property="OptPWD" column="OptPWD"/>
+        <result property="bAdmin" column="bAdmin"/>
+        <result property="Stop" column="Stop"/>
+    </resultMap>
+
+    <!--查询所有的登录用户信息-->
+    <select id="selectListUser" resultMap="tUserResult">
+        select * from tUser
+    </select>
+    
+    <!--用户登录验证-->
+    <select id="validateUser" resultMap="tUserResult">
+        select * from tUser where tUser.OptPY = #{username} and tUser.OptPWD = #{password}
+    </select>
+
+    <!--  通过OptCode查询用户信息  -->
+
+    <!--登录用户提升管理与降为普通用户-->
+    <update id="updateAdmin">
+        UPDATE tUser SET bAdmin = #{isAdmin} where tUser.OptCode = #{code}
+    </update>
+
+    <!--重置账号密码-->
+    <update id="updatePWD">
+        UPDATE tUser SET optPWD = #{optPWD} where tUser.OptCode = #{code}
+    </update>
+
+</mapper>

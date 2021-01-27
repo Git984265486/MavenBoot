@@ -1,0 +1,27 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /MavenBoot
+
+spring:
+  #数据库
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=CarCheck
+    #url: jdbc:sqlserver://127.168.1.117:1433;DatabaseName=CarCheck
+    username: sa
+    #台式数据库密码：81236238，笔记本数据库密码：123456
+    password: 81236238
+  #HTML页面配置
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+  #静态页面JS,CSS配置
+  mvc:
+    static-path-pattern: /**
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+

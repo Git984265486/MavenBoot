@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费数据管理</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+
+				<fieldset class="table-search-fieldset">
+					<legend>搜索信息</legend>
+					<div style="margin: 10px 10px 10px 10px">
+
+						<form class="layui-form layui-form-pane" action="">
+							<div class="layui-form-item">
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">开始日期</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="startTime" id="startTime" placeholder="yyyy-MM-dd">
+									</div>
+								</div>
+								
+								<div class="layui-inline">
+									<label class="layui-form-label">结束日期</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="endTime" id="endTime" placeholder="yyyy-MM-dd">
+									</div>
+								</div>
+
+								<div class="layui-inline">
+									<button type="submit" class="layui-btn" lay-submit lay-filter="data-search-btn">
+										<i class="layui-icon"></i>搜索这段时间段内的数据
+									</button>
+								</div>
+								
+							</div>
+						</form>
+
+						<form class="layui-form layui-form-pane" action="">
+							<div class="layui-form-item">
+
+								<div class="layui-inline">
+									<label class="layui-form-label">开始日期</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="startTime" id="DelSTime" placeholder="yyyy-MM-dd" lay-verify="required">
+									</div>
+								</div>
+
+								<div class="layui-inline">
+									<label class="layui-form-label">结束日期</label>
+									<div class="layui-input-inline">
+										<input type="text" class="layui-input" name="endTime" id="DelETime" placeholder="yyyy-MM-dd" lay-verify="required">
+									</div>
+								</div>
+
+								<div class="layui-inline">
+									<button type="submit" class="layui-btn layui-btn-danger" lay-submit lay-filter="data-delete-btn">
+										<i class="layui-icon"></i>删除这段时间段内的数据
+									</button>
+								</div>
+
+							</div>
+						</form>
+
+					</div>
+				</fieldset>
+
+				<table class="layui-hide" id="LAY_table_charge" lay-filter="user"></table>
+			</div>
+		</div>
+
+		<script>
+			layui.use(['form', 'table', 'laydate','layer'], function() {
+				var form = layui.form,
+					laydate = layui.laydate,
+					$=layui.$,
+					layer = layui.layer,
+					table = layui.table;
+
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+				console.log("【数据管理路径】" + localhostPath.path);
+				//时间选择器
+				laydate.render({	//搜索开始时间
+					elem: '#startTime'
+				});
+				laydate.render({	//搜索结束时间
+					elem: '#endTime'
+				});
+				laydate.render({	//删除开始时间
+					elem: '#DelSTime'
+				});
+				laydate.render({	//删除结束时间
+					elem: '#DelETime'
+				});
+
+				//表格方法级渲染
+				table.render({
+					elem: '#LAY_table_charge',
+					url: localhostPath.path+'/selectDataByTime',
+					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+					defaultToolbar: ['filter', 'exports', 'print'],
+					totalRow: true,
+					cols: [
+						[ 
+							{field: 'autoid' , title: 'ID'},
+							{field: 'billno' , title: '编号'},
+							{field: 'dtdate' , title: '日期'},
+							{field: 'carno' , title: '车牌号'},
+							{field: 'cartype' , title: '车辆类型'},
+							{field: 'cz' , title: '支付方式'},
+							{field: 'jcxm' , title: '检验总项'},
+							{field: 'zsl' , title: '总数量',sort : true,totalRow: true},
+							{field: 'zje' , title: '总金额',sort : true,totalRow: true},
+							{field: 'memo' , title: '备注'},
+							{field: 'optname' , title: '开单员'},
+						]
+					],
+					limits: [10,20,50,100,500,1000,5000],
+					limit: 10,
+					page: true
+				});
+
+				// 监听搜索提交操作
+				form.on('submit(data-search-btn)', function(data) {
+					var result = JSON.stringify(data.field);
+					var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+					//执行搜索重载
+					table.reload('LAY_table_charge', {
+						page: {
+							curr: 1
+						},
+						where: {		//重载时数据result传回url后台处理
+							startTime: $('#startTime').val(),
+							endTime : $('#endTime').val()
+						}
+					}, 'data');			//处理后返回的数据
+
+					return false;
+				});
+
+				/**【删除监听】**/
+				form.on('submit(data-delete-btn)', function(data) {
+					$.ajax({
+						type:"POST",
+						url:localhostPath.path+"/deleteDataByTime",
+						data:{
+							DelSTime : $('#DelSTime').val(),
+							DelETime : $('#DelETime').val()
+						},
+						dataType:'json',
+						success:function (data) {
+							if (data.result === "DelSuccess"){
+								layer.alert("删除数据成功",function () {
+									window.location.reload();//刷新页面
+								});
+							}else{
+								layer.msg("删除数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("删除数据错误");
+						}
+					});
+					return false;
+				});
+
+			});
+		</script>
+
+	</body>
+</html>

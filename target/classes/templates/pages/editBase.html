@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费项目编辑</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-form-item{
+				width: 100%;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
+				  <legend>修改收费项目信息</legend>
+				</fieldset>
+				
+				<form class="layui-form" lay-filter="example">
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+						
+							<label class="layui-form-label layui-bg-gray">检验项目</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="name" lay-verify="required" placeholder="姓名" autocomplete="off"
+									   class="layui-input" id="proName">
+							</div>
+								
+							<label class="layui-form-label layui-bg-gray">检验项目首字母</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="py" placeholder="检验项目首字母" lay-verify="required" autocomplete="off"
+									   class="layui-input" id="proPYval">
+							</div>
+							
+							<label class="layui-form-label layui-bg-gray" style="color: #ff0000">是否停用</label>
+							<div class="layui-input-inline">
+								<input type="text" name="stop" id="stopVal" autocomplete="off" class="layui-input" readonly="readonly" style="color: red">
+							</div>
+						</div>
+					</div>
+
+					<div class="layui-form-item">
+						<div class="layui-inline">
+
+							<label class="layui-form-label layui-bg-gray">备注信息</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="remark" placeholder="备注信息" autocomplete="off"
+									   class="layui-input" id="remarkVal">
+							</div>
+
+							<label class="layui-form-label layui-bg-gray">车辆类型</label>
+							<div  class="layui-input-inline">
+								<input type="text" name="carType" placeholder="车辆类型" autocomplete="off"
+										   class="layui-input" id="carTypeVal" lay-verify="required">
+							</div>
+
+							<label class="layui-form-label layui-bg-gray">收费标准</label>
+							<div class="layui-input-inline">
+								<input type="text" name="charge" placeholder="收费标准" autocomplete="off"
+									   class="layui-input" id="chargeVal" lay-verify="required">
+							</div>
+
+							<input name="code" class="layui-hide" id="codeVal">
+
+						</div>
+					</div>
+
+				    <div class="layui-input-block" style="text-align: center;">
+				      <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">修改信息</button>
+				    </div>
+				
+				</form>
+			</div>
+		</div>
+		
+		<script>
+		layui.use(['form',"jquery"], function(){
+			var form = layui.form,
+			$ = layui.$;
+
+			var localhostPath = layui.sessionData('pathConfig');//拿到路径前缀
+			console.log("【编辑收费项路径】" + localhostPath.path);
+
+			/**页面赋值**/
+			$(function () {
+				var href = window.location.href;     //获得url
+				var code = href.split("?code=")[1];   //从url获得id参数
+				//layer.msg("传过来的code值："+code);
+				console.log("code[0]:"+href.split("?code=")[0]);
+				console.log("code[1]:"+href.split("?code=")[1]);
+				$.ajax({
+					type:"POST",
+					//url:localhostPath.path+"/selBaseByCode",
+					url:"/MavenBoot/selBaseByCode",//war打包路径
+					//url:"/selBaseByCode",
+					data:{
+						code : code
+					},
+					dataType:'json',
+					success:function (data) {
+						if (data.result === "success"){
+							console.log(JSON.stringify(data));
+							console.log(JSON.stringify(data.baseData));
+							console.log(JSON.stringify(data.baseData.name));
+							layer.msg("获取数据成功");
+							$('#proName').val(data.baseData.name);
+							$('#proPYval').val(data.baseData.py);
+							$('#stopVal').val(data.baseData.stop);
+							$('#remarkVal').val(data.baseData.memo);
+							$('#carTypeVal').val(data.baseData.spdl);
+							$('#chargeVal').val(data.baseData.sfbz);
+							$('#codeVal').val(data.baseData.code);
+						}else{
+							layer.msg("获取数据失败");
+						}
+					},
+					error:function () {
+						layer.msg("获取错误");
+					}
+				});
+			});
+		  
+			  /**监听提交**/
+			form.on('submit(demo1)', function(data){
+				var updateData = JSON.stringify(data.field);	//json字符串
+				//layer.alert(requestData);
+				   $.ajax({
+					  type:"POST",
+					  //url:localhostPath.path+"/updateBaseByCode",
+					  url:"/MavenBoot/updateBaseByCode",	//war打包路径
+					  data:{
+						  updateData : updateData,
+						  operateStr : "editData"
+					  },
+					  dataType:'json',
+					  success:function (data) {
+						  if (data.result === "editSuccess"){
+							  layer.alert("修改数据成功");
+						  }else{
+							  layer.msg("修改数据失败");
+						  }
+					  },
+					  error:function () {
+						  layer.msg("修改数据错误");
+					  }
+				   });
+				return false;
+			});
+
+
+
+		});
+		</script>
+	</body>
+</html>

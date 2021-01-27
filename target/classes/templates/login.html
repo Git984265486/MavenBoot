@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费登录页</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../static/layui/layui.js" charset="utf-8"></script>
+		<!--自定义css样式-->
+		<link rel="stylesheet" th:href="@{/layui/css/myLoginStyle.css}" href="../static/layui/css/myLoginStyle.css" type="text/css" media="all">
+
+	</head>
+	<body>
+	<div class="wrap">
+		<!--/MavenBoot为发布项目名称-->
+<!--		<img src="../images/background.jpg" class="imgStyle">-->
+		<img src="/MavenBoot/layui/images/background.jpg" class="imgStyle">
+<!--		<img src="/layui/images/background.jpg" class="imgStyle">-->
+		<div class="loginForm">
+			<form class="layui-form" lay-filter="example">
+				<div class="logoHead">
+					<h2 style="margin-top: 15px;text-align: center;">用户登录</h2>
+				</div>
+				<div class="usernameWrapDiv">
+					<div class="usernameLabel">
+						<label>用户名:</label>
+					</div>
+					<div class="usernameDiv">
+						<i class="layui-icon layui-icon-username adminIcon"></i>
+						<input class="layui-input adminInput" type="text" name="username" id="name" placeholder="用户名" lay-verify="required">
+					</div>
+				</div>
+				<div class="usernameWrapDiv">
+					<div class="usernameLabel">
+						<label>密码:</label>
+					</div>
+					<div class="passwordDiv">
+						<i class="layui-icon layui-icon-password adminIcon"></i>
+						<input class="layui-input adminInput" type="password" name="password" id="pasd" placeholder="密码" lay-verify="required">
+					</div>
+				</div>
+				<div class="usernameWrapDiv">
+					<div class="usernameLabel">
+						<label>验证码:</label>
+					</div>
+					<div class="cardDiv">
+						<input id="loginCard" class="layui-input cardInput" type="text" placeholder="验证码" lay-verify="required">
+					</div>
+					<div class="codeDiv">
+						<input id="loginCode" class="layui-input codeInput" type="button">
+					</div>
+				</div>
+				<div class="usernameWrapDiv">
+					<div class="submitDiv">
+						<button type="submit" class="layui-btn" lay-submit="" lay-filter="login">登录</button>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script type="text/javascript" src="layui/layui.js"></script>
+	<script>
+		layui.use(['form', "jquery"], function() {
+			var form = layui.form,
+					$ = layui.$;
+
+
+			$(function() {
+				// 页面初始化生成验证码
+				window.onload = createCode('#loginCode');
+				// 验证码切换
+				$('#loginCode').click(function() {
+					createCode('#loginCode');
+				});
+			});
+
+			// 生成验证码
+			function createCode(codeID) {
+				var code = "";
+				// 验证码长度
+				var codeLength = 4;
+				// 验证码dom元素
+				var checkCode = $(codeID);
+				// 验证码随机数
+				var random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+					'O', 'P', 'Q', 'R','S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+				];
+				for (var i = 0; i < codeLength; i++) {
+					// 随机数索引
+					var index = Math.floor(Math.random() * 36);
+					code += random[index];
+				}
+				// 将生成的随机验证码赋值
+				checkCode.val(code);
+			}
+
+			//用户登录验证
+			function validateCode() {
+				var inputCode = $('#loginCard').val().toUpperCase();
+				var cardCode = $('#loginCode').val();
+				var username = $('#name').val();
+				var password = $('#pasd').val();
+				if (inputCode === cardCode) {
+					$.ajax({
+						type: "POST",
+						url: "http://localhost:8080/MavenBoot/validateUser",	//打包war访问路径
+						//url: "http://localhost:8080/validateUser",				//软件启动访问路径
+						data: {
+							username: username,
+							password: password,
+						},
+						success: function(data) {
+							if (data.result === "success") {
+								var userData = JSON.stringify(data.user);
+								var obj = JSON.parse(userData);
+								if ( obj['stop'] !== "1" ){
+									layui.sessionData('user',{
+										key:"userData" , value:{
+											optCode : obj.optCode,
+											optName : obj.optName,
+											badmin : obj.badmin,
+											optPWD : obj.optPWD
+										}
+									});
+									layer.msg("用户登录成功");
+									window.location.href = "/MavenBoot/index";	//打包war访问路径
+									//window.location.href = "/index";				//本地软件访问路径
+									return true;
+								}else{
+									//layui.sessionData('user',{ user : obj });
+									layer.msg("此账户已被冻结，请联系管理员解封！");
+									//console.log("键值对名称:\t" + obj["stop"]);
+									return false;
+								}
+							} else if (data.result === "fail"){
+								layer.msg("请确认用户名和密码是否正确！");
+								return false;
+							}
+						},
+						error: function() {
+							layer.msg("用户登录错误");
+							return false;
+						}
+					});
+				} else {
+					layer.msg("请输入正确验证码");
+					return false;
+				}
+
+			}
+
+			/**监听提交**/
+			form.on('submit(login)', function(data) {
+				validateCode();
+				return false;
+			});
+
+			/**【路径配置】**/
+			layui.sessionData('pathConfig', {
+				key: 'path',
+				value: 'http://localhost:8080/MavenBoot'	//打包war访问路径
+				//value: 'http://localhost:8080'
+				//value: 'http://192.168.1.190:8082'				//本地软件访问路径
+			});
+
+		});
+	</script>
+	</body>
+</html>

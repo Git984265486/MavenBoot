@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>收费金额信息</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<table class="layui-hide" id="LAY_table_charge" lay-filter="chargeOther"></table>
+			</div>
+		</div>
+
+		<script type="text/html" id="toolbarDemo">
+			<div class="layui-btn-container">
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delTen">删除前10行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delFifty">删除前50行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delHundred">删除前100行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delFiveHundred">删除前500行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delThousand">删除前1000行数据</button>
+				<button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="delFiveThousand">删除前5000行数据</button>
+			</div>
+		</script>
+
+		<script>
+			layui.use(['table', 'layer'], function() {
+				var $=layui.$,
+					layer = layui.layer,
+					table = layui.table;
+
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+				console.log("【收费数据路径】" + localhostPath.path);
+
+				//表格方法级渲染
+				table.render({
+					elem: '#LAY_table_charge',
+					url: localhostPath.path+'/selectAllData',
+					toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+					defaultToolbar: ['filter', 'exports', 'print'],
+					cols: [
+						[ 
+							{field: 'jcx' , title: '检测项'},
+							{field: 'sl' , title: '数量'},
+							{field: 'dj' , title: '单价'},
+							{field: 'je' , title: '金额'},
+							{field: 'mxmemo' , title: '备注'},
+							{field: 'pcode' , title: '车辆识别号'},
+						]
+					],
+					limits: [10,50,100,500,1000,5000],
+					limit: 10,
+					page: true
+				});
+
+
+				/**【头工具栏事件】**/
+				table.on('toolbar(chargeOther)', function(obj){
+					if (obj.event === 'delTen'){		//删除10行数据
+						DelCount(10);
+					}
+					if (obj.event === 'delFifty'){		//删除50行数据
+						DelCount(50);
+					}
+					if (obj.event === 'delHundred'){		//删除100行数据
+						DelCount(100);
+					}
+					if (obj.event === 'delFiveHundred'){		//删除500行数据
+						DelCount(500);
+					}
+					if (obj.event === 'delThousand'){		//删除1000行数据
+						DelCount(1000);
+					}
+					if (obj.event === 'delFiveThousand'){		//删除5000行数据
+						DelCount(5000);
+					}
+				});
+
+				/**【删除指定数目countNum条数据】**/
+				function DelCount(countNum) {
+					$.ajax({
+						type:"POST",
+						url:localhostPath.path+"/delCountData",
+						data:{
+							countNum : countNum
+						},
+						dataType:'json',
+						success:function (data) {
+							if (data.result === "DelSuccess"){
+								layer.alert("数据删除成功！",function () {
+									window.location.reload();
+								});
+							}else {
+								layer.msg("数据删除失败！");
+							}
+						},
+						error:function () {
+							layer.msg("删除添加错误");
+						}
+					});
+				}
+
+			});
+		</script>
+
+	</body>
+</html>

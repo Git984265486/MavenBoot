@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>数据管理</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">
+			.layui-tab-content{
+				height: 750px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+
+				<div class="layui-tab">
+					<ul class="layui-tab-title" id="listBtn">
+						<li class="layui-this dataManager" data-method = "carTable">车辆数据管理</li>
+						<li class="dataManager" data-method = "checkTable">车辆检测动态</li>
+						<li class="dataManager" data-method = "chargeTable">收费信息管理</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show" id="showCharge" style="height: 100%"></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script>
+			layui.use(['element','layer'], function() {
+				var $ = layui.$,
+						layer = layui.layer,
+						element = layui.element;//Tab的切换功能，切换事件监听等，需要依赖element模块
+
+				var showContent = document.getElementById("showCharge");
+
+				var carTable = '<object type="text/html" data="/MavenBoot/dataManagementPage" width="100%" height="100%"></object>';	//收费信息
+				var chargeTable = '<object type="text/html" data="/MavenBoot/chargeOtherPage" width="100%" height="100%"></object>';	//收费数据表
+				var checkTable = '<object type="text/html" data="/MavenBoot/dataSuperviserCar" width="100%" height="100%"></object>';	//车辆监管数据页面
+
+				/**【自行加载】**/
+				$(function () {
+					showContent.innerHTML = carTable;
+				});
+
+				/**【触发绑定事件】**/
+				var active = {
+					carTable : function(){
+						showContent.innerHTML= carTable;
+					},
+					chargeTable : function () {
+						showContent.innerHTML= chargeTable;
+					},
+					checkTable : function () {
+						showContent.innerHTML= checkTable;
+					}
+				};
+
+				$('#listBtn .dataManager').on('click', function(){
+					var othis = $(this), method = othis.data('method');
+					active[method] ? active[method].call(this, othis) : '';
+				});
+
+			});
+		</script>
+
+	</body>
+</html>

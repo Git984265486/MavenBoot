@@ -1,0 +1,193 @@
+<!DOCTYPE>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta charset="utf-8">
+		<title>员工信息管理</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+		<style type="text/css">/**此处样式为解决表格单选显示不完全问题**/
+			.laytable-cell-radio {
+				padding: 10px 10px 0 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="layuimini-container">
+			<div class="layuimini-main">
+				<table class="layui-hide" id="table_user_info" lay-filter="user"></table>
+			</div>
+		</div>
+		<script type="text/html" id="userToolbar">
+			<div class="layui-btn-container">
+				<button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="deleteEmployee">删除员工信息</button>
+				<button class="layui-btn layui-btn-sm" lay-event="addEmployee">员工信息录入</button>
+				<button class="layui-btn layui-btn-sm layui-btn-warm" lay-event="stopEmployee">停用员工账号</button>
+				<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="startEmployee">启动员工账号</button>
+				<button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="upUser">升级为管理员</button>
+				<button class="layui-btn layui-btn-sm" lay-event="downUser">降为普通用户</button>
+				<button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="resetPWD">重置账号密码</button>
+			</div>
+		</script>
+
+		<script>
+			layui.use('table', function() {
+				var $ = layui.jquery,
+					table = layui.table;
+				var localhostPath = layui.sessionData('pathConfig');	//获得路径
+				console.log("【用户管理路径】" + localhostPath.path);
+				table.render({
+					elem: '#table_user_info',
+					url: localhostPath.path+'/employeeList',			//获取数据源url
+					title:"用户信息表",
+					toolbar: '#userToolbar', //开启头部工具栏，并为其绑定左侧模板
+					cols: [
+						[
+							{type: 'radio'},
+							{field: 'code',title: '员工编号',sort: true},
+							{field: 'name',title: '员工姓名',sort: true},
+							{field: 'py',title: '助记码',sort: true},
+							{field: 'department',title: '所属部门',sort: true},
+							{field: 'cardno',title: '身份证号',sort: true},
+							{field: 'sex',title: '性别',sort: true},
+							{field: 'birthday',title: '生日',sort: true},
+							{field: 'phone',title: '座机',sort: true},
+							{field: 'mobile',title: '手机',sort: true},
+							{field: 'address',title: '住址',sort: true},
+							{field: 'isStop',title: '是否停用'},
+							{field: 'memo',title: '备注',sort: true}
+						]
+					],
+					limits: [15, 20, 25, 50, 100],
+					limit: 15,
+					page: true,
+				});
+				//头工具栏事件
+				table.on('toolbar(user)', function(obj){
+					var checkStatus = table.checkStatus(obj.config.id);
+					console.log("【员工信息datas】" + JSON.stringify(checkStatus));
+					console.log("【员工信息data】" + JSON.stringify(checkStatus.data));
+					console.log("【员工信息长度】" + checkStatus.data.length);
+
+					if (checkStatus.data.length !== 1){
+						layer.msg("请先选择要变动的员工");
+					}else{
+						var data = checkStatus.data;	//获取到行数据
+						var code = data[0]['code'];		//拿到code值
+						if (obj.event === 'stopEmployee'){		//停用账号登录
+							stopUser(code,1);
+						}
+
+						if(obj.event === 'deleteEmployee'){		//删除员工信息
+							$.ajax({
+								type:"POST",
+								url:localhostPath.path+"/delEmployee",
+								data:{
+									code : data[0]['code']
+								},
+								success:function (data) {
+									if (data.result === "success"){
+										layer.alert("用户删除成功!",function(){
+											window.location.reload();//刷新父页面
+										});
+									}else{
+										layer.alert("用户删除失败!",function(){
+											window.location.reload();//刷新父页面
+										});
+									}
+								},
+								error:function () {
+									layer.msg("用户删除错误");
+								}
+							});
+						}
+
+						if (obj.event === 'startEmployee'){		//启用账号
+							stopUser(code,0);
+						}
+
+						if (obj.event === 'upUser'){			//提升为管理员
+							updateUser(1,"",code);
+						}
+
+						if (obj.event === 'downUser'){			//将为普通用户
+							updateUser(0,"",code);
+						}
+
+						if (obj.event === 'resetPWD'){			//重置密码
+							updateUser(5,"RS",code);
+						}
+					}
+
+					if(obj.event === 'addEmployee'){			//添加用户
+						layer.open({
+							type: 2,
+							title: '添加用户' ,//不显示标题栏
+							area: ['80%', '85%'],
+							btn: ['关闭窗口'],
+							btnAlign: 'c',
+							shade: 0.8,
+							id: 'userAdd' ,//设定一个id，防止重复弹出
+							moveType: 0 ,//拖拽模式，0或者1
+							content: localhostPath.path+'/addEmployeePage'
+						});
+					}
+				});
+
+
+				/**【更新数据方法】**/
+				function updateUser(isAdmin,optPWD,code) {
+					$.ajax({
+						type:"POST",
+						url:localhostPath.path+"/updateAdmin",
+						data:{
+							isAdmin : isAdmin,
+							optPWD : optPWD,
+							code : code,
+						},
+						success:function (data) {
+							if (data.result === "success"){
+								layer.alert("账户更新成功!",function(){
+									window.location.reload();//刷新页面
+								});
+							}else{
+								layer.alert("账户更新失败!",function(){
+									window.location.reload();//刷新页面
+								});
+							}
+						},
+						error:function () {
+							layer.msg("账户更新错误");
+						}
+					});
+				}
+
+				/**【停用账号方法】**/
+				function stopUser(code,stop) {
+					$.ajax({
+						type:"POST",
+						url:localhostPath.path+"/stopEmployee",
+						data:{
+							code : code,
+							stop : stop
+						},
+						success:function (data) {
+							if (data.result === "success"){
+								layer.alert("账户更新成功!",function(){
+									window.location.reload();//刷新页面
+								});
+							}else{
+								layer.alert("账户更新失败!",function(){
+									window.location.reload();//刷新页面
+								});
+							}
+						},
+						error:function () {
+							layer.msg("账户启用错误");
+						}
+					});
+				}
+			});
+		</script>
+	</body>
+</html>

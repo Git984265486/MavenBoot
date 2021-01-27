@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.boot.mapper.statisticsMapper">
+
+    <resultMap type="com.boot.damain.statistics" id="statisticsResult">
+        <result property="carType" column="carType"/>
+        <result property="allCount" column="allCount"/>
+        <result property="january" column="january"/>
+        <result property="february" column="february"/>
+        <result property="march" column="march"/>
+        <result property="april" column="april"/>
+        <result property="may" column="may"/>
+        <result property="june" column="june"/>
+        <result property="july" column="july"/>
+        <result property="august" column="august"/>
+        <result property="september" column="september"/>
+        <result property="october" column="october"/>
+        <result property="november" column="november"/>
+        <result property="december" column="december"/>
+    </resultMap>
+
+    <select id="statisticsData" resultMap="statisticsResult">
+        select cartype as carType , count(*) as allCount,
+        SUM(case when datepart(month,dtdate)=1 then 1 else 0 end) as 'january' ,
+        SUM(case when datepart(month,dtdate)=2 then 1 else 0 end) as 'february' ,
+        SUM(case when datepart(month,dtdate)=3 then 1 else 0 end) as 'march' ,
+        SUM(case when datepart(month,dtdate)=4 then 1 else 0 end) as 'april' ,
+        SUM(case when datepart(month,dtdate)=5 then 1 else 0 end) as 'may' ,
+        SUM(case when datepart(month,dtdate)=6 then 1 else 0 end) as 'june' ,
+        SUM(case when datepart(month,dtdate)=7 then 1 else 0 end) as 'july' ,
+        SUM(case when datepart(month,dtdate)=8 then 1 else 0 end) as 'august' ,
+        SUM(case when datepart(month,dtdate)=9 then 1 else 0 end) as 'september' ,
+        SUM(case when datepart(month,dtdate)=10 then 1 else 0 end) as 'october' ,
+        SUM(case when datepart(month,dtdate)=11 then 1 else 0 end) as 'november' ,
+        SUM(case when datepart(month,dtdate)=12 then 1 else 0 end) as 'december'
+        from tSFB
+        where datepart(year,dtdate)=#{years}
+        group by cartype
+    </select>
+
+</mapper>

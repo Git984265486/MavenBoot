@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="utf-8">
+		<title>检测发证</title>
+		<link rel="stylesheet" th:href="@{/layui/css/layui.css}" href="../../static/layui/css/layui.css" type="text/css" media="all">
+		<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+		<script th:src="@{/layui/layui.js}" src="../../static/layui/layui.js" charset="utf-8"></script>
+	</head>
+	<body>
+
+	<div class="layuimini-container">
+
+		<div class="layuimini-main" style="text-align: center;">
+			<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px; text-align: center;">
+				<legend>检测发证</legend>
+			</fieldset>
+
+			<div class="layui-form-item">
+
+				<div class="layui-inline" style="width: 28% ; float: left;">
+					<p style="color: red;margin-bottom: 50px">待检车辆</p>
+					<div class="layui-inline">
+						<form class="layui-form layui-form-pane">
+							<div class="layui-input-inline">
+								<input type="tel" name="checkCar" class="layui-input" placeholder="输入车牌">
+							</div>
+							<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="check-btn">
+								<i class="layui-icon"></i>搜 索
+							</button>
+						</form>
+						<table class="layui-hide" id="table_check" lay-filter="check"></table>
+					</div>
+				</div>
+
+				<div class="layui-inline" style="width: 28% ; float: center;">
+					<p style="color: red;margin-bottom: 50px">待审车辆</p>
+
+					<div class="layui-inline">
+						<form class="layui-form layui-form-pane">
+							<div class="layui-input-inline">
+								<input type="tel" name="examinationCar" class="layui-input" placeholder="输入车牌">
+							</div>
+							<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="examination-btn">
+								<i class="layui-icon"></i>搜 索
+							</button>
+						</form>
+						<table class="layui-hide" id="table_examination" lay-filter="examination"></table>
+					</div>
+				</div>
+
+				<div class="layui-inline" style="width: 28% ; float: right;">
+					<p style="color: red;margin-bottom: 50px;">领取证件</p>
+					<div class="layui-inline">
+						<form class="layui-form layui-form-pane">
+							<div class="layui-input-inline">
+								<input type="tel" name="completeCar" class="layui-input" placeholder="输入车牌">
+							</div>
+							<button type="submit" class="layui-btn" lay-event="CenterToLeft" lay-submit lay-filter="complete-btn">
+								<i class="layui-icon"></i>搜 索
+							</button>
+						</form>
+						<table class="layui-hide" id="table_complete" lay-filter="complete"></table>
+					</div>
+
+				</div>
+			</div>
+
+			<form class="layui-form">
+				<div class="layui-form-item">
+					<div class="layui-inline">
+						<label class="layui-form-label layui-bg-gray" style="text-align: center">取钥匙窗口</label>
+						<div class="layui-input-block">
+							<select name="selectWindos" id="seleWin">
+								<option value="一号窗口">1号窗</option>
+								<option value="二号窗口">2号窗</option>
+								<option value="三号窗口">3号窗</option>
+								<option value="四号窗口">4号窗</option>
+								<option value="五号窗口">5号窗</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+	<!-- 左侧表格的行中按钮 -->
+	<script type="text/html" id="LeftToCenterBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="LeftToCenter">
+				<i class="layui-icon layui-icon-next"></i>
+			</button>
+		</div>
+	</script>
+
+	<!-- 中间表格的行中按钮 -->
+	<script type="text/html" id="CenterToRightBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="CenterToRight">
+				<i class="layui-icon layui-icon-next"></i>
+			</button>
+		</div>
+	</script>
+
+	<!-- 右侧表格到中间表格的行中按钮 -->
+	<script type="text/html" id="RightToCenterBar">
+		<div class="layui-btn-container layui-transfer-active">
+			<button type="button" class="layui-btn layui-btn-sm " lay-event="RightToCenter">检测完成</button>
+		</div>
+	</script>
+
+
+	<script>
+		layui.use(['form', 'layer','table' ], function() {
+			var $ = layui.$,
+				form = layui.form,
+				layer = layui.layer,
+				table = layui.table;
+
+			var localhostPath = layui.sessionData('pathConfig');	//获得路径
+			console.log("【检测发证路径】" + localhostPath.path);
+
+			/**【待检表格数据赋值】**/
+			table.render({
+				elem: '#table_check',
+				url: localhostPath.path+'/selectTableData'+'?DataType=0',			//获取数据源url
+				toolbar: false, //开启头部工具栏
+				cols: [
+					[
+						{field: 'carno',title: '车牌号码'},
+						{fixed: 'right', title:'移动到待审', toolbar: '#LeftToCenterBar'}
+					]
+				],
+				limits: [10, 20, 25, 50, 100],
+				limit: 10,
+				page: true,
+				width:450
+			});
+			/**【待检表格监听行工具事件】**/
+			table.on('tool(check)', function(obj){
+				var data = obj.data;
+
+				if(obj.event === 'LeftToCenter'){
+					layer.msg(JSON.stringify(data));
+					$.ajax({
+						type: "POST",
+						url:localhostPath.path+"/updateCarStatusByKeyID",
+						data:{
+							keyID : JSON.stringify(data.keyID),
+							instruction : "check"
+						},
+						dataType: "json",
+						success:function (data) {
+							if (data.result === "updateSuccess"){
+								layer.msg("更新数据成功");
+								window.location.reload();
+							}else {
+								layer.msg("更新数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("更新数据错误");
+						}
+					});
+				}
+			});
+
+			/**【待审表格数据赋值】**/
+			table.render({
+				elem: '#table_examination',
+				url: localhostPath.path+'/selectTableData'+'?DataType=1',			//获取数据源url
+				toolbar: false, //开启头部工具栏
+				cols: [
+					[
+						{field: 'carno',title: '车牌号码'},
+						{fixed: 'right', title:'移动到领取证件', toolbar: '#CenterToRightBar'}
+					]
+				],
+				limits: [10, 20, 25, 50, 100],
+				limit: 10,
+				page: true,
+				width:450
+			});
+			/**【待审表格监听行工具事件】**/
+			table.on('tool(examination)', function(obj){
+				var data = obj.data;
+
+				if(obj.event === 'CenterToLeft'){
+					layer.msg(JSON.stringify(data));
+				}
+				if(obj.event === 'CenterToRight'){
+					layer.msg(JSON.stringify(data));
+					$.ajax({
+						type: "POST",
+						url:localhostPath.path+"/updateCarStatusByKeyID",
+						data:{
+							keyID : JSON.stringify(data.keyID),
+							instruction : "examination"
+						},
+						dataType: "json",
+						success:function (data) {
+							if (data.result === "updateSuccess"){
+								layer.msg("更新数据成功");
+								window.location.reload();
+							}else {
+								layer.msg("更新数据失败");
+							}
+						},
+						error:function () {
+							layer.msg("更新数据错误");
+						}
+					});
+				}
+			});
+
+
+			/**【发证表格数据赋值到中间表格】**/
+			table.render({
+				elem: '#table_complete',
+				url: localhostPath.path+'/selectTableData'+'?DataType=2',			//获取数据源url
+				toolbar: false, //开启头部工具栏
+				cols: [
+					[
+						{field: 'carno',title: '车牌号码'},
+						{fixed: 'right', title:'操作', toolbar: '#RightToCenterBar'}
+					]
+				],
+				limits: [10, 20, 25, 50, 100],
+				limit: 10,
+				page: true,
+				width:450
+			});
+			/**【发证表格监听行工具事件】**/
+			table.on('tool(complete)', function(obj){
+				var data = obj.data;
+				if(obj.event === 'RightToCenter'){
+					var readText = data.carno + "车主请到" + $('#seleWin').val() + "领取钥匙。";
+					console.log("【语音播报选中数据】" + readText);
+					
+					$.ajax({
+						type: "POST",
+						//url:"/MavenBoot/finishCheck",
+						url:localhostPath.path+"/finishCheck",
+						data:{
+							speakText : data.carno + "车主请到" + $('#seleWin').val() + "领取钥匙。"
+						},
+						dataType: "json",
+						success:function (data) {
+							if (data.result === "success"){
+								layer.msg("语音播报完成！");
+							}else {
+								layer.msg("语音播报失败！");
+							}
+						},
+						error:function () {
+							layer.msg("语音播报错误！");
+						}
+					});
+				}
+			});
+
+
+			/**【待检监听搜索提交操作】**/
+			form.on('submit(check-btn)', function(data) {
+				var result = JSON.stringify(data.field);
+				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+				//layer.alert(result);
+
+				table.reload('table_check', {	//执行搜索重载
+					page: {
+						curr: 1
+					},
+					where: {
+						carno:obj.checkCar,	//重载时数据result传回url后台处理
+					}
+				}, 'data');				//处理后返回的数据
+				return false;
+			});
+
+			/**【待审监听搜索提交操作】**/
+			form.on('submit(examination-btn)', function(data) {
+				var result = JSON.stringify(data.field);
+				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+				//layer.alert(obj.examinationCar);
+
+				table.reload('table_examination', { //执行搜索重载
+					page: {
+						curr: 1
+					},
+					where: {		//重载时数据result传回url后台处理
+						carno: obj.examinationCar
+					}
+				}, 'data');			//处理后返回的数据
+				return false;
+			});
+
+			/**【发证监听搜索提交操作】**/
+			form.on('submit(complete-btn)', function(data) {
+				var result = JSON.stringify(data.field);
+				var obj = JSON.parse(result);	//由JSON字符串转换为JSON对象
+
+				//layer.alert(obj.completeCar);
+
+				table.reload('table_complete', {	//执行搜索重载
+					page: {
+						curr: 1
+					},
+					where: {		//重载时数据result传回url后台处理
+						carno : obj.completeCar
+					}
+				}, 'data');			//处理后返回的数据
+				return false;
+			});
+
+		});
+	</script>
+	</body>
+</html>
